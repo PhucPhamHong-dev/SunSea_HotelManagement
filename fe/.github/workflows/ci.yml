@@ -1,0 +1,29 @@
+name: Frontend CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm api:generate
+        env:
+          NEXT_PUBLIC_API_BASE_URL: http://127.0.0.1:3001
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test:unit
+      - run: pnpm build
+      - name: Secret scan
+        run: |
+          ! rg -n "SUPABASE_SERVICE_ROLE_KEY|DATABASE_URL|@supabase/supabase-js" src .env.example

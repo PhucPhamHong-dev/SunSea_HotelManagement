@@ -1,0 +1,21 @@
+# Secrets and machine-specific environment configuration
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependencies and generated build output
+**/node_modules/
+**/.next/
+**/dist/
+**/coverage/
+**/out/
+**/.pnpm-store/
+**/*.tsbuildinfo
+
+# Local tooling and operating-system files
+**/.DS_Store
+**/*.log
+**/.supabase/

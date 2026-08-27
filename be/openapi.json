@@ -1,0 +1,3785 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "HealthController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Backend is healthy"
+          }
+        },
+        "summary": "Health check",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/v1/health/supabase": {
+      "get": {
+        "operationId": "HealthController_getSupabaseHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Supabase connectivity health check",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthUserEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Login through Supabase Auth",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthLogoutEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Clear the current session cookies",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "AuthController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthUserEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Get current user profile",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthRefreshEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Refresh session cookies",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/floors": {
+      "get": {
+        "operationId": "FloorsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FloorListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List hotel floors",
+        "tags": [
+          "floors"
+        ]
+      }
+    },
+    "/api/v1/floors/{floorId}": {
+      "get": {
+        "operationId": "FloorsController_get",
+        "parameters": [
+          {
+            "name": "floorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FloorResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Get one hotel floor",
+        "tags": [
+          "floors"
+        ]
+      }
+    },
+    "/api/v1/floors/{floorId}/rooms": {
+      "get": {
+        "operationId": "FloorsController_listRoomsOnFloor",
+        "parameters": [
+          {
+            "name": "floorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List rooms on one floor",
+        "tags": [
+          "floors"
+        ]
+      }
+    },
+    "/api/v1/rooms": {
+      "get": {
+        "operationId": "RoomsController_list",
+        "parameters": [
+          {
+            "name": "floorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "checkInAt",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "checkOutAt",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List rooms, optionally filtered by floor",
+        "tags": [
+          "rooms"
+        ]
+      },
+      "post": {
+        "operationId": "RoomsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Create a room",
+        "tags": [
+          "rooms"
+        ]
+      }
+    },
+    "/api/v1/rooms/status-by-date": {
+      "get": {
+        "operationId": "RoomsController_statusByDate",
+        "parameters": [
+          {
+            "name": "floorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "example": "2026-08-25",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List room operational status and intake availability for a business date",
+        "tags": [
+          "rooms"
+        ]
+      }
+    },
+    "/api/v1/rooms/availability": {
+      "get": {
+        "operationId": "RoomsController_availability",
+        "parameters": [
+          {
+            "name": "floorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "checkInAt",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "checkOutAt",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List rooms available for a requested period",
+        "tags": [
+          "rooms"
+        ]
+      }
+    },
+    "/api/v1/rooms/{roomId}/equivalents": {
+      "get": {
+        "operationId": "RoomsController_equivalents",
+        "parameters": [
+          {
+            "name": "roomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "checkInAt",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "checkOutAt",
+            "required": false,
+            "in": "query",
+            "description": "Omit or send null for an open-ended stay.",
+            "schema": {
+              "format": "date-time",
+              "nullable": true,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EquivalentRoomSearchEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Find available rooms with exactly the same bed count and window attribute",
+        "tags": [
+          "rooms"
+        ]
+      }
+    },
+    "/api/v1/rooms/{roomId}": {
+      "get": {
+        "operationId": "RoomsController_get",
+        "parameters": [
+          {
+            "name": "roomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Get one room",
+        "tags": [
+          "rooms"
+        ]
+      },
+      "patch": {
+        "operationId": "RoomsController_update",
+        "parameters": [
+          {
+            "name": "roomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Update a room",
+        "tags": [
+          "rooms"
+        ]
+      }
+    },
+    "/api/v1/rooms/{roomId}/rate": {
+      "patch": {
+        "operationId": "RoomsController_updateRate",
+        "parameters": [
+          {
+            "name": "roomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomRateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Update room nightly rate",
+        "tags": [
+          "rooms"
+        ]
+      }
+    },
+    "/api/v1/rooms/{roomId}/housekeeping": {
+      "patch": {
+        "operationId": "RoomsController_updateHousekeeping",
+        "parameters": [
+          {
+            "name": "roomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HousekeepingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Update room housekeeping status",
+        "tags": [
+          "rooms"
+        ]
+      }
+    },
+    "/api/v1/rooms/{roomId}/status": {
+      "get": {
+        "operationId": "RoomsController_status",
+        "parameters": [
+          {
+            "name": "roomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Get derived room display status",
+        "tags": [
+          "rooms"
+        ]
+      }
+    },
+    "/api/v1/guests": {
+      "get": {
+        "operationId": "GuestsController_list",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search by name, phone or identity number",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Search active guests",
+        "tags": [
+          "guests"
+        ]
+      },
+      "post": {
+        "operationId": "GuestsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Create a guest",
+        "tags": [
+          "guests"
+        ]
+      }
+    },
+    "/api/v1/guests/{guestId}": {
+      "get": {
+        "operationId": "GuestsController_get",
+        "parameters": [
+          {
+            "name": "guestId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Get a guest",
+        "tags": [
+          "guests"
+        ]
+      },
+      "patch": {
+        "operationId": "GuestsController_update",
+        "parameters": [
+          {
+            "name": "guestId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateGuestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Update a guest",
+        "tags": [
+          "guests"
+        ]
+      }
+    },
+    "/api/v1/guests/{guestId}/deactivate": {
+      "patch": {
+        "operationId": "GuestsController_deactivate",
+        "parameters": [
+          {
+            "name": "guestId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuestEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Soft deactivate a guest",
+        "tags": [
+          "guests"
+        ]
+      }
+    },
+    "/api/v1/reservations": {
+      "get": {
+        "operationId": "ReservationsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List reservations",
+        "tags": [
+          "reservations"
+        ]
+      },
+      "post": {
+        "operationId": "ReservationsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReservationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Create a draft reservation",
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/advance": {
+      "get": {
+        "operationId": "ReservationsController_listAdvance",
+        "parameters": [
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "name": "floorId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdvanceReservationListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List active advance reservations with deposit summary",
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/intake-policy": {
+      "get": {
+        "operationId": "ReservationsController_intakePolicy",
+        "parameters": [
+          {
+            "name": "date",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "example": "2026-08-24",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntakePolicyEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Get available empty-room actions for a local date",
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/intake": {
+      "post": {
+        "operationId": "ReservationsController_createStay",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateStayDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateStayEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Create a guest and either check in now or make an advance reservation atomically",
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/pricing-preview": {
+      "post": {
+        "operationId": "ReservationsController_preview",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PricingPreviewDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PricingPreviewEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Calculate server-side stay pricing",
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservationId}": {
+      "get": {
+        "operationId": "ReservationsController_get",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Get a reservation",
+        "tags": [
+          "reservations"
+        ]
+      },
+      "patch": {
+        "operationId": "ReservationsController_updateDetails",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReservationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Update reservation details with optimistic locking",
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservationId}/advance-detail": {
+      "get": {
+        "operationId": "ReservationsController_advanceDetail",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdvanceReservationDetailEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Get advance reservation detail and backend-calculated financials",
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservationId}/confirm": {
+      "patch": {
+        "operationId": "ReservationsController_confirm",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservationId}/check-in": {
+      "patch": {
+        "operationId": "ReservationsController_checkIn",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservationId}/cancel": {
+      "patch": {
+        "operationId": "ReservationsController_cancel",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelReservationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservationId}/check-out": {
+      "post": {
+        "operationId": "ReservationsController_checkOut",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Confirm the backend-calculated checkout bill, record its cash settlement, and check out",
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservationId}/checkout-preview": {
+      "get": {
+        "operationId": "ReservationsController_checkoutPreview",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutPreviewEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/service-catalog": {
+      "get": {
+        "operationId": "ServicesController_listCatalog",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List active services",
+        "tags": [
+          "services"
+        ]
+      },
+      "post": {
+        "operationId": "ServicesController_createCatalog",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ServiceCatalogDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Create a service catalog item",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/api/v1/service-catalog/{serviceId}": {
+      "patch": {
+        "operationId": "ServicesController_updateCatalog",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServiceCatalogEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Update a service catalog item",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/api/v1/reservations/{reservationId}/services": {
+      "get": {
+        "operationId": "ServicesController_listReservationServices",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationServiceListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List active services for a reservation",
+        "tags": [
+          "services"
+        ]
+      },
+      "post": {
+        "operationId": "ServicesController_add",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddReservationServiceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationServiceEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Add a service to a checked-in reservation",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/api/v1/reservation-services/{serviceId}": {
+      "patch": {
+        "operationId": "ServicesController_updateReservationService",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateReservationServiceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationServiceEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Update a service on a checked-in reservation",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/api/v1/reservation-services/{serviceId}/void": {
+      "patch": {
+        "operationId": "ServicesController_void",
+        "parameters": [
+          {
+            "name": "serviceId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidServiceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationServiceEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Void a reservation service",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/api/v1/payments": {
+      "get": {
+        "operationId": "PaymentsController_list",
+        "parameters": [
+          {
+            "name": "reservationId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List payments",
+        "tags": [
+          "payments"
+        ]
+      },
+      "post": {
+        "operationId": "PaymentsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Record a manual payment",
+        "tags": [
+          "payments"
+        ]
+      }
+    },
+    "/api/v1/payments/{paymentId}/void": {
+      "patch": {
+        "operationId": "PaymentsController_void",
+        "parameters": [
+          {
+            "name": "paymentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidPaymentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Void a manual payment",
+        "tags": [
+          "payments"
+        ]
+      }
+    },
+    "/api/v1/audit-logs": {
+      "get": {
+        "operationId": "AuditController_list",
+        "parameters": [
+          {
+            "name": "entity",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "List immutable audit records",
+        "tags": [
+          "audit-logs"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "SUNSEA Hotel Management API",
+    "description": "",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "cookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "hotel_session"
+      }
+    },
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "admin",
+            "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "example": "123456",
+            "minLength": 6
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ]
+      },
+      "AuthUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "username": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "owner",
+              "staff"
+            ]
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "username",
+          "role",
+          "active"
+        ]
+      },
+      "ApiMetaDto": {
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "timestamp"
+        ]
+      },
+      "AuthUserEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AuthUserResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "AuthLogoutResponseDto": {
+        "type": "object",
+        "properties": {
+          "loggedOut": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "loggedOut"
+        ]
+      },
+      "AuthLogoutEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AuthLogoutResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "AuthRefreshResponseDto": {
+        "type": "object",
+        "properties": {
+          "refreshed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "refreshed"
+        ]
+      },
+      "AuthRefreshEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AuthRefreshResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "FloorResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "floorNumber": {
+            "type": "number",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Tầng 1"
+          }
+        },
+        "required": [
+          "id",
+          "floorNumber",
+          "name"
+        ]
+      },
+      "FloorListResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FloorResponseDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "RoomResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "floorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomTypeId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Inventory type determined by bed count and window availability."
+          },
+          "roomTypeName": {
+            "type": "string",
+            "example": "1 giường · Có cửa sổ"
+          },
+          "roomNumber": {
+            "type": "string",
+            "example": "101"
+          },
+          "bedCount": {
+            "type": "number",
+            "example": 3
+          },
+          "hasWindow": {
+            "type": "boolean",
+            "example": false,
+            "description": "Whether the room has a window."
+          },
+          "defaultNightlyRate": {
+            "type": "number",
+            "nullable": true,
+            "example": 450000,
+            "description": "Nightly rate; may be null until configured"
+          },
+          "layoutKey": {
+            "type": "string",
+            "example": "standard"
+          },
+          "housekeepingStatus": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "cleaning",
+              "out_of_service"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "occupied",
+              "cleaning",
+              "reserved",
+              "out_of_service"
+            ]
+          },
+          "reservationId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "canCreateStay": {
+            "type": "boolean",
+            "description": "Whether an immediate stay can be created for this room on the requested business date."
+          },
+          "canCreateAdvance": {
+            "type": "boolean",
+            "description": "Whether an advance reservation can be created for this room on the requested business date."
+          },
+          "unavailableReason": {
+            "type": "string",
+            "nullable": true,
+            "description": "Backend-provided reason when the room cannot be used for a new stay."
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "active": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "id",
+          "floorId",
+          "roomTypeId",
+          "roomTypeName",
+          "roomNumber",
+          "bedCount",
+          "hasWindow",
+          "defaultNightlyRate",
+          "layoutKey",
+          "housekeepingStatus",
+          "status",
+          "reservationId",
+          "canCreateStay",
+          "canCreateAdvance",
+          "unavailableReason",
+          "updatedAt",
+          "active"
+        ]
+      },
+      "RoomListResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoomResponseDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "RoomEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/RoomResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "EquivalentRoomSearchDto": {
+        "type": "object",
+        "properties": {
+          "requestedRoom": {
+            "$ref": "#/components/schemas/RoomResponseDto"
+          },
+          "isRequestedRoomAvailable": {
+            "type": "boolean",
+            "description": "Whether the receptionist can keep the requested room for the requested interval."
+          },
+          "roomTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomTypeName": {
+            "type": "string",
+            "example": "2 giường · Không cửa sổ"
+          },
+          "availableRoomCount": {
+            "type": "number",
+            "description": "Remaining sellable rooms in the type for the requested period."
+          },
+          "canReserveRoomType": {
+            "type": "boolean",
+            "description": "Whether an advance reservation may be confirmed against type inventory and assigned later."
+          },
+          "alternatives": {
+            "description": "Available rooms with exactly the same bed count and window attribute.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoomResponseDto"
+            }
+          }
+        },
+        "required": [
+          "requestedRoom",
+          "isRequestedRoomAvailable",
+          "roomTypeId",
+          "roomTypeName",
+          "availableRoomCount",
+          "canReserveRoomType",
+          "alternatives"
+        ]
+      },
+      "EquivalentRoomSearchEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/EquivalentRoomSearchDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "RoomDto": {
+        "type": "object",
+        "properties": {
+          "floorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomNumber": {
+            "type": "string",
+            "example": "101"
+          },
+          "bedCount": {
+            "type": "number",
+            "example": 3
+          },
+          "hasWindow": {
+            "type": "boolean",
+            "description": "Whether the room has a window. Only equivalent rooms with the same value can be suggested."
+          },
+          "defaultNightlyRate": {
+            "type": "number",
+            "nullable": false,
+            "example": 450000,
+            "description": "Nightly rate; omit to keep it unset"
+          },
+          "layoutKey": {
+            "type": "string",
+            "example": "standard"
+          }
+        },
+        "required": [
+          "floorId",
+          "roomNumber",
+          "bedCount"
+        ]
+      },
+      "RoomRateDto": {
+        "type": "object",
+        "properties": {
+          "rate": {
+            "type": "number",
+            "nullable": false,
+            "example": 450000,
+            "description": "Set to null in persistence to clear the rate"
+          }
+        },
+        "required": [
+          "rate"
+        ]
+      },
+      "HousekeepingDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "cleaning",
+              "out_of_service"
+            ]
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "GuestResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "idNumber": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "idIssuedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "address": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "type": "object",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "active",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "GuestListResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GuestResponseDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "GuestDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Nguyễn Văn An"
+          },
+          "phone": {
+            "type": "string",
+            "example": "0900000000"
+          },
+          "idNumber": {
+            "type": "string",
+            "example": "079000000000"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "idIssuedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "address": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "fullName"
+        ]
+      },
+      "GuestEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/GuestResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "UpdateGuestDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Nguyễn Văn An"
+          },
+          "idNumber": {
+            "type": "string",
+            "example": "079000000000"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "idIssuedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "address": {
+            "type": "string"
+          }
+        }
+      },
+      "ReservationResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "Physical room assigned to the stay. It can be null for a room-type advance reservation."
+          },
+          "roomTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "preferredRoomId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true,
+            "description": "Requested room preference used when the reservation is assigned."
+          },
+          "guestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "plannedCheckInAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "plannedCheckOutAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "actualCheckInAt": {
+            "type": "object",
+            "format": "date-time",
+            "nullable": true
+          },
+          "actualCheckOutAt": {
+            "type": "object",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "confirmed",
+              "checked_in",
+              "checked_out",
+              "cancelled",
+              "no_show"
+            ]
+          },
+          "roomRateSnapshot": {
+            "type": "number",
+            "nullable": true
+          },
+          "depositExpected": {
+            "type": "number"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "cancellationReason": {
+            "type": "object",
+            "nullable": true
+          },
+          "cancelledAt": {
+            "type": "object",
+            "format": "date-time",
+            "nullable": true
+          },
+          "noShowAt": {
+            "type": "object",
+            "format": "date-time",
+            "nullable": true
+          },
+          "version": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "roomTypeId",
+          "guestId",
+          "plannedCheckInAt",
+          "status",
+          "depositExpected",
+          "version",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ReservationListResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReservationResponseDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "AdvanceReservationListItemDto": {
+        "type": "object",
+        "properties": {
+          "reservationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "confirmed"
+            ]
+          },
+          "roomId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "preferredRoomId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "roomNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "floorId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "floorNumber": {
+            "type": "number",
+            "nullable": true
+          },
+          "roomTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomTypeName": {
+            "type": "string"
+          },
+          "guestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "guestName": {
+            "type": "string"
+          },
+          "checkInAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "checkOutAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "depositPaidAmount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "VND"
+            ]
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "reservationId",
+          "status",
+          "roomTypeId",
+          "roomTypeName",
+          "guestId",
+          "guestName",
+          "checkInAt",
+          "checkOutAt",
+          "depositPaidAmount",
+          "currency",
+          "updatedAt"
+        ]
+      },
+      "AdvanceReservationListResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AdvanceReservationListItemDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "CreateReservationDto": {
+        "type": "object",
+        "properties": {
+          "roomId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "guestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "plannedCheckInAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "plannedCheckOutAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "depositExpected": {
+            "type": "number",
+            "example": 500000
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "roomId",
+          "guestId",
+          "plannedCheckInAt"
+        ]
+      },
+      "ReservationEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ReservationResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "IntakePolicyResponseDto": {
+        "type": "object",
+        "properties": {
+          "timezone": {
+            "type": "string",
+            "example": "Asia/Ho_Chi_Minh"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "localDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "localTime": {
+            "type": "string",
+            "example": "11:30"
+          },
+          "allowCheckIn": {
+            "type": "boolean"
+          },
+          "allowAdvanceReservation": {
+            "type": "boolean"
+          },
+          "defaultAction": {
+            "type": "string",
+            "enum": [
+              "check_in",
+              "advance",
+              "none"
+            ]
+          }
+        },
+        "required": [
+          "timezone",
+          "date",
+          "localDate",
+          "localTime",
+          "allowCheckIn",
+          "allowAdvanceReservation",
+          "defaultAction"
+        ]
+      },
+      "IntakePolicyEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/IntakePolicyResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "CreateStayGuestDto": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "example": "Nguyễn Văn An"
+          },
+          "phone": {
+            "type": "string",
+            "example": "0900000000"
+          },
+          "idNumber": {
+            "type": "string",
+            "example": "079000000000"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "idIssuedDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "fullName"
+        ]
+      },
+      "CreateStayDto": {
+        "type": "object",
+        "properties": {
+          "roomId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "assignmentMode": {
+            "type": "string",
+            "enum": [
+              "exact",
+              "room_type"
+            ],
+            "default": "exact",
+            "description": "Exact assigns the selected physical room. Room-type mode keeps it as a preference and assigns a matching room at check-in."
+          },
+          "guest": {
+            "$ref": "#/components/schemas/CreateStayGuestDto"
+          },
+          "plannedCheckInAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "plannedCheckOutAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Omit or send null when the planned checkout is not yet known."
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "check_in",
+              "advance"
+            ]
+          },
+          "roomRatePerNight": {
+            "type": "number",
+            "example": 600000,
+            "description": "Nightly room rate in integer VND. Stored as an immutable reservation snapshot."
+          },
+          "depositAmount": {
+            "type": "number",
+            "example": 500000,
+            "description": "Actual deposit in integer VND. Allowed only for an advance reservation and recorded as a completed payment."
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "roomId",
+          "guest",
+          "plannedCheckInAt",
+          "action",
+          "roomRatePerNight"
+        ]
+      },
+      "CreatedStayGuestDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string",
+            "nullable": true
+          },
+          "idNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "idIssuedDate": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          },
+          "address": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "active",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreateStayResponseDto": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "check_in",
+              "advance"
+            ]
+          },
+          "reservation": {
+            "$ref": "#/components/schemas/ReservationResponseDto"
+          },
+          "guest": {
+            "$ref": "#/components/schemas/CreatedStayGuestDto"
+          }
+        },
+        "required": [
+          "action",
+          "reservation",
+          "guest"
+        ]
+      },
+      "CreateStayEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CreateStayResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "PricingPreviewDto": {
+        "type": "object",
+        "properties": {
+          "roomId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "guestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "plannedCheckInAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "plannedCheckOutAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "depositExpected": {
+            "type": "number",
+            "example": 500000
+          },
+          "note": {
+            "type": "string"
+          },
+          "manualAdjustment": {
+            "type": "number",
+            "example": 0
+          }
+        },
+        "required": [
+          "roomId",
+          "guestId",
+          "plannedCheckInAt"
+        ]
+      },
+      "PricingPreviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "billingMode": {
+            "type": "string",
+            "enum": [
+              "SHORT_STAY",
+              "NIGHTLY",
+              "MANUAL_REVIEW"
+            ]
+          },
+          "durationMinutes": {
+            "type": "number"
+          },
+          "nights": {
+            "type": "number"
+          },
+          "lateCheckout": {
+            "type": "boolean"
+          },
+          "requiresManualReview": {
+            "type": "boolean"
+          },
+          "roomAmount": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "billingMode",
+          "durationMinutes",
+          "nights",
+          "lateCheckout",
+          "requiresManualReview",
+          "roomAmount",
+          "total",
+          "charges"
+        ]
+      },
+      "PricingPreviewEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PricingPreviewResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "AdvanceReservationDetailDto": {
+        "type": "object",
+        "properties": {
+          "reservationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reservationStatus": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "confirmed",
+              "checked_in",
+              "checked_out",
+              "cancelled",
+              "no_show"
+            ]
+          },
+          "roomId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "preferredRoomId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "roomNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "preferredRoomNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "floorId": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
+          },
+          "floorNumber": {
+            "type": "number",
+            "nullable": true
+          },
+          "roomTypeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "roomTypeName": {
+            "type": "string"
+          },
+          "guestId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "guestName": {
+            "type": "string"
+          },
+          "contactPhone": {
+            "type": "string",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "checkInAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "checkOutAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "roomPriceAmount": {
+            "type": "number"
+          },
+          "estimatedRoomAmount": {
+            "type": "number",
+            "nullable": true
+          },
+          "depositPaidAmount": {
+            "type": "number"
+          },
+          "totalPaidAmount": {
+            "type": "number"
+          },
+          "remainingAmount": {
+            "type": "number",
+            "nullable": true
+          },
+          "isOpenEnded": {
+            "type": "boolean"
+          },
+          "chargedNights": {
+            "type": "number",
+            "nullable": true
+          },
+          "amountAsOf": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time"
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "VND"
+            ]
+          },
+          "canCancel": {
+            "type": "boolean"
+          },
+          "canCheckIn": {
+            "type": "boolean"
+          },
+          "checkInBlockedReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "version": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "reservationId",
+          "reservationStatus",
+          "roomTypeId",
+          "roomTypeName",
+          "guestId",
+          "guestName",
+          "contactPhone",
+          "note",
+          "checkInAt",
+          "checkOutAt",
+          "roomPriceAmount",
+          "estimatedRoomAmount",
+          "depositPaidAmount",
+          "totalPaidAmount",
+          "remainingAmount",
+          "isOpenEnded",
+          "chargedNights",
+          "amountAsOf",
+          "currency",
+          "canCancel",
+          "canCheckIn",
+          "checkInBlockedReason",
+          "version",
+          "updatedAt"
+        ]
+      },
+      "AdvanceReservationDetailEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/AdvanceReservationDetailDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "UpdateReservationDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "number",
+            "example": 1
+          },
+          "plannedCheckInAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "plannedCheckOutAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "ReservationActionDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "number",
+            "example": 1
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "CancelReservationDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "number",
+            "example": 1
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Khách thay đổi lịch trình"
+          }
+        },
+        "required": [
+          "version",
+          "reason"
+        ]
+      },
+      "CheckoutPreviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "reservationId": {
+            "type": "string"
+          },
+          "roomAmount": {
+            "type": "number"
+          },
+          "serviceAmount": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "paidAmount": {
+            "type": "number"
+          },
+          "balance": {
+            "type": "number"
+          },
+          "lateCheckout": {
+            "type": "boolean"
+          },
+          "isOpenEnded": {
+            "type": "boolean",
+            "description": "Whether this stay has no planned checkout and is billed live."
+          },
+          "chargedNights": {
+            "type": "number",
+            "nullable": true,
+            "description": "Number of room nights currently charged by the Backend."
+          },
+          "amountAsOf": {
+            "type": "string",
+            "nullable": true,
+            "format": "date-time",
+            "description": "Instant used by the Backend to calculate live open-stay pricing."
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "reservationId",
+          "roomAmount",
+          "serviceAmount",
+          "total",
+          "paidAmount",
+          "balance",
+          "lateCheckout",
+          "isOpenEnded",
+          "chargedNights",
+          "amountAsOf",
+          "charges"
+        ]
+      },
+      "CheckoutPreviewEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CheckoutPreviewResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "ServiceCatalogResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "defaultPrice": {
+            "type": "number"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "defaultPrice",
+          "active"
+        ]
+      },
+      "ServiceCatalogListResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "ServiceCatalogDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "defaultPrice": {
+            "type": "number",
+            "example": 50000
+          }
+        },
+        "required": [
+          "name",
+          "defaultPrice"
+        ]
+      },
+      "ServiceCatalogEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ServiceCatalogResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "ReservationServiceResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reservationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "serviceId": {
+            "type": "object",
+            "format": "uuid",
+            "nullable": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "unitPrice": {
+            "type": "number"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "reservationId",
+          "name",
+          "unitPrice",
+          "quantity",
+          "total",
+          "active"
+        ]
+      },
+      "ReservationServiceListResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReservationServiceResponseDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "AddReservationServiceDto": {
+        "type": "object",
+        "properties": {
+          "serviceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "description": "Required for a custom service"
+          },
+          "unitPrice": {
+            "type": "number",
+            "description": "Required for a manually entered service. Integer VND only.",
+            "example": 300000
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "quantity"
+        ]
+      },
+      "ReservationServiceEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ReservationServiceResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "UpdateReservationServiceDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Giặt ủi"
+          },
+          "unitPrice": {
+            "type": "number",
+            "description": "Integer VND only.",
+            "example": 300000
+          },
+          "quantity": {
+            "type": "number",
+            "example": 1
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "name",
+          "unitPrice",
+          "quantity"
+        ]
+      },
+      "VoidServiceDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      },
+      "PaymentResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "reservationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paymentType": {
+            "type": "string",
+            "enum": [
+              "deposit",
+              "settlement",
+              "refund",
+              "adjustment"
+            ]
+          },
+          "amount": {
+            "type": "number"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "cash",
+              "bank_transfer",
+              "other"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "completed",
+              "voided",
+              "refunded"
+            ]
+          },
+          "paidAt": {
+            "type": "object",
+            "format": "date-time",
+            "nullable": true
+          },
+          "note": {
+            "type": "object",
+            "nullable": true
+          },
+          "voidReason": {
+            "type": "object",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "reservationId",
+          "paymentType",
+          "amount",
+          "method",
+          "status"
+        ]
+      },
+      "PaymentListResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentResponseDto"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "CreatePaymentDto": {
+        "type": "object",
+        "properties": {
+          "reservationId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "paymentType": {
+            "type": "string",
+            "enum": [
+              "deposit",
+              "settlement",
+              "refund",
+              "adjustment"
+            ]
+          },
+          "amount": {
+            "type": "number",
+            "example": 500000
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "cash",
+              "bank_transfer",
+              "other"
+            ]
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "reservationId",
+          "paymentType",
+          "amount",
+          "method"
+        ]
+      },
+      "PaymentEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/PaymentResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "VoidPaymentDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ]
+      }
+    }
+  }
+}
