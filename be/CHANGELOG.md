@@ -84,7 +84,7 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Fixed
 
-- **2026-08-27 | BE/DevOps/CI:** Sửa deploy runner non-root bị Git chặn do ownership worktree; script CI/CD chỉ khai báo `safe.directory` cho đúng `/opt/sunsea`, giữ các cơ chế bảo vệ Git ở những đường dẫn khác.
+- **2026-08-27 | BE/DevOps/CI:** Sửa deploy runner non-root bị Git chặn do ownership worktree và Compose chạy sai thư mục home của runner; script CI/CD chỉ trust `/opt/sunsea`, chạy Compose từ worktree này và giữ `.env` root-owned, group-readable với mode `640`.
 
 - **2026-08-26 | BE/Finance:** Sửa lỗi ngày dự kiến trả đã qua làm đóng băng tiền phòng. Khi status là `checked_in`, preview/detail và checkout dùng `actual_check_in_at` đến thời điểm hiện tại/trả thực tế; bill tăng thêm đêm sau 17:00 `Asia/Ho_Chi_Minh` dù `planned_check_out_at` vẫn tồn tại.
 

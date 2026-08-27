@@ -24,6 +24,10 @@ if ! git config --global --get-all safe.directory | grep --fixed-strings --quiet
   git config --global --add safe.directory "$deploy_dir"
 fi
 
+# Compose resolves relative paths from the current directory. The runner service
+# starts in its own home directory, so always execute from the deployment tree.
+cd "$deploy_dir"
+
 if [[ -n "$(git -C "$deploy_dir" status --porcelain --untracked-files=no)" ]]; then
   echo "Production worktree has tracked local changes; refusing to overwrite it." >&2
   exit 1
