@@ -35,6 +35,12 @@ pnpm build
 
 Test configuration được giữ sẵn cho phase sau; thay đổi intake v2 không thêm test suite mới. Frontend chạy cùng Backend qua Docker Compose của repository `be/` khi cần.
 
+## Production một domain
+
+Production dùng `https://sunsea.phucpink.io.vn` cho cả UI, REST API và Socket.IO. Caddy ở root repository reverse-proxy `/api/*` và `/socket.io/*` vào NestJS, còn các route khác vào Next.js. `NEXT_PUBLIC_API_BASE_URL` và `NEXT_PUBLIC_WS_URL` vì vậy cùng là origin này; chúng được truyền vào **lúc Docker build**, vì Next.js public environment được nhúng vào client bundle.
+
+Không tạo `.env` trong Frontend. File environment production duy nhất nằm trên VPS (`/opt/sunsea/.env`), bị Git ignore và chứa public origin cùng backend/Supabase secrets cần thiết cho Compose.
+
 ## Boundary
 
 Frontend chỉ gọi REST API và Socket.IO từ backend. Không cài hoặc import `@supabase/supabase-js`, không chứa database URL/service-role key.

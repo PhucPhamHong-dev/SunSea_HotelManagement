@@ -48,6 +48,12 @@ pnpm openapi:export
 
 Test configuration được giữ sẵn cho phase sau; thay đổi intake v2 không thêm test suite mới. Docker Compose có thể chạy Backend và Frontend theo hướng dẫn bên dưới; Supabase local chỉ cần khi muốn reset môi trường local.
 
+## Production một domain
+
+Production không expose trực tiếp cổng `3000` hoặc `3001`. Docker Compose ở root repository chạy Caddy tại `https://sunsea.phucpink.io.vn`: Caddy phục vụ Frontend tại `/` và proxy `/api/*`, `/socket.io/*`, `/docs*`, `/openapi.json` vào Backend. Do API và Frontend cùng origin, cookie HttpOnly có `Secure`/`SameSite=Lax` hoạt động ổn định và CORS production chỉ cần chính origin này.
+
+Trên VPS, `.env` thật nằm ở `/opt/sunsea/.env`, dựa trên `deploy/production.env.example`; file này không được commit. Phải đặt `NODE_ENV=production`, `FRONTEND_URL`, `CORS_ORIGINS`, `NEXT_PUBLIC_API_BASE_URL` và `NEXT_PUBLIC_WS_URL` bằng `https://sunsea.phucpink.io.vn`, đồng thời giữ các credential Supabase hosted thuộc cùng project. Chạy compose production từ root repository, không dùng `be/docker-compose.yml` local.
+
 ## Chạy Backend và Frontend bằng một Docker Compose
 
 Từ thư mục Backend, chạy một lệnh:

@@ -11,3 +11,16 @@ Mỗi ứng dụng có tài liệu và hướng dẫn chạy riêng:
 - [Frontend README](./fe/README.md)
 
 Không commit file `.env` hoặc bất kỳ secret, token hay khóa kết nối nào.
+
+## Production deployment
+
+Production uses one public origin: `https://sunsea.phucpink.io.vn`. Caddy terminates HTTPS and routes `/` to `fe`, while `/api/*`, `/socket.io/*`, `/docs*` and `/openapi.json` go to `be`; the Backend and Frontend containers are never exposed directly.
+
+On the VPS, place the real environment file at `/opt/sunsea/.env` based on [`deploy/production.env.example`](./deploy/production.env.example), then run:
+
+```bash
+cd /opt/sunsea
+docker compose --env-file .env -f docker-compose.production.yml up -d --build
+```
+
+The only required public DNS record is `sunsea.phucpink.io.vn → VPS IPv4`. Open ports `80` and `443` for Caddy (and `22` only for SSH administration).

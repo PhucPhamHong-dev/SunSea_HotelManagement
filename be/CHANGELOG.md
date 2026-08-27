@@ -6,6 +6,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Added
 
+- **2026-08-27 | BE/DevOps:** Bổ sung deployment production một domain bằng root `docker-compose.production.yml` và Caddy. Backend chỉ expose trong Docker network; HTTPS origin `sunsea.phucpink.io.vn` proxy `/api/*` và `/socket.io/*` vào NestJS. Template environment không chứa secret nằm tại `deploy/production.env.example`.
+
 - **2026-08-26 | BE/Database/API:** Thêm và áp dụng `0016_room_type_inventory_and_future_availability.sql`: bảng `room_types`, `rooms.room_type_id`, reservation có `room_type_id`/`preferred_room_id`, có thể chưa gán `room_id` trước check-in và draft hold tự hết hạn sau 30 phút. `POST /reservations/intake` nhận `assignmentMode=exact|room_type`; booking theo loại phòng chỉ match chính xác số giường và thuộc tính cửa sổ.
 - **2026-08-26 | BE/Database:** Thêm và áp dụng `0017_room_type_capacity_guard.sql` để mọi booking, kể cả booking chọn số phòng cụ thể, đều bị chặn khi hết tồn kho loại phòng trong khoảng thời gian yêu cầu.
 - **2026-08-26 | BE/Database:** Thêm và áp dụng `0018_expected_checkout_physical_guard.sql`; khách đang ở có ngày dự kiến trả rõ ràng không còn khóa số phòng ở các ngày sau mốc đó, còn stay mở vẫn khóa vô hạn. Nếu khách ở quá dự kiến, check-in booking sau bị chặn để staff quyết định, không tự chuyển phòng.
@@ -44,6 +46,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 - **2026-08-23 | BE/API:** Thêm modules guests, reservations, pricing, services, payments, audit và housekeeping skeleton; thêm reservation lifecycle, pricing preview, service/payment manual APIs và `/api/v1` OpenAPI routes.
 
 ### Changed
+
+- **2026-08-27 | BE/DevOps:** Production sử dụng `FRONTEND_URL`/`CORS_ORIGINS` cùng origin HTTPS `sunsea.phucpink.io.vn`; không cần public Backend domain hay expose port 3001.
 
 - **2026-08-26 | BE/Operations/API:** Trạng thái `cleaning` chỉ chặn nhận phòng tức thời. `GET /rooms/status-by-date` không mang trạng thái dọn hiện tại sang business date tương lai; availability tương lai được xét theo tồn kho loại phòng. Check-in reservation chưa gán phòng sẽ chọn phòng `ready` đúng room type, ưu tiên phòng mong muốn rồi mới theo số phòng.
 - **2026-08-26 | BE/Operations:** Gia hạn stay không còn tự động chuyển booking của khách khác. Nếu thiếu tồn kho room type, Backend từ chối transaction với conflict để staff quyết định rõ ràng.

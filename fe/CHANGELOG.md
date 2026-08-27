@@ -6,6 +6,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Added
 
+- **2026-08-27 | FE/DevOps:** Bổ sung deployment production một domain qua Caddy. Frontend, REST API và Socket.IO dùng cùng origin `https://sunsea.phucpink.io.vn`; không có Supabase config trong bundle.
+
 - **2026-08-26 | FE/UI/API:** Dashboard hiển thị room type từ API thật trong intake, danh sách/chi tiết đặt trước và modal phòng tương đương. Với advance booking khi số phòng ưu tiên bận nhưng Backend còn tồn kho cùng loại, lễ tân có thể xác nhận `Giữ loại phòng, xếp phòng sau`; Frontend gửi `assignmentMode=room_type`, không mock hay tự gán phòng.
 
 - **2026-08-26 | FE/Realtime:** Dashboard lắng nghe `reservation.no_show` từ Backend để invalidate reservation, danh sách đặt trước, detail/payment và map phòng; không dùng trạng thái local hoặc mock để giải phóng phòng.
@@ -39,6 +41,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 - **2026-08-23 | FE/API:** Dựng dashboard theo mockup với calendar tháng, danh sách đặt trước, stay information, dịch vụ phát sinh, lịch sử thanh toán, thao tác xác nhận/trả phòng và realtime query invalidation.
 
 ### Changed
+
+- **2026-08-27 | FE/DevOps:** Dockerfile nhận `NEXT_PUBLIC_API_BASE_URL` và `NEXT_PUBLIC_WS_URL` ở build-time để Next.js nhúng đúng public origin production; Compose local cũng truyền hai build argument này.
 
 - **2026-08-26 | FE/UI/API:** Room map lấy availability theo business date mới từ Backend: trạng thái dọn phòng hôm nay không làm phòng bị khóa ở ngày tương lai. Reservation chưa được gán phòng hiển thị loại phòng và số phòng ưu tiên thay vì dữ liệu giả; khi check-in Backend mới quyết định phòng ready thực tế.
 

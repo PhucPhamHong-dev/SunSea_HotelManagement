@@ -1,0 +1,12 @@
+sunsea.phucpink.io.vn {
+  encode zstd gzip
+
+  @backend path /api/* /socket.io/* /openapi.json /docs*
+  handle @backend {
+    reverse_proxy backend:3001
+  }
+
+  handle {
+    reverse_proxy frontend:3000
+  }
+}
