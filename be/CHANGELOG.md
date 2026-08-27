@@ -6,6 +6,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Added
 
+- **2026-08-27 | BE/DevOps/CI:** Thêm GitHub Actions production CI/CD ở root repository: quality gate Backend/Frontend chạy trên GitHub-hosted runner, sau đó runner VPS `sunsea-production` chỉ deploy commit `main` đã được kiểm tra. Deploy dùng Docker Compose, health check và rollback revision khi lỗi; không đưa `.env` hoặc Supabase credential vào GitHub.
+
 - **2026-08-27 | BE/DevOps:** Bổ sung deployment production một domain bằng root `docker-compose.production.yml` và Nginx VPS. Backend chỉ bind loopback; HTTPS origin `sunsea.phucpink.io.vn` proxy `/api/*` và `/socket.io/*` vào NestJS. Template environment không chứa secret nằm tại `deploy/production.env.example`.
 
 - **2026-08-26 | BE/Database/API:** Thêm và áp dụng `0016_room_type_inventory_and_future_availability.sql`: bảng `room_types`, `rooms.room_type_id`, reservation có `room_type_id`/`preferred_room_id`, có thể chưa gán `room_id` trước check-in và draft hold tự hết hạn sau 30 phút. `POST /reservations/intake` nhận `assignmentMode=exact|room_type`; booking theo loại phòng chỉ match chính xác số giường và thuộc tính cửa sổ.

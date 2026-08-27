@@ -54,6 +54,8 @@ Production không expose trực tiếp cổng `3000` hoặc `3001`. Docker Compo
 
 Trên VPS, `.env` thật nằm ở `/opt/sunsea/.env`, dựa trên `deploy/production.env.example`; file này không được commit. Phải đặt `NODE_ENV=production`, `FRONTEND_URL`, `CORS_ORIGINS`, `NEXT_PUBLIC_API_BASE_URL` và `NEXT_PUBLIC_WS_URL` bằng `https://sunsea.phucpink.io.vn`, đồng thời giữ các credential Supabase hosted thuộc cùng project. Chạy compose production từ root repository, không dùng `be/docker-compose.yml` local.
 
+Mỗi push vào branch `main` chạy quality gate Backend trước khi runner production triển khai. Workflow root chỉ deploy sau khi lint, typecheck, unit test hiện có và build thành công; môi trường runtime vẫn đọc credential từ `/opt/sunsea/.env`, không nhận secret từ GitHub Actions.
+
 ## Chạy Backend và Frontend bằng một Docker Compose
 
 Từ thư mục Backend, chạy một lệnh:

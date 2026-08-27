@@ -1,0 +1,102 @@
+name: Production CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sunsea-production
+  cancel-in-progress: false
+
+jobs:
+  quality:
+    name: Quality gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: |
+            be/pnpm-lock.yaml
+            fe/pnpm-lock.yaml
+
+      - name: Install Backend dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: be
+
+      - name: Lint Backend
+        run: pnpm lint
+        working-directory: be
+
+      - name: Typecheck Backend
+        run: pnpm typecheck
+        working-directory: be
+
+      - name: Run Backend unit tests
+        run: pnpm test:unit
+        working-directory: be
+
+      - name: Build Backend
+        run: pnpm build
+        working-directory: be
+
+      - name: Install Frontend dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: fe
+
+      - name: Lint Frontend
+        run: pnpm lint
+        working-directory: fe
+
+      - name: Typecheck Frontend
+        run: pnpm typecheck
+        working-directory: fe
+
+      - name: Run Frontend unit tests
+        run: pnpm test:unit
+        working-directory: fe
+
+      - name: Build Frontend
+        run: pnpm build
+        working-directory: fe
+        env:
+          NEXT_PUBLIC_API_BASE_URL: https://sunsea.phucpink.io.vn
+          NEXT_PUBLIC_WS_URL: https://sunsea.phucpink.io.vn
+
+      - name: Scan for committed secrets
+        uses: gitleaks/gitleaks-action@v2
+
+  deploy:
+    name: Deploy production
+    needs: quality
+    if: github.ref == 'refs/heads/main'
+    runs-on:
+      - self-hosted
+      - Linux
+      - X64
+      - sunsea-production
+    timeout-minutes: 25
+    steps:
+      - name: Checkout approved revision
+        uses: actions/checkout@v4
+
+      - name: Deploy and verify
+        run: bash "$GITHUB_WORKSPACE/deploy/ci/deploy-production.sh" "$GITHUB_SHA"
+        env:
+          SUNSEA_DEPLOY_DIR: /opt/sunsea

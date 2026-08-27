@@ -41,6 +41,8 @@ Production dùng `https://sunsea.phucpink.io.vn` cho cả UI, REST API và Socke
 
 Không tạo `.env` trong Frontend. File environment production duy nhất nằm trên VPS (`/opt/sunsea/.env`), bị Git ignore và chứa public origin cùng backend/Supabase secrets cần thiết cho Compose.
 
+Mỗi push vào `main` phải qua quality gate Frontend (lint, typecheck, unit test hiện có và build) trước khi runner production triển khai. CI/CD không truyền Supabase hay database secret vào Frontend; production luôn dùng environment file chỉ có trên VPS.
+
 ## Boundary
 
 Frontend chỉ gọi REST API và Socket.IO từ backend. Không cài hoặc import `@supabase/supabase-js`, không chứa database URL/service-role key.

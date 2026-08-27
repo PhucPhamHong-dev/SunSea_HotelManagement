@@ -24,3 +24,9 @@ docker compose --env-file .env -f docker-compose.production.yml up -d --build
 ```
 
 The only required public DNS record is `sunsea.phucpink.io.vn → VPS IPv4`. Open ports `80` and `443` for Nginx (and `22` only for SSH administration). Install [`deploy/nginx/sunsea.phucpink.io.vn.conf`](./deploy/nginx/sunsea.phucpink.io.vn.conf) into Nginx and use Certbot to issue the certificate before serving traffic.
+
+## CI/CD production
+
+Every push to `main` runs the root GitHub Actions workflow at [`.github/workflows/production.yml`](./.github/workflows/production.yml). Its quality gate runs Backend and Frontend install, lint, typecheck, existing unit tests, build, and a secret scan on GitHub-hosted runners. Only after that succeeds does the `sunsea-production` self-hosted runner deploy the exact pushed commit to `/opt/sunsea`.
+
+The deploy runner never runs on pull requests or forks. It runs [`deploy/ci/deploy-production.sh`](./deploy/ci/deploy-production.sh), validates the Docker Compose configuration, rebuilds both services, checks Backend and Frontend health endpoints, and rolls the VPS back to the previous Git revision if deployment or health verification fails. Production secrets remain only in `/opt/sunsea/.env`; do not add them to GitHub Actions secrets or this repository.
