@@ -5,8 +5,8 @@ services:
       dockerfile: Dockerfile
     env_file:
       - ${SUNSEA_ENV_FILE:-.env}
-    expose:
-      - "3001"
+    ports:
+      - "127.0.0.1:${SUNSEA_BACKEND_PORT:-13001}:3001"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:3001/api/v1/health"]
@@ -24,29 +24,9 @@ services:
         NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL}
     environment:
       NODE_ENV: production
-    expose:
-      - "3000"
-    restart: unless-stopped
-    depends_on:
-      backend:
-        condition: service_healthy
-
-  caddy:
-    image: caddy:2.10-alpine
-    depends_on:
-      backend:
-        condition: service_healthy
-      frontend:
-        condition: service_started
     ports:
-      - "80:80"
-      - "443:443"
+      - "127.0.0.1:${SUNSEA_FRONTEND_PORT:-13000}:3000"
     restart: unless-stopped
-    volumes:
-      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-
-volumes:
-  caddy_data:
-  caddy_config:
+    depends_on:
+      backend:
+        condition: service_healthy

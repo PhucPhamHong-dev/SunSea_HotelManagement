@@ -6,7 +6,7 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Added
 
-- **2026-08-27 | FE/DevOps:** Bổ sung deployment production một domain qua Caddy. Frontend, REST API và Socket.IO dùng cùng origin `https://sunsea.phucpink.io.vn`; không có Supabase config trong bundle.
+- **2026-08-27 | FE/DevOps:** Bổ sung deployment production một domain qua Nginx VPS. Frontend, REST API và Socket.IO dùng cùng origin `https://sunsea.phucpink.io.vn`; không có Supabase config trong bundle.
 
 - **2026-08-26 | FE/UI/API:** Dashboard hiển thị room type từ API thật trong intake, danh sách/chi tiết đặt trước và modal phòng tương đương. Với advance booking khi số phòng ưu tiên bận nhưng Backend còn tồn kho cùng loại, lễ tân có thể xác nhận `Giữ loại phòng, xếp phòng sau`; Frontend gửi `assignmentMode=room_type`, không mock hay tự gán phòng.
 
