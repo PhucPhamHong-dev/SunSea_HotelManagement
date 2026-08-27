@@ -17,6 +17,13 @@ if [[ ! -f "$compose_file" || ! -f "$env_file" ]]; then
   exit 1
 fi
 
+# The production checkout is intentionally owned by root while the runner uses
+# a dedicated non-root account. Trust only this explicit worktree so Git's
+# ownership protection remains active for every other path on the VPS.
+if ! git config --global --get-all safe.directory | grep --fixed-strings --quiet --line-regexp "$deploy_dir"; then
+  git config --global --add safe.directory "$deploy_dir"
+fi
+
 if [[ -n "$(git -C "$deploy_dir" status --porcelain --untracked-files=no)" ]]; then
   echo "Production worktree has tracked local changes; refusing to overwrite it." >&2
   exit 1

@@ -84,6 +84,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Fixed
 
+- **2026-08-27 | BE/DevOps/CI:** Sửa deploy runner non-root bị Git chặn do ownership worktree; script CI/CD chỉ khai báo `safe.directory` cho đúng `/opt/sunsea`, giữ các cơ chế bảo vệ Git ở những đường dẫn khác.
+
 - **2026-08-26 | BE/Finance:** Sửa lỗi ngày dự kiến trả đã qua làm đóng băng tiền phòng. Khi status là `checked_in`, preview/detail và checkout dùng `actual_check_in_at` đến thời điểm hiện tại/trả thực tế; bill tăng thêm đêm sau 17:00 `Asia/Ho_Chi_Minh` dù `planned_check_out_at` vẫn tồn tại.
 
 - **2026-08-26 | BE/Operations:** Sửa lỗi khách đã quá ngày dự kiến trả nhưng chưa checkout bị xem là trống. `checked_in` giờ giữ phòng cho API status theo ngày và equivalent-room lookup đến khi checkout thực tế hoàn tất; không thể tạo booking mới trên chính phòng đó.

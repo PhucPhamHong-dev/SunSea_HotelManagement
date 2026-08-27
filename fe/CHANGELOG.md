@@ -98,6 +98,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Fixed
 
+- **2026-08-27 | FE/DevOps/CI:** Sửa pipeline production để runner non-root chỉ trust worktree `/opt/sunsea` trước khi pull/build Frontend; deploy không cần quyền root hoặc secret GitHub.
+
 - **2026-08-26 | FE/UI/API:** Sửa selection đặt trước bị `setSelectedDate` xóa sau khi click card, khiến reservation `draft`/`confirmed` hiển thị nhầm panel lưu trú và mất nút `Hủy đặt phòng`. Dashboard giờ lấy `reservation.status` từ Backend làm nguồn quyết định panel; click map cũng mở đúng panel đặt trước.
 
 - **2026-08-26 | FE/UI:** Bỏ hướng dẫn thừa dưới field `Dự kiến trả (tùy chọn)` và thu gọn `Ghi chú` của intake thành HeroUI single-line field, tránh kéo dài form đặt phòng/nhận phòng.
