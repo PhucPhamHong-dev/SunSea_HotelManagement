@@ -8,16 +8,14 @@ export function dateKey(date: Date): string {
 }
 
 /**
- * The advance-reservation list is an operational queue, not a complete
- * calendar. It deliberately includes check-ins today and tomorrow only,
- * using the hotel's business timezone rather than the browser timezone.
+ * The advance-reservation list is the reception's forward-looking queue.
+ * It starts at the beginning of today in the hotel timezone and deliberately
+ * has no end date, so every effective future booking remains visible.
  */
-export function advanceReservationWindow(now = new Date()): { from: string; to: string } {
+export function advanceReservationWindow(now = new Date()): { from: string } {
   const today = dateKey(now);
-  const dayAfterTomorrow = addHotelDays(today, 2);
   return {
     from: systemDateTimeLocalToIso(`${today}T00:00`) as string,
-    to: systemDateTimeLocalToIso(`${dayAfterTomorrow}T00:00`) as string,
   };
 }
 
@@ -127,13 +125,6 @@ function localCalendarDateKey(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
-}
-
-function addHotelDays(value: string, days: number): string {
-  const [year = 0, month = 1, day = 1] = value.split('-').map(Number);
-  const date = new Date(Date.UTC(year, month - 1, day));
-  date.setUTCDate(date.getUTCDate() + days);
-  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
 }
 
 export function formatVndAmountInput(value?: number | string | null): string {

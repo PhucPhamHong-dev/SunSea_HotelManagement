@@ -319,12 +319,13 @@ export default function DashboardPage() {
       </header>
       {apiUnavailable && <div className="api-banner" role="status">Backend đang không trả dữ liệu vận hành. Các khu vực sẽ tự đồng bộ lại khi phiên đăng nhập và API sẵn sàng.</div>}
 
-      <div className="dashboard-top">
-        <div className="dashboard-left-column">
-          <CalendarPanel month={calendarMonth} selectedDate={selectedDate} reservations={reservations} onSelectDate={handleSelectDate} onChangeMonth={setCalendarMonth} />
-          <AdvanceReservations reservations={advanceReservationsQuery.data ?? []} selectedReservationId={selectedReservationId} onSelect={selectReservation} isLoading={advanceReservationsQuery.isLoading} isError={advanceReservationsQuery.isError} />
-        </div>
-        {showCreateStay && selectedRoom ? <CreateStayPanel
+      <div className="dashboard-workspace">
+        <div className="dashboard-top">
+          <div className="dashboard-left-column">
+            <CalendarPanel month={calendarMonth} selectedDate={selectedDate} reservations={reservations} onSelectDate={handleSelectDate} onChangeMonth={setCalendarMonth} />
+            <AdvanceReservations reservations={advanceReservationsQuery.data ?? []} selectedReservationId={selectedReservationId} onSelect={selectReservation} isLoading={advanceReservationsQuery.isLoading} isError={advanceReservationsQuery.isError} />
+          </div>
+          {showCreateStay && selectedRoom ? <CreateStayPanel
             room={selectedRoom}
             selectedDate={selectedDate}
             policy={intakePolicyQuery.data}
@@ -365,14 +366,14 @@ export default function DashboardPage() {
             confirmPending={confirmReservation.isPending}
             actionMessage={actionMessage}
           />}
-      </div>
+        </div>
 
-      {selectedFloor && floorNumber !== undefined ? <FloorMapPanel floorId={activeFloorId} floorNumber={floorNumber} rooms={rooms} isLoading={selectedFloorRoomsQuery.isLoading} isError={selectedFloorRoomsQuery.isError} selectedRoomId={selectedRoomId} selectionKind={resolvedSelectionKind} onSelectRoom={handleSelectRoom} canGoPrevious={floorIndex > 0} canGoNext={floorIndex >= 0 && floorIndex < (floorsQuery.data?.length ?? 1) - 1} onPreviousFloor={() => goToFloor(floorIndex - 1)} onNextFloor={() => goToFloor(floorIndex + 1)} /> : (
-        <section className="floor-panel" aria-labelledby="floor-map-empty-title">
-          <div className="floor-panel__heading"><div><h2 id="floor-map-empty-title">Sơ đồ phòng</h2><p>Chưa có dữ liệu tầng từ Backend.</p></div><span className="floor-panel__sync">Chờ dữ liệu</span></div>
-          <p className="empty-copy">Tạo tầng và phòng qua API Backend để bắt đầu vận hành.</p>
-        </section>
-      )}
+        {selectedFloor && floorNumber !== undefined ? <FloorMapPanel floorId={activeFloorId} floorNumber={floorNumber} rooms={rooms} isLoading={selectedFloorRoomsQuery.isLoading} isError={selectedFloorRoomsQuery.isError} selectedRoomId={selectedRoomId} selectionKind={resolvedSelectionKind} onSelectRoom={handleSelectRoom} canGoPrevious={floorIndex > 0} canGoNext={floorIndex >= 0 && floorIndex < (floorsQuery.data?.length ?? 1) - 1} onPreviousFloor={() => goToFloor(floorIndex - 1)} onNextFloor={() => goToFloor(floorIndex + 1)} /> : (
+          <section className="floor-panel" aria-label="Sơ đồ phòng chưa có dữ liệu">
+            <p className="empty-copy">Tạo tầng và phòng qua API Backend để bắt đầu vận hành.</p>
+          </section>
+        )}
+      </div>
 
       {pendingAlternative && <EquivalentRoomModal
         search={pendingAlternative.search}

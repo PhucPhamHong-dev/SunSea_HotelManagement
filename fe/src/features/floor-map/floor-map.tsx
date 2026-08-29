@@ -28,7 +28,7 @@ export function FloorMap({ floorNumber, rooms, selectedRoomId, onSelectRoom, sel
         if (item.kind === 'elevator') {
           return (
             <div key="elevator" className="elevator" style={{ gridArea: item.area }}>
-              <span className="elevator__title">{item.label}</span>
+              <span className="elevator__floor">Tầng {floorNumber}</span>
               <span className="elevator__arrows">↔ ↕</span>
               <span className="elevator__box" aria-hidden="true"><i /><i /></span>
             </div>

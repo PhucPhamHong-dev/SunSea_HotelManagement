@@ -44,6 +44,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Changed
 
+- **2026-08-29 | FE/UI/API:** Danh sách `Phòng đặt trước` gọi Backend từ đầu ngày hiện tại theo `Asia/Ho_Chi_Minh` đến toàn bộ tương lai, không còn giới hạn hôm nay/ngày mai. Dashboard được bố trí trong một viewport: panel thông tin lưu trú và danh sách đặt trước cuộn nội bộ, còn sơ đồ phòng vẫn ở màn hình đầu. Bỏ heading `Sơ đồ phòng · Tầng …`; ô thang máy hiển thị trực tiếp `Tầng …` để tiết kiệm không gian.
+
 - **2026-08-27 | FE/DevOps:** Dockerfile nhận `NEXT_PUBLIC_API_BASE_URL` và `NEXT_PUBLIC_WS_URL` ở build-time để Next.js nhúng đúng public origin production; Compose local cũng truyền hai build argument này.
 
 - **2026-08-26 | FE/UI/API:** Room map lấy availability theo business date mới từ Backend: trạng thái dọn phòng hôm nay không làm phòng bị khóa ở ngày tương lai. Reservation chưa được gán phòng hiển thị loại phòng và số phòng ưu tiên thay vì dữ liệu giả; khi check-in Backend mới quyết định phòng ready thực tế.
@@ -151,6 +153,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 - **2026-08-23 | FE/API:** Regenerate client sau khi backend bổ sung list reservation services và checkout-preview schema riêng.
 
 ### Tests
+
+- **2026-08-29 | Tests/FE/UI/API:** Đã chạy `pnpm lint`, `pnpm typecheck` và `pnpm build` thành công. Không thêm hoặc thay đổi test suite theo phạm vi.
 
 - **2026-08-26 | Tests/FE/API/UI/DevOps:** Đã chạy `pnpm api:generate`, `pnpm lint`, `pnpm typecheck`, `pnpm build` thành công. Docker Compose rebuild và Frontend `/login` phản hồi HTTP `200`; kiểm tra runtime không có session chuyển `/dashboard` về `/login`. Không thêm hoặc thay đổi test suite theo phạm vi.
 

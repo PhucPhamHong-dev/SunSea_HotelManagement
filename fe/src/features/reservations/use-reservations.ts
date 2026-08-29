@@ -23,7 +23,7 @@ export function useReservation(id?: string) {
 export function useAdvanceReservations(enabled = true) {
   const window = advanceReservationWindow();
   return useQuery({
-    queryKey: ['advance-reservations', window.from, window.to],
+    queryKey: ['advance-reservations', window.from],
     queryFn: async () => (await apiClient.reservations.listAdvance(window)).data.data,
     enabled,
   });
