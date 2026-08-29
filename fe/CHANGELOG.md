@@ -98,6 +98,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Fixed
 
+- **2026-08-29 | FE/Auth:** Sửa login thành công nhưng Dashboard tự quay lại `/login` khi TanStack Query đang giữ cache `/auth/me = null`. Login giờ dùng user do Backend trả về để cập nhật cache session trước khi điều hướng; không lưu token ở Frontend và không thay đổi API.
+
 - **2026-08-27 | FE/DevOps/CI:** Sửa pipeline production để runner non-root chỉ trust và chạy Compose từ worktree `/opt/sunsea` trước khi pull/build Frontend; deploy không cần quyền root hoặc secret GitHub.
 
 - **2026-08-26 | FE/UI/API:** Sửa selection đặt trước bị `setSelectedDate` xóa sau khi click card, khiến reservation `draft`/`confirmed` hiển thị nhầm panel lưu trú và mất nút `Hủy đặt phòng`. Dashboard giờ lấy `reservation.status` từ Backend làm nguồn quyết định panel; click map cũng mở đúng panel đặt trước.

@@ -2,11 +2,13 @@
 
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { authService } from '../../lib/auth/auth-service';
 import { ApiError } from '../../lib/api/api-error';
 
 export function LoginForm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -17,7 +19,11 @@ export function LoginForm() {
     setLoading(true);
     setError(null);
     try {
-      await authService.login({ username, password });
+      const response = await authService.login({ username, password });
+      // A previous visit to /dashboard may have cached a null /auth/me result.
+      // Seed the authenticated user returned by login before navigating so the
+      // dashboard does not immediately redirect back to /login.
+      queryClient.setQueryData(['auth', 'me'], response.data.data);
       router.replace('/dashboard');
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Đăng nhập thất bại.');
