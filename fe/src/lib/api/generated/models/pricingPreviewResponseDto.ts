@@ -4,8 +4,8 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { PricingPreviewResponseDtoBillingMode } from './pricingPreviewResponseDtoBillingMode';
-import type { PricingPreviewResponseDtoChargesItem } from './pricingPreviewResponseDtoChargesItem';
+import type { PricingPreviewResponseDtoBillingMode } from "./pricingPreviewResponseDtoBillingMode";
+import type { PricingPreviewResponseDtoChargesItem } from "./pricingPreviewResponseDtoChargesItem";
 
 export interface PricingPreviewResponseDto {
   billingMode: PricingPreviewResponseDtoBillingMode;

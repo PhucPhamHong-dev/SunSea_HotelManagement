@@ -8,4 +8,6 @@
 /**
  * @nullable
  */
-export type ReservationResponseDtoActualCheckOutAt = { [key: string]: unknown } | null;
+export type ReservationResponseDtoActualCheckOutAt = {
+  [key: string]: unknown;
+} | null;

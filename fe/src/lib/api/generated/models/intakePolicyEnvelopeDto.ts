@@ -4,8 +4,8 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { IntakePolicyResponseDto } from './intakePolicyResponseDto';
-import type { ApiMetaDto } from './apiMetaDto';
+import type { IntakePolicyResponseDto } from "./intakePolicyResponseDto";
+import type { ApiMetaDto } from "./apiMetaDto";
 
 export interface IntakePolicyEnvelopeDto {
   success: boolean;

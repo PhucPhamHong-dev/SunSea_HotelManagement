@@ -6,6 +6,12 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Added
 
+- **2026-08-31 | BE/Database/API:** Thêm migration `0020_walk_in_multi_guest_intake.sql` và `POST /api/v1/reservations/check-in` cho nhận phòng trực tiếp một hoặc nhiều khách trong một transaction. Migration thêm `guest_documents`/`reservation_guests` với RLS, audit columns và RPC lock phòng `ready`; CCCD mặc định quốc tịch `VN`/bắt buộc ngày cấp, hộ chiếu bắt buộc quốc tịch. Không thêm lookup, autofill, OCR hoặc ràng buộc trùng số giấy tờ trong phase này.
+
+- **2026-08-29 | BE/Database/Operations:** Thêm migration `0019_floor_four_and_room_attribute_correction.sql`: Tầng 4 có 4A/4B, 301 đổi thành 2 giường có cửa sổ và inventory cửa sổ được chuẩn hóa. Migration rollback an toàn nếu reservation hiệu lực đang gắn trực tiếp với 301 hoặc capacity loại phòng sau thay đổi không đủ.
+
+- **2026-08-29 | BE/API/OpenAPI:** Khai báo response envelope cho `GET /api/v1/rooms/availability`; client FE sinh lại được typed room list thật để query khả dụng theo khoảng ngày Dashboard.
+
 - **2026-08-27 | BE/DevOps/CI:** Thêm GitHub Actions production CI/CD ở root repository: quality gate Backend/Frontend chạy trên GitHub-hosted runner, sau đó runner VPS `sunsea-production` chỉ deploy commit `main` đã được kiểm tra. Deploy dùng Docker Compose, health check và rollback revision khi lỗi; không đưa `.env` hoặc Supabase credential vào GitHub.
 
 - **2026-08-27 | BE/DevOps:** Bổ sung deployment production một domain bằng root `docker-compose.production.yml` và Nginx VPS. Backend chỉ bind loopback; HTTPS origin `sunsea.phucpink.io.vn` proxy `/api/*` và `/socket.io/*` vào NestJS. Template environment không chứa secret nằm tại `deploy/production.env.example`.
@@ -48,6 +54,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 - **2026-08-23 | BE/API:** Thêm modules guests, reservations, pricing, services, payments, audit và housekeeping skeleton; thêm reservation lifecycle, pricing preview, service/payment manual APIs và `/api/v1` OpenAPI routes.
 
 ### Changed
+
+- **2026-08-29 | BE/DevOps:** `scripts/supabase-cli.sh` dùng Supabase CLI cài sẵn hoặc `npx` fallback; không còn phụ thuộc Docker image fallback không còn tồn tại. Bỏ qua `supabase/.temp/` do CLI sinh ra.
 
 - **2026-08-27 | BE/DevOps:** Production sử dụng `FRONTEND_URL`/`CORS_ORIGINS` cùng origin HTTPS `sunsea.phucpink.io.vn`; không cần public Backend domain hay expose port 3001 (container chỉ bind `127.0.0.1:13001`).
 
@@ -101,6 +109,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Database
 
+- **2026-08-31 | Database:** Đã apply `0020_walk_in_multi_guest_intake.sql` lên Supabase hosted. Kiểm tra transaction rollback tạo 1 CCCD + 1 hộ chiếu thành công và không để lại dữ liệu vận hành.
+
 - **2026-08-26 | Database:** Đã áp dụng `0016_room_type_inventory_and_future_availability.sql`, `0017_room_type_capacity_guard.sql` và `0018_expected_checkout_physical_guard.sql` trên Supabase hosted; backfill thành công 4 room type từ 15 phòng, RLS `room_types_active_user` được bật, và reservations hiện hữu giữ phòng ưu tiên/loại phòng tương ứng.
 
 - **2026-08-26 | Database:** Đã áp dụng `0015_automatic_no_show.sql` lên Supabase hosted. RPC no-show dùng `FOR UPDATE SKIP LOCKED`, chỉ cấp quyền `service_role`, và không ghi payment/refund hoặc chuyển phòng sang cleaning.
@@ -132,6 +142,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### API
 
+- **2026-08-31 | API:** Swagger/OpenAPI đã export contract `CheckInRoomDto`, nested guest/document fields và response reservation + guest list cho `POST /api/v1/reservations/check-in`; Frontend generated client phải regenerate từ contract này.
+
 - **2026-08-26 | API:** OpenAPI đã bổ sung `Room.roomTypeId`/`roomTypeName`, `CreateStayDto.assignmentMode`, availability room type trong endpoint equivalents và nullable physical-room fields cho reservation/list/detail; Frontend Orval client đã regenerate từ contract này.
 
 - **2026-08-26 | API:** Đã export OpenAPI không còn operation no-show thủ công; Frontend Orval client đã regenerate từ contract này.
@@ -161,6 +173,12 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 - **2026-08-23 | BE/API:** Bổ sung `GET /api/v1/reservations/:reservationId/services`, response schema reservation services, và schema checkout preview riêng để FE dùng typed contract chính xác.
 
 ### Tests
+
+- **2026-08-31 | Tests/BE/Database/API/Docker:** Đã chạy `pnpm lint`, `pnpm typecheck`, `pnpm build` và `pnpm openapi:export` thành công. Đã dry-run rồi apply migration `0020` trên Supabase hosted; transactional smoke check tạo hai khách CCCD/hộ chiếu rồi `ROLLBACK` thành công. Docker local rebuild, Backend healthy và OpenAPI HTTP 200. Không thêm/chạy test suite mới theo phạm vi.
+
+- **2026-08-29 | Tests/BE/Database/DevOps:** Khôi phục migration history `0001`–`0018` từ schema production đã kiểm tra, sau đó áp dụng `0019` qua Supabase CLI. Xác nhận Supabase hosted có 4 tầng, 17 phòng; 301 là 2 giường có cửa sổ, 4A là 1 giường không cửa sổ và 4B là 2 giường có cửa sổ. Đã chạy `pnpm lint`, `pnpm typecheck`, `pnpm build`; Docker Compose local rebuild thành công, Backend health `200` và Frontend `/login` `200`. Không thêm test suite mới.
+
+- **2026-08-29 | Tests/BE/API/OpenAPI/Docker:** Đã chạy `pnpm openapi:export`, `pnpm lint`, `pnpm typecheck` và `pnpm build` thành công. Docker Compose local rebuild thành công; health Backend phản hồi `200`. Không thêm hoặc thay đổi test suite; endpoint availability hiện dùng response schema typed trong OpenAPI.
 
 - **2026-08-26 | Tests/BE/Database/API/DevOps:** Đã chạy `pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm openapi:export`; Docker Compose Backend/Frontend rebuild thành công, health `200`, `/login` `200`. Smoke với session Backend thật xác nhận 4 nhóm room type đúng (102/202/302 là 1 giường có cửa sổ), phòng 105 `cleaning` hôm nay nhưng `available/canCreateAdvance=true` ngày mai, và equivalent API của 105 chỉ trả 205/305 cùng type. Không thêm/chạy test suite mới theo phạm vi.
 

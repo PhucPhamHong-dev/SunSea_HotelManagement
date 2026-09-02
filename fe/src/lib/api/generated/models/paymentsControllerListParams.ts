@@ -6,5 +6,5 @@
  */
 
 export type PaymentsControllerListParams = {
-reservationId?: string;
+  reservationId?: string;
 };

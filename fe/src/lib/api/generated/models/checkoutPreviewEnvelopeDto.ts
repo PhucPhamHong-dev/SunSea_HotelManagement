@@ -4,8 +4,8 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { CheckoutPreviewResponseDto } from './checkoutPreviewResponseDto';
-import type { ApiMetaDto } from './apiMetaDto';
+import type { CheckoutPreviewResponseDto } from "./checkoutPreviewResponseDto";
+import type { ApiMetaDto } from "./apiMetaDto";
 
 export interface CheckoutPreviewEnvelopeDto {
   success: boolean;

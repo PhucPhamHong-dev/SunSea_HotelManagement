@@ -4,7 +4,7 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { GuestResponseDtoDeletedAt } from './guestResponseDtoDeletedAt';
+import type { GuestResponseDtoDeletedAt } from "./guestResponseDtoDeletedAt";
 
 export interface GuestResponseDto {
   id: string;

@@ -4,7 +4,7 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { ReservationServiceResponseDtoServiceId } from './reservationServiceResponseDtoServiceId';
+import type { ReservationServiceResponseDtoServiceId } from "./reservationServiceResponseDtoServiceId";
 
 export interface ReservationServiceResponseDto {
   id: string;

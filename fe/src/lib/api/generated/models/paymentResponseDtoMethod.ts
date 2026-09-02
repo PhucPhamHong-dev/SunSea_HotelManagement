@@ -5,12 +5,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type PaymentResponseDtoMethod = typeof PaymentResponseDtoMethod[keyof typeof PaymentResponseDtoMethod];
-
+export type PaymentResponseDtoMethod =
+  (typeof PaymentResponseDtoMethod)[keyof typeof PaymentResponseDtoMethod];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PaymentResponseDtoMethod = {
-  cash: 'cash',
-  bank_transfer: 'bank_transfer',
-  other: 'other',
+  cash: "cash",
+  bank_transfer: "bank_transfer",
+  other: "other",
 } as const;

@@ -6,7 +6,7 @@
  */
 
 export type RoomsControllerListParams = {
-floorId?: string;
-checkInAt?: string;
-checkOutAt?: string;
+  floorId?: string;
+  checkInAt?: string;
+  checkOutAt?: string;
 };

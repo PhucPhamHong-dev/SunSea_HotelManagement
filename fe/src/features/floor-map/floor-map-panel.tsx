@@ -10,10 +10,11 @@ interface FloorMapPanelProps {
   floorId: string;
   floorNumber: number;
   rooms: Room[];
+  roomNotes: ReadonlyMap<string, string>;
   isLoading?: boolean;
   isError?: boolean;
   selectedRoomId: string | null;
-  onSelectRoom: (roomId: string) => void;
+  onSelectRoom: (roomId: string, reservationId: string | null) => void;
   selectionKind?: 'room' | 'advanceReservation' | 'activeStay';
   canGoPrevious: boolean;
   canGoNext: boolean;
@@ -21,7 +22,7 @@ interface FloorMapPanelProps {
   onNextFloor: () => void;
 }
 
-export function FloorMapPanel({ floorId, floorNumber, rooms, isLoading = false, isError = false, selectedRoomId, onSelectRoom, selectionKind = 'room', canGoPrevious, canGoNext, onPreviousFloor, onNextFloor }: FloorMapPanelProps) {
+export function FloorMapPanel({ floorId, floorNumber, rooms, roomNotes, isLoading = false, isError = false, selectedRoomId, onSelectRoom, selectionKind = 'room', canGoPrevious, canGoNext, onPreviousFloor, onNextFloor }: FloorMapPanelProps) {
   const queryClient = useQueryClient();
   useEffect(() => {
     const socket = getRealtimeSocket();
@@ -52,7 +53,7 @@ export function FloorMapPanel({ floorId, floorNumber, rooms, isLoading = false, 
       {!isLoading && !isError && floorRooms.length === 0 && <p className="empty-copy">Chưa có phòng trong tầng này.</p>}
       <div className="floor-map__viewport">
         <button type="button" className="floor-map__navigation floor-map__navigation--previous" aria-label="Tầng trước" disabled={!canGoPrevious} onClick={onPreviousFloor}>‹</button>
-        <FloorMap floorNumber={floorNumber} rooms={floorRooms} selectedRoomId={selectedRoomId} onSelectRoom={onSelectRoom} selectionKind={selectionKind} />
+        <FloorMap floorNumber={floorNumber} rooms={floorRooms} roomNotes={roomNotes} selectedRoomId={selectedRoomId} onSelectRoom={onSelectRoom} selectionKind={selectionKind} />
         <button type="button" className="floor-map__navigation floor-map__navigation--next" aria-label="Tầng sau" disabled={!canGoNext} onClick={onNextFloor}>›</button>
       </div>
     </section>

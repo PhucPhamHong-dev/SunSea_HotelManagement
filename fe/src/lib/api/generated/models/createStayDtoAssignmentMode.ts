@@ -8,11 +8,11 @@
 /**
  * Exact assigns the selected physical room. Room-type mode keeps it as a preference and assigns a matching room at check-in.
  */
-export type CreateStayDtoAssignmentMode = typeof CreateStayDtoAssignmentMode[keyof typeof CreateStayDtoAssignmentMode];
-
+export type CreateStayDtoAssignmentMode =
+  (typeof CreateStayDtoAssignmentMode)[keyof typeof CreateStayDtoAssignmentMode];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateStayDtoAssignmentMode = {
-  exact: 'exact',
-  room_type: 'room_type',
+  exact: "exact",
+  room_type: "room_type",
 } as const;

@@ -6,7 +6,7 @@
  */
 
 export type ReservationsControllerListAdvanceParams = {
-from?: string;
-to?: string;
-floorId?: string;
+  from?: string;
+  to?: string;
+  floorId?: string;
 };

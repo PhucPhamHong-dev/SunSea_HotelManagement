@@ -4,51 +4,51 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type {
-  AuditControllerListParams
-} from '.././models';
+import type { AuditControllerListParams } from ".././models";
 
-import { apiFetch } from '../../api-fetch';
+import { apiFetch } from "../../api-fetch";
 
 /**
  * @summary List immutable audit records
  */
 export type auditControllerListResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type auditControllerListResponseSuccess = (auditControllerListResponse200) & {
-  headers: Headers;
+  data: void;
+  status: 200;
 };
-;
 
-export type auditControllerListResponse = (auditControllerListResponseSuccess)
+export type auditControllerListResponseSuccess =
+  auditControllerListResponse200 & {
+    headers: Headers;
+  };
+export type auditControllerListResponse = auditControllerListResponseSuccess;
 
-export const getAuditControllerListUrl = (params: AuditControllerListParams,) => {
+export const getAuditControllerListUrl = (
+  params: AuditControllerListParams,
+) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/audit-logs?${stringifiedParams}` : `/api/v1/audit-logs`
-}
+  return stringifiedParams.length > 0
+    ? `/api/v1/audit-logs?${stringifiedParams}`
+    : `/api/v1/audit-logs`;
+};
 
-export const auditControllerList = async (params: AuditControllerListParams, options?: RequestInit): Promise<auditControllerListResponse> => {
-  
-  return apiFetch<auditControllerListResponse>(getAuditControllerListUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const auditControllerList = async (
+  params: AuditControllerListParams,
+  options?: RequestInit,
+): Promise<auditControllerListResponse> => {
+  return apiFetch<auditControllerListResponse>(
+    getAuditControllerListUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};

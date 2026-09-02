@@ -6,10 +6,10 @@
  */
 
 export type RoomsControllerEquivalentsParams = {
-checkInAt: string;
-/**
- * Omit or send null for an open-ended stay.
- * @nullable
- */
-checkOutAt?: string | null;
+  checkInAt: string;
+  /**
+   * Omit or send null for an open-ended stay.
+   * @nullable
+   */
+  checkOutAt?: string | null;
 };

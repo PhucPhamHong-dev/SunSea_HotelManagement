@@ -5,12 +5,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type PricingPreviewResponseDtoBillingMode = typeof PricingPreviewResponseDtoBillingMode[keyof typeof PricingPreviewResponseDtoBillingMode];
-
+export type PricingPreviewResponseDtoBillingMode =
+  (typeof PricingPreviewResponseDtoBillingMode)[keyof typeof PricingPreviewResponseDtoBillingMode];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PricingPreviewResponseDtoBillingMode = {
-  SHORT_STAY: 'SHORT_STAY',
-  NIGHTLY: 'NIGHTLY',
-  MANUAL_REVIEW: 'MANUAL_REVIEW',
+  SHORT_STAY: "SHORT_STAY",
+  NIGHTLY: "NIGHTLY",
+  MANUAL_REVIEW: "MANUAL_REVIEW",
 } as const;

@@ -9,4 +9,6 @@
 /**
  * @nullable
  */
-export type RoomResponseDtoDefaultNightlyRate = { [key: string]: unknown } | null;
+export type RoomResponseDtoDefaultNightlyRate = {
+  [key: string]: unknown;
+} | null;

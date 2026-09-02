@@ -5,15 +5,15 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type AdvanceReservationDetailDtoReservationStatus = typeof AdvanceReservationDetailDtoReservationStatus[keyof typeof AdvanceReservationDetailDtoReservationStatus];
-
+export type AdvanceReservationDetailDtoReservationStatus =
+  (typeof AdvanceReservationDetailDtoReservationStatus)[keyof typeof AdvanceReservationDetailDtoReservationStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AdvanceReservationDetailDtoReservationStatus = {
-  draft: 'draft',
-  confirmed: 'confirmed',
-  checked_in: 'checked_in',
-  checked_out: 'checked_out',
-  cancelled: 'cancelled',
-  no_show: 'no_show',
+  draft: "draft",
+  confirmed: "confirmed",
+  checked_in: "checked_in",
+  checked_out: "checked_out",
+  cancelled: "cancelled",
+  no_show: "no_show",
 } as const;

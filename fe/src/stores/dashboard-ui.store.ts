@@ -7,11 +7,14 @@ export type DashboardSelection =
 
 interface DashboardUiState {
   selectedDate: string;
+  selectedRangeStart: string | null;
+  selectedRangeEnd: string | null;
   selectedFloorId: string | null;
   selectedRoomId: string | null;
   selectedReservationId: string | null;
   selectionKind: DashboardSelection['kind'];
   setSelectedDate: (selectedDate: string) => void;
+  setSelectedDateRange: (startDate: string, endDate: string | null) => void;
   setSelectedFloorId: (selectedFloorId: string | null) => void;
   select: (selection: DashboardSelection) => void;
   clearSelection: () => void;
@@ -20,11 +23,14 @@ interface DashboardUiState {
 
 export const useDashboardUiStore = create<DashboardUiState>((set) => ({
   selectedDate: new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date()),
+  selectedRangeStart: null,
+  selectedRangeEnd: null,
   selectedFloorId: null,
   selectedRoomId: null,
   selectedReservationId: null,
   selectionKind: 'room',
-  setSelectedDate: (selectedDate) => set({ selectedDate, selectedReservationId: null, selectionKind: 'room' }),
+  setSelectedDate: (selectedDate) => set({ selectedDate, selectedRangeStart: null, selectedRangeEnd: null, selectedReservationId: null, selectionKind: 'room' }),
+  setSelectedDateRange: (startDate, endDate) => set({ selectedDate: startDate, selectedRangeStart: startDate, selectedRangeEnd: endDate, selectedReservationId: null, selectionKind: 'room' }),
   setSelectedFloorId: (selectedFloorId) => set({ selectedFloorId }),
   select: (selection) => set({
     selectedRoomId: selection.roomId,

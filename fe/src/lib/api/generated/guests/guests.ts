@@ -9,193 +9,184 @@ import type {
   GuestEnvelopeDto,
   GuestListResponseDto,
   GuestsControllerListParams,
-  UpdateGuestDto
-} from '.././models';
+  UpdateGuestDto,
+} from ".././models";
 
-import { apiFetch } from '../../api-fetch';
+import { apiFetch } from "../../api-fetch";
 
 /**
  * @summary Search active guests
  */
 export type guestsControllerListResponse200 = {
-  data: GuestListResponseDto
-  status: 200
-}
-    
-export type guestsControllerListResponseSuccess = (guestsControllerListResponse200) & {
-  headers: Headers;
+  data: GuestListResponseDto;
+  status: 200;
 };
-;
 
-export type guestsControllerListResponse = (guestsControllerListResponseSuccess)
+export type guestsControllerListResponseSuccess =
+  guestsControllerListResponse200 & {
+    headers: Headers;
+  };
+export type guestsControllerListResponse = guestsControllerListResponseSuccess;
 
-export const getGuestsControllerListUrl = (params?: GuestsControllerListParams,) => {
+export const getGuestsControllerListUrl = (
+  params?: GuestsControllerListParams,
+) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/guests?${stringifiedParams}` : `/api/v1/guests`
-}
+  return stringifiedParams.length > 0
+    ? `/api/v1/guests?${stringifiedParams}`
+    : `/api/v1/guests`;
+};
 
-export const guestsControllerList = async (params?: GuestsControllerListParams, options?: RequestInit): Promise<guestsControllerListResponse> => {
-  
-  return apiFetch<guestsControllerListResponse>(getGuestsControllerListUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const guestsControllerList = async (
+  params?: GuestsControllerListParams,
+  options?: RequestInit,
+): Promise<guestsControllerListResponse> => {
+  return apiFetch<guestsControllerListResponse>(
+    getGuestsControllerListUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Create a guest
  */
 export type guestsControllerCreateResponse201 = {
-  data: GuestEnvelopeDto
-  status: 201
-}
-    
-export type guestsControllerCreateResponseSuccess = (guestsControllerCreateResponse201) & {
-  headers: Headers;
+  data: GuestEnvelopeDto;
+  status: 201;
 };
-;
 
-export type guestsControllerCreateResponse = (guestsControllerCreateResponseSuccess)
+export type guestsControllerCreateResponseSuccess =
+  guestsControllerCreateResponse201 & {
+    headers: Headers;
+  };
+export type guestsControllerCreateResponse =
+  guestsControllerCreateResponseSuccess;
 
 export const getGuestsControllerCreateUrl = () => {
+  return `/api/v1/guests`;
+};
 
-
-  
-
-  return `/api/v1/guests`
-}
-
-export const guestsControllerCreate = async (guestDto: GuestDto, options?: RequestInit): Promise<guestsControllerCreateResponse> => {
-  
-  return apiFetch<guestsControllerCreateResponse>(getGuestsControllerCreateUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      guestDto,)
-  }
-);}
-
+export const guestsControllerCreate = async (
+  guestDto: GuestDto,
+  options?: RequestInit,
+): Promise<guestsControllerCreateResponse> => {
+  return apiFetch<guestsControllerCreateResponse>(
+    getGuestsControllerCreateUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(guestDto),
+    },
+  );
+};
 
 /**
  * @summary Get a guest
  */
 export type guestsControllerGetResponse200 = {
-  data: GuestEnvelopeDto
-  status: 200
-}
-    
-export type guestsControllerGetResponseSuccess = (guestsControllerGetResponse200) & {
-  headers: Headers;
+  data: GuestEnvelopeDto;
+  status: 200;
 };
-;
 
-export type guestsControllerGetResponse = (guestsControllerGetResponseSuccess)
+export type guestsControllerGetResponseSuccess =
+  guestsControllerGetResponse200 & {
+    headers: Headers;
+  };
+export type guestsControllerGetResponse = guestsControllerGetResponseSuccess;
 
-export const getGuestsControllerGetUrl = (guestId: string,) => {
+export const getGuestsControllerGetUrl = (guestId: string) => {
+  return `/api/v1/guests/${guestId}`;
+};
 
-
-  
-
-  return `/api/v1/guests/${guestId}`
-}
-
-export const guestsControllerGet = async (guestId: string, options?: RequestInit): Promise<guestsControllerGetResponse> => {
-  
-  return apiFetch<guestsControllerGetResponse>(getGuestsControllerGetUrl(guestId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const guestsControllerGet = async (
+  guestId: string,
+  options?: RequestInit,
+): Promise<guestsControllerGetResponse> => {
+  return apiFetch<guestsControllerGetResponse>(
+    getGuestsControllerGetUrl(guestId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Update a guest
  */
 export type guestsControllerUpdateResponse200 = {
-  data: GuestEnvelopeDto
-  status: 200
-}
-    
-export type guestsControllerUpdateResponseSuccess = (guestsControllerUpdateResponse200) & {
-  headers: Headers;
+  data: GuestEnvelopeDto;
+  status: 200;
 };
-;
 
-export type guestsControllerUpdateResponse = (guestsControllerUpdateResponseSuccess)
+export type guestsControllerUpdateResponseSuccess =
+  guestsControllerUpdateResponse200 & {
+    headers: Headers;
+  };
+export type guestsControllerUpdateResponse =
+  guestsControllerUpdateResponseSuccess;
 
-export const getGuestsControllerUpdateUrl = (guestId: string,) => {
+export const getGuestsControllerUpdateUrl = (guestId: string) => {
+  return `/api/v1/guests/${guestId}`;
+};
 
-
-  
-
-  return `/api/v1/guests/${guestId}`
-}
-
-export const guestsControllerUpdate = async (guestId: string,
-    updateGuestDto: UpdateGuestDto, options?: RequestInit): Promise<guestsControllerUpdateResponse> => {
-  
-  return apiFetch<guestsControllerUpdateResponse>(getGuestsControllerUpdateUrl(guestId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      updateGuestDto,)
-  }
-);}
-
+export const guestsControllerUpdate = async (
+  guestId: string,
+  updateGuestDto: UpdateGuestDto,
+  options?: RequestInit,
+): Promise<guestsControllerUpdateResponse> => {
+  return apiFetch<guestsControllerUpdateResponse>(
+    getGuestsControllerUpdateUrl(guestId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateGuestDto),
+    },
+  );
+};
 
 /**
  * @summary Soft deactivate a guest
  */
 export type guestsControllerDeactivateResponse200 = {
-  data: GuestEnvelopeDto
-  status: 200
-}
-    
-export type guestsControllerDeactivateResponseSuccess = (guestsControllerDeactivateResponse200) & {
-  headers: Headers;
+  data: GuestEnvelopeDto;
+  status: 200;
 };
-;
 
-export type guestsControllerDeactivateResponse = (guestsControllerDeactivateResponseSuccess)
+export type guestsControllerDeactivateResponseSuccess =
+  guestsControllerDeactivateResponse200 & {
+    headers: Headers;
+  };
+export type guestsControllerDeactivateResponse =
+  guestsControllerDeactivateResponseSuccess;
 
-export const getGuestsControllerDeactivateUrl = (guestId: string,) => {
+export const getGuestsControllerDeactivateUrl = (guestId: string) => {
+  return `/api/v1/guests/${guestId}/deactivate`;
+};
 
-
-  
-
-  return `/api/v1/guests/${guestId}/deactivate`
-}
-
-export const guestsControllerDeactivate = async (guestId: string, options?: RequestInit): Promise<guestsControllerDeactivateResponse> => {
-  
-  return apiFetch<guestsControllerDeactivateResponse>(getGuestsControllerDeactivateUrl(guestId),
-  {      
-    ...options,
-    method: 'PATCH'
-    
-    
-  }
-);}
-
-
+export const guestsControllerDeactivate = async (
+  guestId: string,
+  options?: RequestInit,
+): Promise<guestsControllerDeactivateResponse> => {
+  return apiFetch<guestsControllerDeactivateResponse>(
+    getGuestsControllerDeactivateUrl(guestId),
+    {
+      ...options,
+      method: "PATCH",
+    },
+  );
+};

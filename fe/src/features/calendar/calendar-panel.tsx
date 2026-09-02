@@ -6,6 +6,8 @@ import { monthGrid, reservationStartsOn } from './calendar-utils';
 interface CalendarPanelProps {
   month: Date;
   selectedDate: string;
+  selectedRangeStart: string | null;
+  selectedRangeEnd: string | null;
   reservations: Reservation[];
   onSelectDate: (date: string) => void;
   onChangeMonth: (month: Date) => void;
@@ -13,7 +15,7 @@ interface CalendarPanelProps {
 
 const weekdays = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
 
-export function CalendarPanel({ month, selectedDate, reservations, onSelectDate, onChangeMonth }: CalendarPanelProps) {
+export function CalendarPanel({ month, selectedDate, selectedRangeStart, selectedRangeEnd, reservations, onSelectDate, onChangeMonth }: CalendarPanelProps) {
   const cells = monthGrid(month);
   const monthLabel = `Tháng ${String(month.getMonth() + 1).padStart(2, '0')} / ${month.getFullYear()}`;
 
@@ -35,24 +37,30 @@ export function CalendarPanel({ month, selectedDate, reservations, onSelectDate,
         {weekdays.map((weekday) => <span key={weekday}>{weekday}</span>)}
       </div>
       <div className="calendar-grid" role="grid" aria-label={`Lịch phòng ${monthLabel}`}>
-        {cells.map(({ key, date, inMonth }) => (
-          <button
-            key={key}
-            type="button"
-            className={`calendar-day${inMonth ? '' : ' calendar-day--outside'}${selectedDate === key ? ' calendar-day--selected' : ''}`}
-            onClick={() => onSelectDate(key)}
-            aria-label={`Ngày ${date.getDate()} tháng ${date.getMonth() + 1}`}
-          >
-            <span>{date.getDate()}</span>
-            <span className="calendar-day__dots" aria-hidden="true">
-              {reservations.filter((reservation) => reservationStartsOn(reservation, key)).slice(0, 3).map((reservation) => (
-                <i className={`calendar-dot calendar-dot--${reservation.status}`} key={reservation.id} />
-              ))}
-            </span>
-          </button>
-        ))}
+        {cells.map(({ key, date, inMonth }) => {
+          const isRangeStart = selectedRangeStart === key;
+          const isRangeEnd = selectedRangeEnd === key;
+          const isInRange = Boolean(selectedRangeStart && selectedRangeEnd && key > selectedRangeStart && key < selectedRangeEnd);
+          const isSingleDate = !selectedRangeStart && selectedDate === key;
+          return (
+            <button
+              key={key}
+              type="button"
+              className={`calendar-day${inMonth ? '' : ' calendar-day--outside'}${isSingleDate ? ' calendar-day--selected' : ''}${isRangeStart ? ' calendar-day--range-start' : ''}${isRangeEnd ? ' calendar-day--range-end' : ''}${isInRange ? ' calendar-day--in-range' : ''}`}
+              onClick={() => onSelectDate(key)}
+              aria-label={`Ngày ${date.getDate()} tháng ${date.getMonth() + 1}`}
+            >
+              <span>{date.getDate()}</span>
+              <span className="calendar-day__dots" aria-hidden="true">
+                {reservations.filter((reservation) => reservationStartsOn(reservation, key)).slice(0, 3).map((reservation) => (
+                  <i className={`calendar-dot calendar-dot--${reservation.status}`} key={reservation.id} />
+                ))}
+              </span>
+            </button>
+          );
+        })}
       </div>
-      <p className="calendar-panel__hint">Chọn ngày để xem trạng thái phòng</p>
+      <p className="calendar-panel__hint">{selectedRangeStart && !selectedRangeEnd ? 'Chọn ngày trả để kiểm tra phòng.' : selectedRangeStart && selectedRangeEnd ? 'Khoảng ngày đã chọn dùng để kiểm tra phòng.' : 'Chọn ngày nhận, sau đó chọn ngày trả.'}</p>
     </section>
   );
 }

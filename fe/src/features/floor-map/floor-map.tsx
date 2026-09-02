@@ -1,13 +1,14 @@
 'use client';
 
 import type { Room } from '../../lib/api/api-client';
-import { roomNumberForFloor } from './floor-layout';
+import { floorLayoutForFloor } from './floor-layout';
 
 interface FloorMapProps {
   floorNumber: number;
   rooms: Room[];
+  roomNotes: ReadonlyMap<string, string>;
   selectedRoomId: string | null;
-  onSelectRoom: (roomId: string) => void;
+  onSelectRoom: (roomId: string, reservationId: string | null) => void;
   selectionKind?: 'room' | 'advanceReservation' | 'activeStay';
 }
 
@@ -19,11 +20,11 @@ const statusLabels: Record<Room['status'], string> = {
   out_of_service: 'Ngừng phục vụ',
 };
 
-export function FloorMap({ floorNumber, rooms, selectedRoomId, onSelectRoom, selectionKind = 'room' }: FloorMapProps) {
-  const layout = roomNumberForFloor(floorNumber);
+export function FloorMap({ floorNumber, rooms, roomNotes, selectedRoomId, onSelectRoom, selectionKind = 'room' }: FloorMapProps) {
+  const layout = floorLayoutForFloor(floorNumber);
   const byNumber = new Map(rooms.map((room) => [room.roomNumber, room]));
   return (
-    <section className="floor-map__grid" aria-label={`Sơ đồ tầng ${floorNumber}`}>
+    <section className={`floor-map__grid${floorNumber === 4 ? ' floor-map__grid--fourth' : ''}`} aria-label={`Sơ đồ tầng ${floorNumber}`}>
       {layout.map((item) => {
         if (item.kind === 'elevator') {
           return (
@@ -34,17 +35,25 @@ export function FloorMap({ floorNumber, rooms, selectedRoomId, onSelectRoom, sel
             </div>
           );
         }
+        if (item.kind === 'facility') {
+          return (
+            <div key={item.area} className="floor-map__facility" style={{ gridArea: item.area }} aria-label={`${item.label}, khu vực không phải phòng`}>
+              {item.label}
+            </div>
+          );
+        }
         const room = byNumber.get(item.roomNumber);
         if (!room) return null;
         const selected = room.id === selectedRoomId;
         const advanceSelected = selected && selectionKind === 'advanceReservation' && room.status === 'reserved';
+        const roomNote = roomNotes.get(room.id);
         return (
           <button
             key={room.id}
             type="button"
-            className={`room-card room-card--${room.status}${selected ? ' room-card--selected' : ''}`}
+            className={`room-card room-card--${room.status}${selected ? ' room-card--selected' : ''}${roomNote ? ' room-card--has-note' : ''}`}
             style={{ gridArea: item.area }}
-            onClick={() => onSelectRoom(room.id)}
+            onClick={() => onSelectRoom(room.id, room.reservationId)}
             aria-pressed={selected}
             data-testid={`room-${room.roomNumber}`}
           >
@@ -54,7 +63,8 @@ export function FloorMap({ floorNumber, rooms, selectedRoomId, onSelectRoom, sel
             </span>
             {selected && <span className="room-card__badge room-card__badge--selected">ĐANG CHỌN</span>}
             {room.status === 'reserved' && <span className={`room-card__badge${advanceSelected ? ' room-card__badge--reservation-selected' : ''}`}>ĐẶT TRƯỚC</span>}
-            {!selected && room.status !== 'reserved' && <span className="room-card__status">{statusLabels[room.status]}</span>}
+            {roomNote && <span className={`room-card__note${room.status === 'reserved' ? ' room-card__note--reserved' : ''}`} title={roomNote}>{roomNote}</span>}
+            {!selected && room.status !== 'reserved' && !roomNote && <span className="room-card__status">{statusLabels[room.status]}</span>}
           </button>
         );
       })}

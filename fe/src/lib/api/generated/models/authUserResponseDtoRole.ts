@@ -5,11 +5,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type AuthUserResponseDtoRole = typeof AuthUserResponseDtoRole[keyof typeof AuthUserResponseDtoRole];
-
+export type AuthUserResponseDtoRole =
+  (typeof AuthUserResponseDtoRole)[keyof typeof AuthUserResponseDtoRole];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AuthUserResponseDtoRole = {
-  owner: 'owner',
-  staff: 'staff',
+  owner: "owner",
+  staff: "staff",
 } as const;

@@ -4,8 +4,8 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { AdvanceReservationDetailDtoReservationStatus } from './advanceReservationDetailDtoReservationStatus';
-import type { AdvanceReservationDetailDtoCurrency } from './advanceReservationDetailDtoCurrency';
+import type { AdvanceReservationDetailDtoReservationStatus } from "./advanceReservationDetailDtoReservationStatus";
+import type { AdvanceReservationDetailDtoCurrency } from "./advanceReservationDetailDtoCurrency";
 
 export interface AdvanceReservationDetailDto {
   reservationId: string;

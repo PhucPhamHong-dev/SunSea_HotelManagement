@@ -5,12 +5,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type IntakePolicyResponseDtoDefaultAction = typeof IntakePolicyResponseDtoDefaultAction[keyof typeof IntakePolicyResponseDtoDefaultAction];
-
+export type IntakePolicyResponseDtoDefaultAction =
+  (typeof IntakePolicyResponseDtoDefaultAction)[keyof typeof IntakePolicyResponseDtoDefaultAction];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const IntakePolicyResponseDtoDefaultAction = {
-  check_in: 'check_in',
-  advance: 'advance',
-  none: 'none',
+  check_in: "check_in",
+  advance: "advance",
+  none: "none",
 } as const;

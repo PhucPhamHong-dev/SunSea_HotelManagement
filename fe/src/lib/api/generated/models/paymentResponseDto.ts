@@ -4,12 +4,12 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { PaymentResponseDtoPaymentType } from './paymentResponseDtoPaymentType';
-import type { PaymentResponseDtoMethod } from './paymentResponseDtoMethod';
-import type { PaymentResponseDtoStatus } from './paymentResponseDtoStatus';
-import type { PaymentResponseDtoPaidAt } from './paymentResponseDtoPaidAt';
-import type { PaymentResponseDtoNote } from './paymentResponseDtoNote';
-import type { PaymentResponseDtoVoidReason } from './paymentResponseDtoVoidReason';
+import type { PaymentResponseDtoPaymentType } from "./paymentResponseDtoPaymentType";
+import type { PaymentResponseDtoMethod } from "./paymentResponseDtoMethod";
+import type { PaymentResponseDtoStatus } from "./paymentResponseDtoStatus";
+import type { PaymentResponseDtoPaidAt } from "./paymentResponseDtoPaidAt";
+import type { PaymentResponseDtoNote } from "./paymentResponseDtoNote";
+import type { PaymentResponseDtoVoidReason } from "./paymentResponseDtoVoidReason";
 
 export interface PaymentResponseDto {
   id: string;

@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min, MinLength, ValidateNested } from 'class-validator';
+import { ArrayMinSize, IsArray, IsDateString, IsEnum, IsInt, IsNumber, IsOptional, IsString, IsUUID, MaxLength, Min, MinLength, ValidateIf, ValidateNested } from 'class-validator';
 
 export class CreateStayGuestDto {
   @ApiProperty({ example: 'Nguyễn Văn An' })
@@ -77,6 +77,75 @@ export class CreateStayDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
+  note?: string;
+}
+
+export class CheckInRoomGuestDto {
+  @ApiProperty({ enum: ['national_id', 'passport'], description: 'National ID is a Vietnamese CCCD. Passport requires nationality instead of an issuing country.' })
+  @IsEnum(['national_id', 'passport'])
+  documentType!: 'national_id' | 'passport';
+
+  @ApiProperty({ example: 'Nguyễn Văn An' })
+  @IsString()
+  @MinLength(1)
+  @MaxLength(200)
+  fullName!: string;
+
+  @ApiProperty({ example: '079000000000' })
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  documentNumber!: string;
+
+  @ApiProperty({ format: 'date' })
+  @IsDateString()
+  dateOfBirth!: string;
+
+  @ApiProperty({ example: 'Hải Châu, Đà Nẵng' })
+  @IsString()
+  @MinLength(1)
+  @MaxLength(500)
+  address!: string;
+
+  @ApiPropertyOptional({ format: 'date', description: 'Required for a Vietnamese CCCD; omitted for a passport.' })
+  @ValidateIf((guest: CheckInRoomGuestDto) => guest.documentType === 'national_id')
+  @IsDateString()
+  documentIssuedAt?: string;
+
+  @ApiPropertyOptional({ example: 'Korean', description: 'Required for a passport. CCCD is stored as Vietnam (VN) without displaying a nationality field.' })
+  @ValidateIf((guest: CheckInRoomGuestDto) => guest.documentType === 'passport')
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  nationality?: string;
+}
+
+export class CheckInRoomDto {
+  @ApiProperty({ format: 'uuid' })
+  @IsUUID()
+  roomId!: string;
+
+  @ApiProperty({ type: [CheckInRoomGuestDto], minItems: 1 })
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => CheckInRoomGuestDto)
+  guests!: CheckInRoomGuestDto[];
+
+  @ApiProperty({ example: 350000, description: 'Nightly room rate in integer VND. Stored as an immutable reservation snapshot.' })
+  @IsInt()
+  @Min(1)
+  roomRatePerNight!: number;
+
+  @ApiPropertyOptional({ type: String, format: 'date-time', nullable: true, description: 'Omit or send null when the guest has no expected checkout yet.' })
+  @IsOptional()
+  @IsDateString()
+  plannedCheckOutAt?: string | null;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  @MaxLength(2000)
   note?: string;
 }
 

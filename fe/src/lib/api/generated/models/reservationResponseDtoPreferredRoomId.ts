@@ -9,4 +9,6 @@
  * Requested room preference used when the reservation is assigned.
  * @nullable
  */
-export type ReservationResponseDtoPreferredRoomId = { [key: string]: unknown } | null;
+export type ReservationResponseDtoPreferredRoomId = {
+  [key: string]: unknown;
+} | null;

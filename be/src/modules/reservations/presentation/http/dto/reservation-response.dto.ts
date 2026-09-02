@@ -60,6 +60,34 @@ export class CreateStayEnvelopeDto {
   @ApiProperty({ type: ApiMetaDto }) meta!: ApiMetaDto;
 }
 
+export class CheckedInGuestDocumentDto {
+  @ApiProperty({ format: 'uuid' }) id!: string;
+  @ApiProperty({ enum: ['national_id', 'passport'] }) type!: 'national_id' | 'passport';
+  @ApiProperty() number!: string;
+  @ApiProperty({ description: 'VN is stored by the Backend for CCCD without requiring a frontend field.' }) nationality!: string;
+  @ApiPropertyOptional({ type: String, format: 'date', nullable: true }) issuedAt!: string | null;
+}
+
+export class CheckedInGuestDto {
+  @ApiProperty({ format: 'uuid' }) id!: string;
+  @ApiProperty() fullName!: string;
+  @ApiProperty({ format: 'date' }) dateOfBirth!: string;
+  @ApiProperty() address!: string;
+  @ApiProperty({ enum: ['primary', 'companion'] }) role!: 'primary' | 'companion';
+  @ApiProperty({ type: CheckedInGuestDocumentDto }) document!: CheckedInGuestDocumentDto;
+}
+
+export class CheckInRoomResponseDto {
+  @ApiProperty({ type: ReservationResponseDto }) reservation!: ReservationResponseDto;
+  @ApiProperty({ type: [CheckedInGuestDto] }) guests!: CheckedInGuestDto[];
+}
+
+export class CheckInRoomEnvelopeDto {
+  @ApiProperty() success!: boolean;
+  @ApiProperty({ type: CheckInRoomResponseDto }) data!: CheckInRoomResponseDto;
+  @ApiProperty({ type: ApiMetaDto }) meta!: ApiMetaDto;
+}
+
 export class IntakePolicyResponseDto {
   @ApiProperty({ example: 'Asia/Ho_Chi_Minh' }) timezone!: string;
   @ApiProperty({ format: 'date' }) date!: string;

@@ -8,4 +8,6 @@
 /**
  * @nullable
  */
-export type PricingPreviewDtoPlannedCheckOutAt = { [key: string]: unknown } | null;
+export type PricingPreviewDtoPlannedCheckOutAt = {
+  [key: string]: unknown;
+} | null;

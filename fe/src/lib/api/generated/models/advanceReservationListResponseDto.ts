@@ -4,8 +4,8 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { AdvanceReservationListItemDto } from './advanceReservationListItemDto';
-import type { ApiMetaDto } from './apiMetaDto';
+import type { AdvanceReservationListItemDto } from "./advanceReservationListItemDto";
+import type { ApiMetaDto } from "./apiMetaDto";
 
 export interface AdvanceReservationListResponseDto {
   success: boolean;

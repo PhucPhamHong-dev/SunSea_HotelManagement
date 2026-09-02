@@ -8,4 +8,6 @@
 /**
  * @nullable
  */
-export type AdvanceReservationDetailDtoRoomId = { [key: string]: unknown } | null;
+export type AdvanceReservationDetailDtoRoomId = {
+  [key: string]: unknown;
+} | null;

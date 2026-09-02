@@ -4,7 +4,7 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { CheckoutPreviewResponseDtoChargesItem } from './checkoutPreviewResponseDtoChargesItem';
+import type { CheckoutPreviewResponseDtoChargesItem } from "./checkoutPreviewResponseDtoChargesItem";
 
 export interface CheckoutPreviewResponseDto {
   reservationId: string;

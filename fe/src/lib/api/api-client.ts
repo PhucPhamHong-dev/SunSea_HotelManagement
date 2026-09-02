@@ -17,10 +17,12 @@ import {
   reservationsControllerGet,
   reservationsControllerList,
   reservationsControllerIntakePolicy,
+  reservationsControllerCheckInRoom,
   reservationsControllerCreateStay,
   reservationsControllerUpdateDetails,
   roomsControllerGet,
   roomsControllerEquivalents,
+  roomsControllerAvailability,
   roomsControllerList,
   roomsControllerStatusByDate,
   roomsControllerUpdateHousekeeping,
@@ -45,12 +47,15 @@ import type { ReservationsControllerListAdvanceParams } from './generated/models
 import type { AdvanceReservationListItemDto } from './generated/models/advanceReservationListItemDto';
 import type { AdvanceReservationDetailDto } from './generated/models/advanceReservationDetailDto';
 import type { CreateStayDto } from './generated/models/createStayDto';
+import type { CheckInRoomDto } from './generated/models/checkInRoomDto';
+import type { CheckInRoomResponseDto } from './generated/models/checkInRoomResponseDto';
 import type { IntakePolicyEnvelopeDto } from './generated/models/intakePolicyEnvelopeDto';
 import type { ReservationsControllerIntakePolicyParams } from './generated/models/reservationsControllerIntakePolicyParams';
 import type { CreateStayResponseDto } from './generated/models/createStayResponseDto';
 import type { ReservationServiceResponseDto } from './generated/models/reservationServiceResponseDto';
 import type { RoomResponseDto } from './generated/models/roomResponseDto';
 import type { RoomsControllerListParams } from './generated/models/roomsControllerListParams';
+import type { RoomsControllerAvailabilityParams } from './generated/models/roomsControllerAvailabilityParams';
 import type { RoomsControllerStatusByDateParams } from './generated/models/roomsControllerStatusByDateParams';
 import type { HousekeepingDto } from './generated/models/housekeepingDto';
 import type { EquivalentRoomSearchDto } from './generated/models/equivalentRoomSearchDto';
@@ -64,6 +69,7 @@ export const apiClient = {
   floors: { list: floorsControllerList },
   rooms: {
     list: (params?: RoomsControllerListParams) => roomsControllerList(params),
+    availability: (params: RoomsControllerAvailabilityParams) => roomsControllerAvailability(params),
     statusByDate: (params: RoomsControllerStatusByDateParams) => roomsControllerStatusByDate(params),
     equivalents: (roomId: string, params: RoomsControllerEquivalentsParams) => roomsControllerEquivalents(roomId, params),
     get: roomsControllerGet,
@@ -77,6 +83,7 @@ export const apiClient = {
     list: reservationsControllerList,
     listAdvance: (params?: ReservationsControllerListAdvanceParams) => reservationsControllerListAdvance(params),
     intakePolicy: (params: ReservationsControllerIntakePolicyParams) => reservationsControllerIntakePolicy(params),
+    checkInRoom: (body: CheckInRoomDto) => reservationsControllerCheckInRoom(body),
     createStay: (body: CreateStayDto) => reservationsControllerCreateStay(body),
     get: reservationsControllerGet,
     advanceDetail: reservationsControllerAdvanceDetail,
@@ -113,4 +120,4 @@ export type AuthUser = AuthUserResponseDto;
 export type AdvanceReservationListItem = AdvanceReservationListItemDto;
 export type EquivalentRoomSearch = EquivalentRoomSearchDto;
 export type CheckoutPreview = CheckoutPreviewResponseDto;
-export type { AddReservationServiceDto, AdvanceReservationDetailDto, AdvanceReservationListItemDto, CancelReservationDto, CreateStayDto, CreateStayResponseDto, HousekeepingDto, IntakePolicyEnvelopeDto, ReservationActionDto, UpdateGuestDto, UpdateReservationDto, UpdateReservationServiceDto };
+export type { AddReservationServiceDto, AdvanceReservationDetailDto, AdvanceReservationListItemDto, CancelReservationDto, CheckInRoomDto, CheckInRoomResponseDto, CreateStayDto, CreateStayResponseDto, HousekeepingDto, IntakePolicyEnvelopeDto, ReservationActionDto, UpdateGuestDto, UpdateReservationDto, UpdateReservationServiceDto };

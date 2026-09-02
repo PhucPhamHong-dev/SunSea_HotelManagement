@@ -8,6 +8,8 @@ import type {
   AdvanceReservationDetailEnvelopeDto,
   AdvanceReservationListResponseDto,
   CancelReservationDto,
+  CheckInRoomDto,
+  CheckInRoomEnvelopeDto,
   CheckoutPreviewEnvelopeDto,
   CreateReservationDto,
   CreateStayDto,
@@ -20,513 +22,531 @@ import type {
   ReservationListResponseDto,
   ReservationsControllerIntakePolicyParams,
   ReservationsControllerListAdvanceParams,
-  UpdateReservationDto
-} from '.././models';
+  UpdateReservationDto,
+} from ".././models";
 
-import { apiFetch } from '../../api-fetch';
+import { apiFetch } from "../../api-fetch";
 
 /**
  * @summary List reservations
  */
 export type reservationsControllerListResponse200 = {
-  data: ReservationListResponseDto
-  status: 200
-}
-    
-export type reservationsControllerListResponseSuccess = (reservationsControllerListResponse200) & {
-  headers: Headers;
+  data: ReservationListResponseDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerListResponse = (reservationsControllerListResponseSuccess)
+export type reservationsControllerListResponseSuccess =
+  reservationsControllerListResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerListResponse =
+  reservationsControllerListResponseSuccess;
 
 export const getReservationsControllerListUrl = () => {
+  return `/api/v1/reservations`;
+};
 
-
-  
-
-  return `/api/v1/reservations`
-}
-
-export const reservationsControllerList = async ( options?: RequestInit): Promise<reservationsControllerListResponse> => {
-  
-  return apiFetch<reservationsControllerListResponse>(getReservationsControllerListUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const reservationsControllerList = async (
+  options?: RequestInit,
+): Promise<reservationsControllerListResponse> => {
+  return apiFetch<reservationsControllerListResponse>(
+    getReservationsControllerListUrl(),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Create a draft reservation
  */
 export type reservationsControllerCreateResponse201 = {
-  data: ReservationEnvelopeDto
-  status: 201
-}
-    
-export type reservationsControllerCreateResponseSuccess = (reservationsControllerCreateResponse201) & {
-  headers: Headers;
+  data: ReservationEnvelopeDto;
+  status: 201;
 };
-;
 
-export type reservationsControllerCreateResponse = (reservationsControllerCreateResponseSuccess)
+export type reservationsControllerCreateResponseSuccess =
+  reservationsControllerCreateResponse201 & {
+    headers: Headers;
+  };
+export type reservationsControllerCreateResponse =
+  reservationsControllerCreateResponseSuccess;
 
 export const getReservationsControllerCreateUrl = () => {
+  return `/api/v1/reservations`;
+};
 
-
-  
-
-  return `/api/v1/reservations`
-}
-
-export const reservationsControllerCreate = async (createReservationDto: CreateReservationDto, options?: RequestInit): Promise<reservationsControllerCreateResponse> => {
-  
-  return apiFetch<reservationsControllerCreateResponse>(getReservationsControllerCreateUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createReservationDto,)
-  }
-);}
-
+export const reservationsControllerCreate = async (
+  createReservationDto: CreateReservationDto,
+  options?: RequestInit,
+): Promise<reservationsControllerCreateResponse> => {
+  return apiFetch<reservationsControllerCreateResponse>(
+    getReservationsControllerCreateUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(createReservationDto),
+    },
+  );
+};
 
 /**
  * @summary List active advance reservations with deposit summary
  */
 export type reservationsControllerListAdvanceResponse200 = {
-  data: AdvanceReservationListResponseDto
-  status: 200
-}
-    
-export type reservationsControllerListAdvanceResponseSuccess = (reservationsControllerListAdvanceResponse200) & {
-  headers: Headers;
+  data: AdvanceReservationListResponseDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerListAdvanceResponse = (reservationsControllerListAdvanceResponseSuccess)
+export type reservationsControllerListAdvanceResponseSuccess =
+  reservationsControllerListAdvanceResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerListAdvanceResponse =
+  reservationsControllerListAdvanceResponseSuccess;
 
-export const getReservationsControllerListAdvanceUrl = (params?: ReservationsControllerListAdvanceParams,) => {
+export const getReservationsControllerListAdvanceUrl = (
+  params?: ReservationsControllerListAdvanceParams,
+) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/reservations/advance?${stringifiedParams}` : `/api/v1/reservations/advance`
-}
+  return stringifiedParams.length > 0
+    ? `/api/v1/reservations/advance?${stringifiedParams}`
+    : `/api/v1/reservations/advance`;
+};
 
-export const reservationsControllerListAdvance = async (params?: ReservationsControllerListAdvanceParams, options?: RequestInit): Promise<reservationsControllerListAdvanceResponse> => {
-  
-  return apiFetch<reservationsControllerListAdvanceResponse>(getReservationsControllerListAdvanceUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const reservationsControllerListAdvance = async (
+  params?: ReservationsControllerListAdvanceParams,
+  options?: RequestInit,
+): Promise<reservationsControllerListAdvanceResponse> => {
+  return apiFetch<reservationsControllerListAdvanceResponse>(
+    getReservationsControllerListAdvanceUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Get available empty-room actions for a local date
  */
 export type reservationsControllerIntakePolicyResponse200 = {
-  data: IntakePolicyEnvelopeDto
-  status: 200
-}
-    
-export type reservationsControllerIntakePolicyResponseSuccess = (reservationsControllerIntakePolicyResponse200) & {
-  headers: Headers;
+  data: IntakePolicyEnvelopeDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerIntakePolicyResponse = (reservationsControllerIntakePolicyResponseSuccess)
+export type reservationsControllerIntakePolicyResponseSuccess =
+  reservationsControllerIntakePolicyResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerIntakePolicyResponse =
+  reservationsControllerIntakePolicyResponseSuccess;
 
-export const getReservationsControllerIntakePolicyUrl = (params: ReservationsControllerIntakePolicyParams,) => {
+export const getReservationsControllerIntakePolicyUrl = (
+  params: ReservationsControllerIntakePolicyParams,
+) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/reservations/intake-policy?${stringifiedParams}` : `/api/v1/reservations/intake-policy`
-}
+  return stringifiedParams.length > 0
+    ? `/api/v1/reservations/intake-policy?${stringifiedParams}`
+    : `/api/v1/reservations/intake-policy`;
+};
 
-export const reservationsControllerIntakePolicy = async (params: ReservationsControllerIntakePolicyParams, options?: RequestInit): Promise<reservationsControllerIntakePolicyResponse> => {
-  
-  return apiFetch<reservationsControllerIntakePolicyResponse>(getReservationsControllerIntakePolicyUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const reservationsControllerIntakePolicy = async (
+  params: ReservationsControllerIntakePolicyParams,
+  options?: RequestInit,
+): Promise<reservationsControllerIntakePolicyResponse> => {
+  return apiFetch<reservationsControllerIntakePolicyResponse>(
+    getReservationsControllerIntakePolicyUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Create a guest and either check in now or make an advance reservation atomically
  */
 export type reservationsControllerCreateStayResponse201 = {
-  data: CreateStayEnvelopeDto
-  status: 201
-}
-    
-export type reservationsControllerCreateStayResponseSuccess = (reservationsControllerCreateStayResponse201) & {
-  headers: Headers;
+  data: CreateStayEnvelopeDto;
+  status: 201;
 };
-;
 
-export type reservationsControllerCreateStayResponse = (reservationsControllerCreateStayResponseSuccess)
+export type reservationsControllerCreateStayResponseSuccess =
+  reservationsControllerCreateStayResponse201 & {
+    headers: Headers;
+  };
+export type reservationsControllerCreateStayResponse =
+  reservationsControllerCreateStayResponseSuccess;
 
 export const getReservationsControllerCreateStayUrl = () => {
+  return `/api/v1/reservations/intake`;
+};
 
+export const reservationsControllerCreateStay = async (
+  createStayDto: CreateStayDto,
+  options?: RequestInit,
+): Promise<reservationsControllerCreateStayResponse> => {
+  return apiFetch<reservationsControllerCreateStayResponse>(
+    getReservationsControllerCreateStayUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(createStayDto),
+    },
+  );
+};
 
-  
+/**
+ * @summary Check in a ready room with one or more manually entered guests atomically
+ */
+export type reservationsControllerCheckInRoomResponse201 = {
+  data: CheckInRoomEnvelopeDto;
+  status: 201;
+};
 
-  return `/api/v1/reservations/intake`
-}
+export type reservationsControllerCheckInRoomResponseSuccess =
+  reservationsControllerCheckInRoomResponse201 & {
+    headers: Headers;
+  };
+export type reservationsControllerCheckInRoomResponse =
+  reservationsControllerCheckInRoomResponseSuccess;
 
-export const reservationsControllerCreateStay = async (createStayDto: CreateStayDto, options?: RequestInit): Promise<reservationsControllerCreateStayResponse> => {
-  
-  return apiFetch<reservationsControllerCreateStayResponse>(getReservationsControllerCreateStayUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createStayDto,)
-  }
-);}
+export const getReservationsControllerCheckInRoomUrl = () => {
+  return `/api/v1/reservations/check-in`;
+};
 
+export const reservationsControllerCheckInRoom = async (
+  checkInRoomDto: CheckInRoomDto,
+  options?: RequestInit,
+): Promise<reservationsControllerCheckInRoomResponse> => {
+  return apiFetch<reservationsControllerCheckInRoomResponse>(
+    getReservationsControllerCheckInRoomUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(checkInRoomDto),
+    },
+  );
+};
 
 /**
  * @summary Calculate server-side stay pricing
  */
 export type reservationsControllerPreviewResponse201 = {
-  data: PricingPreviewEnvelopeDto
-  status: 201
-}
-    
-export type reservationsControllerPreviewResponseSuccess = (reservationsControllerPreviewResponse201) & {
-  headers: Headers;
+  data: PricingPreviewEnvelopeDto;
+  status: 201;
 };
-;
 
-export type reservationsControllerPreviewResponse = (reservationsControllerPreviewResponseSuccess)
+export type reservationsControllerPreviewResponseSuccess =
+  reservationsControllerPreviewResponse201 & {
+    headers: Headers;
+  };
+export type reservationsControllerPreviewResponse =
+  reservationsControllerPreviewResponseSuccess;
 
 export const getReservationsControllerPreviewUrl = () => {
+  return `/api/v1/reservations/pricing-preview`;
+};
 
-
-  
-
-  return `/api/v1/reservations/pricing-preview`
-}
-
-export const reservationsControllerPreview = async (pricingPreviewDto: PricingPreviewDto, options?: RequestInit): Promise<reservationsControllerPreviewResponse> => {
-  
-  return apiFetch<reservationsControllerPreviewResponse>(getReservationsControllerPreviewUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      pricingPreviewDto,)
-  }
-);}
-
+export const reservationsControllerPreview = async (
+  pricingPreviewDto: PricingPreviewDto,
+  options?: RequestInit,
+): Promise<reservationsControllerPreviewResponse> => {
+  return apiFetch<reservationsControllerPreviewResponse>(
+    getReservationsControllerPreviewUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(pricingPreviewDto),
+    },
+  );
+};
 
 /**
  * @summary Get a reservation
  */
 export type reservationsControllerGetResponse200 = {
-  data: ReservationEnvelopeDto
-  status: 200
-}
-    
-export type reservationsControllerGetResponseSuccess = (reservationsControllerGetResponse200) & {
-  headers: Headers;
+  data: ReservationEnvelopeDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerGetResponse = (reservationsControllerGetResponseSuccess)
+export type reservationsControllerGetResponseSuccess =
+  reservationsControllerGetResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerGetResponse =
+  reservationsControllerGetResponseSuccess;
 
-export const getReservationsControllerGetUrl = (reservationId: string,) => {
+export const getReservationsControllerGetUrl = (reservationId: string) => {
+  return `/api/v1/reservations/${reservationId}`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}`
-}
-
-export const reservationsControllerGet = async (reservationId: string, options?: RequestInit): Promise<reservationsControllerGetResponse> => {
-  
-  return apiFetch<reservationsControllerGetResponse>(getReservationsControllerGetUrl(reservationId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const reservationsControllerGet = async (
+  reservationId: string,
+  options?: RequestInit,
+): Promise<reservationsControllerGetResponse> => {
+  return apiFetch<reservationsControllerGetResponse>(
+    getReservationsControllerGetUrl(reservationId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Update reservation details with optimistic locking
  */
 export type reservationsControllerUpdateDetailsResponse200 = {
-  data: ReservationEnvelopeDto
-  status: 200
-}
-    
-export type reservationsControllerUpdateDetailsResponseSuccess = (reservationsControllerUpdateDetailsResponse200) & {
-  headers: Headers;
+  data: ReservationEnvelopeDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerUpdateDetailsResponse = (reservationsControllerUpdateDetailsResponseSuccess)
+export type reservationsControllerUpdateDetailsResponseSuccess =
+  reservationsControllerUpdateDetailsResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerUpdateDetailsResponse =
+  reservationsControllerUpdateDetailsResponseSuccess;
 
-export const getReservationsControllerUpdateDetailsUrl = (reservationId: string,) => {
+export const getReservationsControllerUpdateDetailsUrl = (
+  reservationId: string,
+) => {
+  return `/api/v1/reservations/${reservationId}`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}`
-}
-
-export const reservationsControllerUpdateDetails = async (reservationId: string,
-    updateReservationDto: UpdateReservationDto, options?: RequestInit): Promise<reservationsControllerUpdateDetailsResponse> => {
-  
-  return apiFetch<reservationsControllerUpdateDetailsResponse>(getReservationsControllerUpdateDetailsUrl(reservationId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      updateReservationDto,)
-  }
-);}
-
+export const reservationsControllerUpdateDetails = async (
+  reservationId: string,
+  updateReservationDto: UpdateReservationDto,
+  options?: RequestInit,
+): Promise<reservationsControllerUpdateDetailsResponse> => {
+  return apiFetch<reservationsControllerUpdateDetailsResponse>(
+    getReservationsControllerUpdateDetailsUrl(reservationId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateReservationDto),
+    },
+  );
+};
 
 /**
  * @summary Get advance reservation detail and backend-calculated financials
  */
 export type reservationsControllerAdvanceDetailResponse200 = {
-  data: AdvanceReservationDetailEnvelopeDto
-  status: 200
-}
-    
-export type reservationsControllerAdvanceDetailResponseSuccess = (reservationsControllerAdvanceDetailResponse200) & {
-  headers: Headers;
+  data: AdvanceReservationDetailEnvelopeDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerAdvanceDetailResponse = (reservationsControllerAdvanceDetailResponseSuccess)
+export type reservationsControllerAdvanceDetailResponseSuccess =
+  reservationsControllerAdvanceDetailResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerAdvanceDetailResponse =
+  reservationsControllerAdvanceDetailResponseSuccess;
 
-export const getReservationsControllerAdvanceDetailUrl = (reservationId: string,) => {
+export const getReservationsControllerAdvanceDetailUrl = (
+  reservationId: string,
+) => {
+  return `/api/v1/reservations/${reservationId}/advance-detail`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}/advance-detail`
-}
-
-export const reservationsControllerAdvanceDetail = async (reservationId: string, options?: RequestInit): Promise<reservationsControllerAdvanceDetailResponse> => {
-  
-  return apiFetch<reservationsControllerAdvanceDetailResponse>(getReservationsControllerAdvanceDetailUrl(reservationId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const reservationsControllerAdvanceDetail = async (
+  reservationId: string,
+  options?: RequestInit,
+): Promise<reservationsControllerAdvanceDetailResponse> => {
+  return apiFetch<reservationsControllerAdvanceDetailResponse>(
+    getReservationsControllerAdvanceDetailUrl(reservationId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 export type reservationsControllerConfirmResponse200 = {
-  data: ReservationEnvelopeDto
-  status: 200
-}
-    
-export type reservationsControllerConfirmResponseSuccess = (reservationsControllerConfirmResponse200) & {
-  headers: Headers;
+  data: ReservationEnvelopeDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerConfirmResponse = (reservationsControllerConfirmResponseSuccess)
+export type reservationsControllerConfirmResponseSuccess =
+  reservationsControllerConfirmResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerConfirmResponse =
+  reservationsControllerConfirmResponseSuccess;
 
-export const getReservationsControllerConfirmUrl = (reservationId: string,) => {
+export const getReservationsControllerConfirmUrl = (reservationId: string) => {
+  return `/api/v1/reservations/${reservationId}/confirm`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}/confirm`
-}
-
-export const reservationsControllerConfirm = async (reservationId: string,
-    reservationActionDto: ReservationActionDto, options?: RequestInit): Promise<reservationsControllerConfirmResponse> => {
-  
-  return apiFetch<reservationsControllerConfirmResponse>(getReservationsControllerConfirmUrl(reservationId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      reservationActionDto,)
-  }
-);}
-
+export const reservationsControllerConfirm = async (
+  reservationId: string,
+  reservationActionDto: ReservationActionDto,
+  options?: RequestInit,
+): Promise<reservationsControllerConfirmResponse> => {
+  return apiFetch<reservationsControllerConfirmResponse>(
+    getReservationsControllerConfirmUrl(reservationId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(reservationActionDto),
+    },
+  );
+};
 
 export type reservationsControllerCheckInResponse200 = {
-  data: ReservationEnvelopeDto
-  status: 200
-}
-    
-export type reservationsControllerCheckInResponseSuccess = (reservationsControllerCheckInResponse200) & {
-  headers: Headers;
+  data: ReservationEnvelopeDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerCheckInResponse = (reservationsControllerCheckInResponseSuccess)
+export type reservationsControllerCheckInResponseSuccess =
+  reservationsControllerCheckInResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerCheckInResponse =
+  reservationsControllerCheckInResponseSuccess;
 
-export const getReservationsControllerCheckInUrl = (reservationId: string,) => {
+export const getReservationsControllerCheckInUrl = (reservationId: string) => {
+  return `/api/v1/reservations/${reservationId}/check-in`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}/check-in`
-}
-
-export const reservationsControllerCheckIn = async (reservationId: string,
-    reservationActionDto: ReservationActionDto, options?: RequestInit): Promise<reservationsControllerCheckInResponse> => {
-  
-  return apiFetch<reservationsControllerCheckInResponse>(getReservationsControllerCheckInUrl(reservationId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      reservationActionDto,)
-  }
-);}
-
+export const reservationsControllerCheckIn = async (
+  reservationId: string,
+  reservationActionDto: ReservationActionDto,
+  options?: RequestInit,
+): Promise<reservationsControllerCheckInResponse> => {
+  return apiFetch<reservationsControllerCheckInResponse>(
+    getReservationsControllerCheckInUrl(reservationId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(reservationActionDto),
+    },
+  );
+};
 
 export type reservationsControllerCancelResponse200 = {
-  data: ReservationEnvelopeDto
-  status: 200
-}
-    
-export type reservationsControllerCancelResponseSuccess = (reservationsControllerCancelResponse200) & {
-  headers: Headers;
+  data: ReservationEnvelopeDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerCancelResponse = (reservationsControllerCancelResponseSuccess)
+export type reservationsControllerCancelResponseSuccess =
+  reservationsControllerCancelResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerCancelResponse =
+  reservationsControllerCancelResponseSuccess;
 
-export const getReservationsControllerCancelUrl = (reservationId: string,) => {
+export const getReservationsControllerCancelUrl = (reservationId: string) => {
+  return `/api/v1/reservations/${reservationId}/cancel`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}/cancel`
-}
-
-export const reservationsControllerCancel = async (reservationId: string,
-    cancelReservationDto: CancelReservationDto, options?: RequestInit): Promise<reservationsControllerCancelResponse> => {
-  
-  return apiFetch<reservationsControllerCancelResponse>(getReservationsControllerCancelUrl(reservationId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      cancelReservationDto,)
-  }
-);}
-
+export const reservationsControllerCancel = async (
+  reservationId: string,
+  cancelReservationDto: CancelReservationDto,
+  options?: RequestInit,
+): Promise<reservationsControllerCancelResponse> => {
+  return apiFetch<reservationsControllerCancelResponse>(
+    getReservationsControllerCancelUrl(reservationId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(cancelReservationDto),
+    },
+  );
+};
 
 /**
  * @summary Confirm the backend-calculated checkout bill, record its cash settlement, and check out
  */
 export type reservationsControllerCheckOutResponse201 = {
-  data: ReservationEnvelopeDto
-  status: 201
-}
-    
-export type reservationsControllerCheckOutResponseSuccess = (reservationsControllerCheckOutResponse201) & {
-  headers: Headers;
+  data: ReservationEnvelopeDto;
+  status: 201;
 };
-;
 
-export type reservationsControllerCheckOutResponse = (reservationsControllerCheckOutResponseSuccess)
+export type reservationsControllerCheckOutResponseSuccess =
+  reservationsControllerCheckOutResponse201 & {
+    headers: Headers;
+  };
+export type reservationsControllerCheckOutResponse =
+  reservationsControllerCheckOutResponseSuccess;
 
-export const getReservationsControllerCheckOutUrl = (reservationId: string,) => {
+export const getReservationsControllerCheckOutUrl = (reservationId: string) => {
+  return `/api/v1/reservations/${reservationId}/check-out`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}/check-out`
-}
-
-export const reservationsControllerCheckOut = async (reservationId: string,
-    reservationActionDto: ReservationActionDto, options?: RequestInit): Promise<reservationsControllerCheckOutResponse> => {
-  
-  return apiFetch<reservationsControllerCheckOutResponse>(getReservationsControllerCheckOutUrl(reservationId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      reservationActionDto,)
-  }
-);}
-
+export const reservationsControllerCheckOut = async (
+  reservationId: string,
+  reservationActionDto: ReservationActionDto,
+  options?: RequestInit,
+): Promise<reservationsControllerCheckOutResponse> => {
+  return apiFetch<reservationsControllerCheckOutResponse>(
+    getReservationsControllerCheckOutUrl(reservationId),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(reservationActionDto),
+    },
+  );
+};
 
 export type reservationsControllerCheckoutPreviewResponse200 = {
-  data: CheckoutPreviewEnvelopeDto
-  status: 200
-}
-    
-export type reservationsControllerCheckoutPreviewResponseSuccess = (reservationsControllerCheckoutPreviewResponse200) & {
-  headers: Headers;
+  data: CheckoutPreviewEnvelopeDto;
+  status: 200;
 };
-;
 
-export type reservationsControllerCheckoutPreviewResponse = (reservationsControllerCheckoutPreviewResponseSuccess)
+export type reservationsControllerCheckoutPreviewResponseSuccess =
+  reservationsControllerCheckoutPreviewResponse200 & {
+    headers: Headers;
+  };
+export type reservationsControllerCheckoutPreviewResponse =
+  reservationsControllerCheckoutPreviewResponseSuccess;
 
-export const getReservationsControllerCheckoutPreviewUrl = (reservationId: string,) => {
+export const getReservationsControllerCheckoutPreviewUrl = (
+  reservationId: string,
+) => {
+  return `/api/v1/reservations/${reservationId}/checkout-preview`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}/checkout-preview`
-}
-
-export const reservationsControllerCheckoutPreview = async (reservationId: string, options?: RequestInit): Promise<reservationsControllerCheckoutPreviewResponse> => {
-  
-  return apiFetch<reservationsControllerCheckoutPreviewResponse>(getReservationsControllerCheckoutPreviewUrl(reservationId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const reservationsControllerCheckoutPreview = async (
+  reservationId: string,
+  options?: RequestInit,
+): Promise<reservationsControllerCheckoutPreviewResponse> => {
+  return apiFetch<reservationsControllerCheckoutPreviewResponse>(
+    getReservationsControllerCheckoutPreviewUrl(reservationId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};

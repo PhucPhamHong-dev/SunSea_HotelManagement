@@ -6,5 +6,5 @@
  */
 
 export type ReservationsControllerIntakePolicyParams = {
-date: string;
+  date: string;
 };

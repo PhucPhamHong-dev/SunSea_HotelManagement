@@ -4,7 +4,7 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { AuthUserResponseDtoRole } from './authUserResponseDtoRole';
+import type { AuthUserResponseDtoRole } from "./authUserResponseDtoRole";
 
 export interface AuthUserResponseDto {
   id: string;

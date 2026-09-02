@@ -8,4 +8,6 @@
 /**
  * @nullable
  */
-export type ReservationServiceResponseDtoServiceId = { [key: string]: unknown } | null;
+export type ReservationServiceResponseDtoServiceId = {
+  [key: string]: unknown;
+} | null;

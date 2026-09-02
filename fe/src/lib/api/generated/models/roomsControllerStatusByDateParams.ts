@@ -6,6 +6,6 @@
  */
 
 export type RoomsControllerStatusByDateParams = {
-floorId?: string;
-date: string;
+  floorId?: string;
+  date: string;
 };

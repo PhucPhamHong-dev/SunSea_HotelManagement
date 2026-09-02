@@ -5,12 +5,12 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type HousekeepingDtoStatus = typeof HousekeepingDtoStatus[keyof typeof HousekeepingDtoStatus];
-
+export type HousekeepingDtoStatus =
+  (typeof HousekeepingDtoStatus)[keyof typeof HousekeepingDtoStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const HousekeepingDtoStatus = {
-  ready: 'ready',
-  cleaning: 'cleaning',
-  out_of_service: 'out_of_service',
+  ready: "ready",
+  cleaning: "cleaning",
+  out_of_service: "out_of_service",
 } as const;

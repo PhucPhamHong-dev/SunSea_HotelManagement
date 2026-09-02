@@ -8,4 +8,6 @@
 /**
  * @nullable
  */
-export type AdvanceReservationListItemDtoCheckOutAt = { [key: string]: unknown } | null;
+export type AdvanceReservationListItemDtoCheckOutAt = {
+  [key: string]: unknown;
+} | null;

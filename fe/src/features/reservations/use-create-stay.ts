@@ -1,7 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { apiClient, type CreateStayDto, type CreateStayResponseDto, type Guest, type Reservation } from '../../lib/api/api-client';
+import { apiClient, type CheckInRoomDto, type CheckInRoomResponseDto, type CreateStayDto, type CreateStayResponseDto, type Guest, type Reservation } from '../../lib/api/api-client';
 
 export function useIntakePolicy(date?: string, enabled = true) {
   return useQuery({
@@ -39,6 +39,27 @@ export function useCreateStay() {
       queryClient.setQueryData<Guest[]>(['guests'], (current) => {
         if (!current) return [guest];
         return [guest, ...current];
+      });
+      void queryClient.invalidateQueries({ queryKey: ['reservations'] });
+      void queryClient.invalidateQueries({ queryKey: ['advance-reservations'] });
+      void queryClient.invalidateQueries({ queryKey: ['rooms'] });
+      void queryClient.invalidateQueries({ queryKey: ['guests'] });
+      void queryClient.invalidateQueries({ queryKey: ['payments', created.reservation.id] });
+      void queryClient.invalidateQueries({ queryKey: ['checkout-preview', created.reservation.id] });
+    },
+  });
+}
+
+export function useCheckInRoom() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (body: CheckInRoomDto) => apiClient.reservations.checkInRoom(body),
+    onSuccess: (response) => {
+      const created = response.data.data as CheckInRoomResponseDto;
+      queryClient.setQueryData(['reservation', created.reservation.id], created.reservation);
+      queryClient.setQueryData<Reservation[]>(['reservations'], (current) => {
+        if (!current) return [created.reservation];
+        return [created.reservation, ...current];
       });
       void queryClient.invalidateQueries({ queryKey: ['reservations'] });
       void queryClient.invalidateQueries({ queryKey: ['advance-reservations'] });

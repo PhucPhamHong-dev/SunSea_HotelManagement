@@ -3,7 +3,7 @@ import { ApplicationError } from '../../../../common/errors/application-error';
 import { ErrorCode } from '../../../../common/errors/error-codes';
 import { PricingEngineService } from '../../../pricing/application/services/pricing-engine.service';
 import type { PricingResult } from '../../../pricing/domain/pricing.types';
-import type { AdvanceReservationListQuery, CreateStayInput, ReservationDetailsUpdate, ReservationEntity, ReservationInput, ReservationRepository, ReservationStatus } from '../ports/reservation.repository';
+import type { AdvanceReservationListQuery, CheckInRoomInput, CreateStayInput, ReservationDetailsUpdate, ReservationEntity, ReservationInput, ReservationRepository, ReservationStatus } from '../ports/reservation.repository';
 
 const SYSTEM_TIMEZONE = 'Asia/Ho_Chi_Minh';
 
@@ -66,6 +66,30 @@ export class ReservationService {
       }, input.roomRatePerNight);
     }
     return this.repository.createStay(accessToken, actorId, input);
+  }
+
+  async checkInRoom(accessToken: string, actorId: string, input: CheckInRoomInput) {
+    if (!Number.isInteger(input.roomRatePerNight) || input.roomRatePerNight < 1) {
+      throw new ApplicationError(ErrorCode.INVALID_AMOUNT, 'Tiền phòng / đêm phải là số nguyên VND lớn hơn 0.', HttpStatus.BAD_REQUEST);
+    }
+    if (input.plannedCheckOutAt && new Date(input.plannedCheckOutAt).getTime() <= Date.now()) {
+      throw new ApplicationError(ErrorCode.VALIDATION_ERROR, 'Dự kiến trả phải sau thời điểm nhận phòng.', HttpStatus.BAD_REQUEST);
+    }
+    if (!input.guests.length) {
+      throw new ApplicationError(ErrorCode.VALIDATION_ERROR, 'Cần nhập ít nhất một khách lưu trú.', HttpStatus.BAD_REQUEST);
+    }
+    for (const guest of input.guests) {
+      if (!guest.fullName.trim() || !guest.documentNumber.trim() || !guest.dateOfBirth || !guest.address.trim()) {
+        throw new ApplicationError(ErrorCode.VALIDATION_ERROR, 'Mỗi khách cần họ tên, số giấy tờ, ngày sinh và địa chỉ.', HttpStatus.BAD_REQUEST);
+      }
+      if (guest.documentType === 'national_id' && !guest.documentIssuedAt) {
+        throw new ApplicationError(ErrorCode.VALIDATION_ERROR, 'Căn cước cần ngày cấp.', HttpStatus.BAD_REQUEST);
+      }
+      if (guest.documentType === 'passport' && !guest.nationality?.trim()) {
+        throw new ApplicationError(ErrorCode.VALIDATION_ERROR, 'Hộ chiếu cần quốc tịch.', HttpStatus.BAD_REQUEST);
+      }
+    }
+    return this.repository.checkInRoom(accessToken, actorId, input);
   }
 
   async getAdvanceDetail(accessToken: string, reservationId: string) {

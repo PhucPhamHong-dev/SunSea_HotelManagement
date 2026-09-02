@@ -4,9 +4,9 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { CreateStayDtoAssignmentMode } from './createStayDtoAssignmentMode';
-import type { CreateStayGuestDto } from './createStayGuestDto';
-import type { CreateStayDtoAction } from './createStayDtoAction';
+import type { CreateStayDtoAssignmentMode } from "./createStayDtoAssignmentMode";
+import type { CreateStayGuestDto } from "./createStayGuestDto";
+import type { CreateStayDtoAction } from "./createStayDtoAction";
 
 export interface CreateStayDto {
   roomId: string;

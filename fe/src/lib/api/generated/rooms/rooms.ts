@@ -14,393 +14,391 @@ import type {
   RoomsControllerAvailabilityParams,
   RoomsControllerEquivalentsParams,
   RoomsControllerListParams,
-  RoomsControllerStatusByDateParams
-} from '.././models';
+  RoomsControllerStatusByDateParams,
+} from ".././models";
 
-import { apiFetch } from '../../api-fetch';
+import { apiFetch } from "../../api-fetch";
 
 /**
  * @summary List rooms, optionally filtered by floor
  */
 export type roomsControllerListResponse200 = {
-  data: RoomListResponseDto
-  status: 200
-}
-    
-export type roomsControllerListResponseSuccess = (roomsControllerListResponse200) & {
-  headers: Headers;
+  data: RoomListResponseDto;
+  status: 200;
 };
-;
 
-export type roomsControllerListResponse = (roomsControllerListResponseSuccess)
+export type roomsControllerListResponseSuccess =
+  roomsControllerListResponse200 & {
+    headers: Headers;
+  };
+export type roomsControllerListResponse = roomsControllerListResponseSuccess;
 
-export const getRoomsControllerListUrl = (params?: RoomsControllerListParams,) => {
+export const getRoomsControllerListUrl = (
+  params?: RoomsControllerListParams,
+) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/rooms?${stringifiedParams}` : `/api/v1/rooms`
-}
+  return stringifiedParams.length > 0
+    ? `/api/v1/rooms?${stringifiedParams}`
+    : `/api/v1/rooms`;
+};
 
-export const roomsControllerList = async (params?: RoomsControllerListParams, options?: RequestInit): Promise<roomsControllerListResponse> => {
-  
-  return apiFetch<roomsControllerListResponse>(getRoomsControllerListUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const roomsControllerList = async (
+  params?: RoomsControllerListParams,
+  options?: RequestInit,
+): Promise<roomsControllerListResponse> => {
+  return apiFetch<roomsControllerListResponse>(
+    getRoomsControllerListUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Create a room
  */
 export type roomsControllerCreateResponse201 = {
-  data: void
-  status: 201
-}
-    
-export type roomsControllerCreateResponseSuccess = (roomsControllerCreateResponse201) & {
-  headers: Headers;
+  data: void;
+  status: 201;
 };
-;
 
-export type roomsControllerCreateResponse = (roomsControllerCreateResponseSuccess)
+export type roomsControllerCreateResponseSuccess =
+  roomsControllerCreateResponse201 & {
+    headers: Headers;
+  };
+export type roomsControllerCreateResponse =
+  roomsControllerCreateResponseSuccess;
 
 export const getRoomsControllerCreateUrl = () => {
+  return `/api/v1/rooms`;
+};
 
-
-  
-
-  return `/api/v1/rooms`
-}
-
-export const roomsControllerCreate = async (roomDto: RoomDto, options?: RequestInit): Promise<roomsControllerCreateResponse> => {
-  
-  return apiFetch<roomsControllerCreateResponse>(getRoomsControllerCreateUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      roomDto,)
-  }
-);}
-
+export const roomsControllerCreate = async (
+  roomDto: RoomDto,
+  options?: RequestInit,
+): Promise<roomsControllerCreateResponse> => {
+  return apiFetch<roomsControllerCreateResponse>(
+    getRoomsControllerCreateUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(roomDto),
+    },
+  );
+};
 
 /**
  * @summary List room operational status and intake availability for a business date
  */
 export type roomsControllerStatusByDateResponse200 = {
-  data: RoomListResponseDto
-  status: 200
-}
-    
-export type roomsControllerStatusByDateResponseSuccess = (roomsControllerStatusByDateResponse200) & {
-  headers: Headers;
+  data: RoomListResponseDto;
+  status: 200;
 };
-;
 
-export type roomsControllerStatusByDateResponse = (roomsControllerStatusByDateResponseSuccess)
+export type roomsControllerStatusByDateResponseSuccess =
+  roomsControllerStatusByDateResponse200 & {
+    headers: Headers;
+  };
+export type roomsControllerStatusByDateResponse =
+  roomsControllerStatusByDateResponseSuccess;
 
-export const getRoomsControllerStatusByDateUrl = (params: RoomsControllerStatusByDateParams,) => {
+export const getRoomsControllerStatusByDateUrl = (
+  params: RoomsControllerStatusByDateParams,
+) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/rooms/status-by-date?${stringifiedParams}` : `/api/v1/rooms/status-by-date`
-}
+  return stringifiedParams.length > 0
+    ? `/api/v1/rooms/status-by-date?${stringifiedParams}`
+    : `/api/v1/rooms/status-by-date`;
+};
 
-export const roomsControllerStatusByDate = async (params: RoomsControllerStatusByDateParams, options?: RequestInit): Promise<roomsControllerStatusByDateResponse> => {
-  
-  return apiFetch<roomsControllerStatusByDateResponse>(getRoomsControllerStatusByDateUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const roomsControllerStatusByDate = async (
+  params: RoomsControllerStatusByDateParams,
+  options?: RequestInit,
+): Promise<roomsControllerStatusByDateResponse> => {
+  return apiFetch<roomsControllerStatusByDateResponse>(
+    getRoomsControllerStatusByDateUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary List rooms available for a requested period
  */
 export type roomsControllerAvailabilityResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type roomsControllerAvailabilityResponseSuccess = (roomsControllerAvailabilityResponse200) & {
-  headers: Headers;
+  data: RoomListResponseDto;
+  status: 200;
 };
-;
 
-export type roomsControllerAvailabilityResponse = (roomsControllerAvailabilityResponseSuccess)
+export type roomsControllerAvailabilityResponseSuccess =
+  roomsControllerAvailabilityResponse200 & {
+    headers: Headers;
+  };
+export type roomsControllerAvailabilityResponse =
+  roomsControllerAvailabilityResponseSuccess;
 
-export const getRoomsControllerAvailabilityUrl = (params?: RoomsControllerAvailabilityParams,) => {
+export const getRoomsControllerAvailabilityUrl = (
+  params?: RoomsControllerAvailabilityParams,
+) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/rooms/availability?${stringifiedParams}` : `/api/v1/rooms/availability`
-}
+  return stringifiedParams.length > 0
+    ? `/api/v1/rooms/availability?${stringifiedParams}`
+    : `/api/v1/rooms/availability`;
+};
 
-export const roomsControllerAvailability = async (params?: RoomsControllerAvailabilityParams, options?: RequestInit): Promise<roomsControllerAvailabilityResponse> => {
-  
-  return apiFetch<roomsControllerAvailabilityResponse>(getRoomsControllerAvailabilityUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const roomsControllerAvailability = async (
+  params?: RoomsControllerAvailabilityParams,
+  options?: RequestInit,
+): Promise<roomsControllerAvailabilityResponse> => {
+  return apiFetch<roomsControllerAvailabilityResponse>(
+    getRoomsControllerAvailabilityUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Find available rooms with exactly the same bed count and window attribute
  */
 export type roomsControllerEquivalentsResponse200 = {
-  data: EquivalentRoomSearchEnvelopeDto
-  status: 200
-}
-    
-export type roomsControllerEquivalentsResponseSuccess = (roomsControllerEquivalentsResponse200) & {
-  headers: Headers;
+  data: EquivalentRoomSearchEnvelopeDto;
+  status: 200;
 };
-;
 
-export type roomsControllerEquivalentsResponse = (roomsControllerEquivalentsResponseSuccess)
+export type roomsControllerEquivalentsResponseSuccess =
+  roomsControllerEquivalentsResponse200 & {
+    headers: Headers;
+  };
+export type roomsControllerEquivalentsResponse =
+  roomsControllerEquivalentsResponseSuccess;
 
-export const getRoomsControllerEquivalentsUrl = (roomId: string,
-    params: RoomsControllerEquivalentsParams,) => {
+export const getRoomsControllerEquivalentsUrl = (
+  roomId: string,
+  params: RoomsControllerEquivalentsParams,
+) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/rooms/${roomId}/equivalents?${stringifiedParams}` : `/api/v1/rooms/${roomId}/equivalents`
-}
+  return stringifiedParams.length > 0
+    ? `/api/v1/rooms/${roomId}/equivalents?${stringifiedParams}`
+    : `/api/v1/rooms/${roomId}/equivalents`;
+};
 
-export const roomsControllerEquivalents = async (roomId: string,
-    params: RoomsControllerEquivalentsParams, options?: RequestInit): Promise<roomsControllerEquivalentsResponse> => {
-  
-  return apiFetch<roomsControllerEquivalentsResponse>(getRoomsControllerEquivalentsUrl(roomId,params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const roomsControllerEquivalents = async (
+  roomId: string,
+  params: RoomsControllerEquivalentsParams,
+  options?: RequestInit,
+): Promise<roomsControllerEquivalentsResponse> => {
+  return apiFetch<roomsControllerEquivalentsResponse>(
+    getRoomsControllerEquivalentsUrl(roomId, params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Get one room
  */
 export type roomsControllerGetResponse200 = {
-  data: RoomEnvelopeDto
-  status: 200
-}
-    
-export type roomsControllerGetResponseSuccess = (roomsControllerGetResponse200) & {
-  headers: Headers;
+  data: RoomEnvelopeDto;
+  status: 200;
 };
-;
 
-export type roomsControllerGetResponse = (roomsControllerGetResponseSuccess)
+export type roomsControllerGetResponseSuccess =
+  roomsControllerGetResponse200 & {
+    headers: Headers;
+  };
+export type roomsControllerGetResponse = roomsControllerGetResponseSuccess;
 
-export const getRoomsControllerGetUrl = (roomId: string,) => {
+export const getRoomsControllerGetUrl = (roomId: string) => {
+  return `/api/v1/rooms/${roomId}`;
+};
 
-
-  
-
-  return `/api/v1/rooms/${roomId}`
-}
-
-export const roomsControllerGet = async (roomId: string, options?: RequestInit): Promise<roomsControllerGetResponse> => {
-  
-  return apiFetch<roomsControllerGetResponse>(getRoomsControllerGetUrl(roomId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const roomsControllerGet = async (
+  roomId: string,
+  options?: RequestInit,
+): Promise<roomsControllerGetResponse> => {
+  return apiFetch<roomsControllerGetResponse>(
+    getRoomsControllerGetUrl(roomId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Update a room
  */
 export type roomsControllerUpdateResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type roomsControllerUpdateResponseSuccess = (roomsControllerUpdateResponse200) & {
-  headers: Headers;
+  data: void;
+  status: 200;
 };
-;
 
-export type roomsControllerUpdateResponse = (roomsControllerUpdateResponseSuccess)
+export type roomsControllerUpdateResponseSuccess =
+  roomsControllerUpdateResponse200 & {
+    headers: Headers;
+  };
+export type roomsControllerUpdateResponse =
+  roomsControllerUpdateResponseSuccess;
 
-export const getRoomsControllerUpdateUrl = (roomId: string,) => {
+export const getRoomsControllerUpdateUrl = (roomId: string) => {
+  return `/api/v1/rooms/${roomId}`;
+};
 
-
-  
-
-  return `/api/v1/rooms/${roomId}`
-}
-
-export const roomsControllerUpdate = async (roomId: string, options?: RequestInit): Promise<roomsControllerUpdateResponse> => {
-  
-  return apiFetch<roomsControllerUpdateResponse>(getRoomsControllerUpdateUrl(roomId),
-  {      
-    ...options,
-    method: 'PATCH'
-    
-    
-  }
-);}
-
+export const roomsControllerUpdate = async (
+  roomId: string,
+  options?: RequestInit,
+): Promise<roomsControllerUpdateResponse> => {
+  return apiFetch<roomsControllerUpdateResponse>(
+    getRoomsControllerUpdateUrl(roomId),
+    {
+      ...options,
+      method: "PATCH",
+    },
+  );
+};
 
 /**
  * @summary Update room nightly rate
  */
 export type roomsControllerUpdateRateResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type roomsControllerUpdateRateResponseSuccess = (roomsControllerUpdateRateResponse200) & {
-  headers: Headers;
+  data: void;
+  status: 200;
 };
-;
 
-export type roomsControllerUpdateRateResponse = (roomsControllerUpdateRateResponseSuccess)
+export type roomsControllerUpdateRateResponseSuccess =
+  roomsControllerUpdateRateResponse200 & {
+    headers: Headers;
+  };
+export type roomsControllerUpdateRateResponse =
+  roomsControllerUpdateRateResponseSuccess;
 
-export const getRoomsControllerUpdateRateUrl = (roomId: string,) => {
+export const getRoomsControllerUpdateRateUrl = (roomId: string) => {
+  return `/api/v1/rooms/${roomId}/rate`;
+};
 
-
-  
-
-  return `/api/v1/rooms/${roomId}/rate`
-}
-
-export const roomsControllerUpdateRate = async (roomId: string,
-    roomRateDto: RoomRateDto, options?: RequestInit): Promise<roomsControllerUpdateRateResponse> => {
-  
-  return apiFetch<roomsControllerUpdateRateResponse>(getRoomsControllerUpdateRateUrl(roomId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      roomRateDto,)
-  }
-);}
-
+export const roomsControllerUpdateRate = async (
+  roomId: string,
+  roomRateDto: RoomRateDto,
+  options?: RequestInit,
+): Promise<roomsControllerUpdateRateResponse> => {
+  return apiFetch<roomsControllerUpdateRateResponse>(
+    getRoomsControllerUpdateRateUrl(roomId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(roomRateDto),
+    },
+  );
+};
 
 /**
  * @summary Update room housekeeping status
  */
 export type roomsControllerUpdateHousekeepingResponse200 = {
-  data: RoomEnvelopeDto
-  status: 200
-}
-    
-export type roomsControllerUpdateHousekeepingResponseSuccess = (roomsControllerUpdateHousekeepingResponse200) & {
-  headers: Headers;
+  data: RoomEnvelopeDto;
+  status: 200;
 };
-;
 
-export type roomsControllerUpdateHousekeepingResponse = (roomsControllerUpdateHousekeepingResponseSuccess)
+export type roomsControllerUpdateHousekeepingResponseSuccess =
+  roomsControllerUpdateHousekeepingResponse200 & {
+    headers: Headers;
+  };
+export type roomsControllerUpdateHousekeepingResponse =
+  roomsControllerUpdateHousekeepingResponseSuccess;
 
-export const getRoomsControllerUpdateHousekeepingUrl = (roomId: string,) => {
+export const getRoomsControllerUpdateHousekeepingUrl = (roomId: string) => {
+  return `/api/v1/rooms/${roomId}/housekeeping`;
+};
 
-
-  
-
-  return `/api/v1/rooms/${roomId}/housekeeping`
-}
-
-export const roomsControllerUpdateHousekeeping = async (roomId: string,
-    housekeepingDto: HousekeepingDto, options?: RequestInit): Promise<roomsControllerUpdateHousekeepingResponse> => {
-  
-  return apiFetch<roomsControllerUpdateHousekeepingResponse>(getRoomsControllerUpdateHousekeepingUrl(roomId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      housekeepingDto,)
-  }
-);}
-
+export const roomsControllerUpdateHousekeeping = async (
+  roomId: string,
+  housekeepingDto: HousekeepingDto,
+  options?: RequestInit,
+): Promise<roomsControllerUpdateHousekeepingResponse> => {
+  return apiFetch<roomsControllerUpdateHousekeepingResponse>(
+    getRoomsControllerUpdateHousekeepingUrl(roomId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(housekeepingDto),
+    },
+  );
+};
 
 /**
  * @summary Get derived room display status
  */
 export type roomsControllerStatusResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type roomsControllerStatusResponseSuccess = (roomsControllerStatusResponse200) & {
-  headers: Headers;
+  data: void;
+  status: 200;
 };
-;
 
-export type roomsControllerStatusResponse = (roomsControllerStatusResponseSuccess)
+export type roomsControllerStatusResponseSuccess =
+  roomsControllerStatusResponse200 & {
+    headers: Headers;
+  };
+export type roomsControllerStatusResponse =
+  roomsControllerStatusResponseSuccess;
 
-export const getRoomsControllerStatusUrl = (roomId: string,) => {
+export const getRoomsControllerStatusUrl = (roomId: string) => {
+  return `/api/v1/rooms/${roomId}/status`;
+};
 
-
-  
-
-  return `/api/v1/rooms/${roomId}/status`
-}
-
-export const roomsControllerStatus = async (roomId: string, options?: RequestInit): Promise<roomsControllerStatusResponse> => {
-  
-  return apiFetch<roomsControllerStatusResponse>(getRoomsControllerStatusUrl(roomId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const roomsControllerStatus = async (
+  roomId: string,
+  options?: RequestInit,
+): Promise<roomsControllerStatusResponse> => {
+  return apiFetch<roomsControllerStatusResponse>(
+    getRoomsControllerStatusUrl(roomId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};

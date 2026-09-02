@@ -397,7 +397,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomListResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1019,6 +1026,43 @@
           }
         ],
         "summary": "Create a guest and either check in now or make an advance reservation atomically",
+        "tags": [
+          "reservations"
+        ]
+      }
+    },
+    "/api/v1/reservations/check-in": {
+      "post": {
+        "operationId": "ReservationsController_checkInRoom",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckInRoomDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckInRoomEnvelopeDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "hotel_session": []
+          }
+        ],
+        "summary": "Check in a ready room with one or more manually entered guests atomically",
         "tags": [
           "reservations"
         ]
@@ -2965,6 +3009,195 @@
           },
           "data": {
             "$ref": "#/components/schemas/CreateStayResponseDto"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/ApiMetaDto"
+          }
+        },
+        "required": [
+          "success",
+          "data",
+          "meta"
+        ]
+      },
+      "CheckInRoomGuestDto": {
+        "type": "object",
+        "properties": {
+          "documentType": {
+            "type": "string",
+            "enum": [
+              "national_id",
+              "passport"
+            ],
+            "description": "National ID is a Vietnamese CCCD. Passport requires nationality instead of an issuing country."
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Nguyễn Văn An"
+          },
+          "documentNumber": {
+            "type": "string",
+            "example": "079000000000"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "address": {
+            "type": "string",
+            "example": "Hải Châu, Đà Nẵng"
+          },
+          "documentIssuedAt": {
+            "type": "string",
+            "format": "date",
+            "description": "Required for a Vietnamese CCCD; omitted for a passport."
+          },
+          "nationality": {
+            "type": "string",
+            "example": "Korean",
+            "description": "Required for a passport. CCCD is stored as Vietnam (VN) without displaying a nationality field."
+          }
+        },
+        "required": [
+          "documentType",
+          "fullName",
+          "documentNumber",
+          "dateOfBirth",
+          "address"
+        ]
+      },
+      "CheckInRoomDto": {
+        "type": "object",
+        "properties": {
+          "roomId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "guests": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CheckInRoomGuestDto"
+            }
+          },
+          "roomRatePerNight": {
+            "type": "number",
+            "example": 350000,
+            "description": "Nightly room rate in integer VND. Stored as an immutable reservation snapshot."
+          },
+          "plannedCheckOutAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "description": "Omit or send null when the guest has no expected checkout yet."
+          },
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "roomId",
+          "guests",
+          "roomRatePerNight"
+        ]
+      },
+      "CheckedInGuestDocumentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "national_id",
+              "passport"
+            ]
+          },
+          "number": {
+            "type": "string"
+          },
+          "nationality": {
+            "type": "string",
+            "description": "VN is stored by the Backend for CCCD without requiring a frontend field."
+          },
+          "issuedAt": {
+            "type": "string",
+            "format": "date",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "number",
+          "nationality"
+        ]
+      },
+      "CheckedInGuestDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date"
+          },
+          "address": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "companion"
+            ]
+          },
+          "document": {
+            "$ref": "#/components/schemas/CheckedInGuestDocumentDto"
+          }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "dateOfBirth",
+          "address",
+          "role",
+          "document"
+        ]
+      },
+      "CheckInRoomResponseDto": {
+        "type": "object",
+        "properties": {
+          "reservation": {
+            "$ref": "#/components/schemas/ReservationResponseDto"
+          },
+          "guests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CheckedInGuestDto"
+            }
+          }
+        },
+        "required": [
+          "reservation",
+          "guests"
+        ]
+      },
+      "CheckInRoomEnvelopeDto": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "$ref": "#/components/schemas/CheckInRoomResponseDto"
           },
           "meta": {
             "$ref": "#/components/schemas/ApiMetaDto"

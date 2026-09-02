@@ -5,10 +5,10 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type AdvanceReservationListItemDtoCurrency = typeof AdvanceReservationListItemDtoCurrency[keyof typeof AdvanceReservationListItemDtoCurrency];
-
+export type AdvanceReservationListItemDtoCurrency =
+  (typeof AdvanceReservationListItemDtoCurrency)[keyof typeof AdvanceReservationListItemDtoCurrency];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AdvanceReservationListItemDtoCurrency = {
-  VND: 'VND',
+  VND: "VND",
 } as const;

@@ -4,8 +4,8 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { RoomResponseDtoHousekeepingStatus } from './roomResponseDtoHousekeepingStatus';
-import type { RoomResponseDtoStatus } from './roomResponseDtoStatus';
+import type { RoomResponseDtoHousekeepingStatus } from "./roomResponseDtoHousekeepingStatus";
+import type { RoomResponseDtoStatus } from "./roomResponseDtoStatus";
 
 export interface RoomResponseDto {
   id: string;

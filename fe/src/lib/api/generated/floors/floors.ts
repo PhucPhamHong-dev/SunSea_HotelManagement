@@ -7,113 +7,97 @@
 import type {
   FloorListResponseDto,
   FloorResponseDto,
-  RoomListResponseDto
-} from '.././models';
+  RoomListResponseDto,
+} from ".././models";
 
-import { apiFetch } from '../../api-fetch';
+import { apiFetch } from "../../api-fetch";
 
 /**
  * @summary List hotel floors
  */
 export type floorsControllerListResponse200 = {
-  data: FloorListResponseDto
-  status: 200
-}
-    
-export type floorsControllerListResponseSuccess = (floorsControllerListResponse200) & {
-  headers: Headers;
+  data: FloorListResponseDto;
+  status: 200;
 };
-;
 
-export type floorsControllerListResponse = (floorsControllerListResponseSuccess)
+export type floorsControllerListResponseSuccess =
+  floorsControllerListResponse200 & {
+    headers: Headers;
+  };
+export type floorsControllerListResponse = floorsControllerListResponseSuccess;
 
 export const getFloorsControllerListUrl = () => {
+  return `/api/v1/floors`;
+};
 
-
-  
-
-  return `/api/v1/floors`
-}
-
-export const floorsControllerList = async ( options?: RequestInit): Promise<floorsControllerListResponse> => {
-  
-  return apiFetch<floorsControllerListResponse>(getFloorsControllerListUrl(),
-  {      
+export const floorsControllerList = async (
+  options?: RequestInit,
+): Promise<floorsControllerListResponse> => {
+  return apiFetch<floorsControllerListResponse>(getFloorsControllerListUrl(), {
     ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+    method: "GET",
+  });
+};
 
 /**
  * @summary Get one hotel floor
  */
 export type floorsControllerGetResponse200 = {
-  data: FloorResponseDto
-  status: 200
-}
-    
-export type floorsControllerGetResponseSuccess = (floorsControllerGetResponse200) & {
-  headers: Headers;
+  data: FloorResponseDto;
+  status: 200;
 };
-;
 
-export type floorsControllerGetResponse = (floorsControllerGetResponseSuccess)
+export type floorsControllerGetResponseSuccess =
+  floorsControllerGetResponse200 & {
+    headers: Headers;
+  };
+export type floorsControllerGetResponse = floorsControllerGetResponseSuccess;
 
-export const getFloorsControllerGetUrl = (floorId: string,) => {
+export const getFloorsControllerGetUrl = (floorId: string) => {
+  return `/api/v1/floors/${floorId}`;
+};
 
-
-  
-
-  return `/api/v1/floors/${floorId}`
-}
-
-export const floorsControllerGet = async (floorId: string, options?: RequestInit): Promise<floorsControllerGetResponse> => {
-  
-  return apiFetch<floorsControllerGetResponse>(getFloorsControllerGetUrl(floorId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const floorsControllerGet = async (
+  floorId: string,
+  options?: RequestInit,
+): Promise<floorsControllerGetResponse> => {
+  return apiFetch<floorsControllerGetResponse>(
+    getFloorsControllerGetUrl(floorId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary List rooms on one floor
  */
 export type floorsControllerListRoomsOnFloorResponse200 = {
-  data: RoomListResponseDto
-  status: 200
-}
-    
-export type floorsControllerListRoomsOnFloorResponseSuccess = (floorsControllerListRoomsOnFloorResponse200) & {
-  headers: Headers;
+  data: RoomListResponseDto;
+  status: 200;
 };
-;
 
-export type floorsControllerListRoomsOnFloorResponse = (floorsControllerListRoomsOnFloorResponseSuccess)
+export type floorsControllerListRoomsOnFloorResponseSuccess =
+  floorsControllerListRoomsOnFloorResponse200 & {
+    headers: Headers;
+  };
+export type floorsControllerListRoomsOnFloorResponse =
+  floorsControllerListRoomsOnFloorResponseSuccess;
 
-export const getFloorsControllerListRoomsOnFloorUrl = (floorId: string,) => {
+export const getFloorsControllerListRoomsOnFloorUrl = (floorId: string) => {
+  return `/api/v1/floors/${floorId}/rooms`;
+};
 
-
-  
-
-  return `/api/v1/floors/${floorId}/rooms`
-}
-
-export const floorsControllerListRoomsOnFloor = async (floorId: string, options?: RequestInit): Promise<floorsControllerListRoomsOnFloorResponse> => {
-  
-  return apiFetch<floorsControllerListRoomsOnFloorResponse>(getFloorsControllerListRoomsOnFloorUrl(floorId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const floorsControllerListRoomsOnFloor = async (
+  floorId: string,
+  options?: RequestInit,
+): Promise<floorsControllerListRoomsOnFloorResponse> => {
+  return apiFetch<floorsControllerListRoomsOnFloorResponse>(
+    getFloorsControllerListRoomsOnFloorUrl(floorId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};

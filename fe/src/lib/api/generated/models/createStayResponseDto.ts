@@ -4,9 +4,9 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { CreateStayResponseDtoAction } from './createStayResponseDtoAction';
-import type { ReservationResponseDto } from './reservationResponseDto';
-import type { CreatedStayGuestDto } from './createdStayGuestDto';
+import type { CreateStayResponseDtoAction } from "./createStayResponseDtoAction";
+import type { ReservationResponseDto } from "./reservationResponseDto";
+import type { CreatedStayGuestDto } from "./createdStayGuestDto";
 
 export interface CreateStayResponseDto {
   action: CreateStayResponseDtoAction;

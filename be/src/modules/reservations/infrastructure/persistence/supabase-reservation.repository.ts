@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { SupabaseService } from '../../../../infrastructure/supabase/supabase.service';
 import { ApplicationError } from '../../../../common/errors/application-error';
 import { ErrorCode } from '../../../../common/errors/error-codes';
-import type { AdvanceReservationContext, AdvanceReservationListItem, AdvanceReservationListQuery, CreateStayInput, CreatedStay, CreatedStayGuest, PaymentSummary, ProcessedNoShow, ReservationDetailsUpdate, ReservationEntity, ReservationInput, ReservationRepository, ReservationStatus } from '../../application/ports/reservation.repository';
+import type { AdvanceReservationContext, AdvanceReservationListItem, AdvanceReservationListQuery, CheckInRoomInput, CheckInRoomResult, CheckedInGuest, CreateStayInput, CreatedStay, CreatedStayGuest, PaymentSummary, ProcessedNoShow, ReservationDetailsUpdate, ReservationEntity, ReservationInput, ReservationRepository, ReservationStatus } from '../../application/ports/reservation.repository';
 
 interface ReservationRow {
   id: string;
@@ -51,6 +51,21 @@ interface GuestRow extends GuestContextRow {
 }
 interface PaymentSummaryRow { reservation_id: string; payment_type: string; amount: number; status: string; }
 interface CreateStayRpcResponse { action: 'check_in' | 'advance'; reservation: ReservationRow; guest: GuestRow; }
+interface CheckInRoomRpcGuest {
+  id: string;
+  fullName: string;
+  dateOfBirth: string;
+  address: string;
+  role: 'primary' | 'companion';
+  document: {
+    id: string;
+    type: 'national_id' | 'passport';
+    number: string;
+    nationality: string;
+    issuedAt: string | null;
+  };
+}
+interface CheckInRoomRpcResponse { reservation: ReservationRow; guests: CheckInRoomRpcGuest[]; }
 interface ProcessedNoShowRow { reservation_id: string; room_id: string | null; }
 
 const fields = 'id, room_id, preferred_room_id, room_type_id, guest_id, planned_check_in_at, planned_check_out_at, actual_check_in_at, actual_check_out_at, status, room_rate_snapshot, deposit_expected, note, cancellation_reason, cancelled_at, no_show_at, version, created_at, updated_at';
@@ -230,6 +245,31 @@ export class SupabaseReservationRepository implements ReservationRepository {
     if (error) throw this.translateDatabaseError(error);
     if (!data) throw new ApplicationError(ErrorCode.INTERNAL_ERROR, 'Stay creation returned no data', HttpStatus.INTERNAL_SERVER_ERROR);
     return { action: data.action, reservation: this.map(data.reservation), guest: this.mapCreatedGuest(data.guest) };
+  }
+
+  async checkInRoom(accessToken: string, actorId: string, input: CheckInRoomInput): Promise<CheckInRoomResult> {
+    const { data, error } = await this.supabase.getPublicClient(accessToken).rpc('check_in_room_with_guests', {
+      p_room_id: input.roomId,
+      p_guests: input.guests.map((guest) => ({
+        documentType: guest.documentType,
+        fullName: guest.fullName.trim(),
+        documentNumber: guest.documentNumber.trim(),
+        dateOfBirth: guest.dateOfBirth,
+        address: guest.address.trim(),
+        ...(guest.documentIssuedAt ? { documentIssuedAt: guest.documentIssuedAt } : {}),
+        ...(guest.nationality?.trim() ? { nationality: guest.nationality.trim() } : {}),
+      })),
+      p_planned_check_out_at: input.plannedCheckOutAt ?? null,
+      p_room_rate_per_night: input.roomRatePerNight,
+      p_note: input.note?.trim() || null,
+      p_actor_id: actorId,
+    }).maybeSingle<CheckInRoomRpcResponse>();
+    if (error) throw this.translateDatabaseError(error);
+    if (!data) throw new ApplicationError(ErrorCode.INTERNAL_ERROR, 'Check-in returned no data', HttpStatus.INTERNAL_SERVER_ERROR);
+    return {
+      reservation: this.map(data.reservation),
+      guests: data.guests.map((guest) => this.mapCheckedInGuest(guest)),
+    };
   }
 
   async create(accessToken: string, actorId: string, input: ReservationInput, roomRateSnapshot: number | null): Promise<ReservationEntity> {
@@ -427,6 +467,23 @@ export class SupabaseReservationRepository implements ReservationRepository {
       deletedAt: row.deleted_at,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
+    };
+  }
+
+  private mapCheckedInGuest(row: CheckInRoomRpcGuest): CheckedInGuest {
+    return {
+      id: row.id,
+      fullName: row.fullName,
+      dateOfBirth: row.dateOfBirth,
+      address: row.address,
+      role: row.role,
+      document: {
+        id: row.document.id,
+        type: row.document.type,
+        number: row.document.number,
+        nationality: row.document.nationality,
+        issuedAt: row.document.issuedAt,
+      },
     };
   }
 

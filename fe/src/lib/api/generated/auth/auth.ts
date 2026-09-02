@@ -8,149 +8,121 @@ import type {
   AuthLogoutEnvelopeDto,
   AuthRefreshEnvelopeDto,
   AuthUserEnvelopeDto,
-  LoginDto
-} from '.././models';
+  LoginDto,
+} from ".././models";
 
-import { apiFetch } from '../../api-fetch';
+import { apiFetch } from "../../api-fetch";
 
 /**
  * @summary Login through Supabase Auth
  */
 export type authControllerLoginResponse201 = {
-  data: AuthUserEnvelopeDto
-  status: 201
-}
-    
-export type authControllerLoginResponseSuccess = (authControllerLoginResponse201) & {
-  headers: Headers;
+  data: AuthUserEnvelopeDto;
+  status: 201;
 };
-;
 
-export type authControllerLoginResponse = (authControllerLoginResponseSuccess)
+export type authControllerLoginResponseSuccess =
+  authControllerLoginResponse201 & {
+    headers: Headers;
+  };
+export type authControllerLoginResponse = authControllerLoginResponseSuccess;
 
 export const getAuthControllerLoginUrl = () => {
+  return `/api/v1/auth/login`;
+};
 
-
-  
-
-  return `/api/v1/auth/login`
-}
-
-export const authControllerLogin = async (loginDto: LoginDto, options?: RequestInit): Promise<authControllerLoginResponse> => {
-  
-  return apiFetch<authControllerLoginResponse>(getAuthControllerLoginUrl(),
-  {      
+export const authControllerLogin = async (
+  loginDto: LoginDto,
+  options?: RequestInit,
+): Promise<authControllerLoginResponse> => {
+  return apiFetch<authControllerLoginResponse>(getAuthControllerLoginUrl(), {
     ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      loginDto,)
-  }
-);}
-
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(loginDto),
+  });
+};
 
 /**
  * @summary Clear the current session cookies
  */
 export type authControllerLogoutResponse201 = {
-  data: AuthLogoutEnvelopeDto
-  status: 201
-}
-    
-export type authControllerLogoutResponseSuccess = (authControllerLogoutResponse201) & {
-  headers: Headers;
+  data: AuthLogoutEnvelopeDto;
+  status: 201;
 };
-;
 
-export type authControllerLogoutResponse = (authControllerLogoutResponseSuccess)
+export type authControllerLogoutResponseSuccess =
+  authControllerLogoutResponse201 & {
+    headers: Headers;
+  };
+export type authControllerLogoutResponse = authControllerLogoutResponseSuccess;
 
 export const getAuthControllerLogoutUrl = () => {
+  return `/api/v1/auth/logout`;
+};
 
-
-  
-
-  return `/api/v1/auth/logout`
-}
-
-export const authControllerLogout = async ( options?: RequestInit): Promise<authControllerLogoutResponse> => {
-  
-  return apiFetch<authControllerLogoutResponse>(getAuthControllerLogoutUrl(),
-  {      
+export const authControllerLogout = async (
+  options?: RequestInit,
+): Promise<authControllerLogoutResponse> => {
+  return apiFetch<authControllerLogoutResponse>(getAuthControllerLogoutUrl(), {
     ...options,
-    method: 'POST'
-    
-    
-  }
-);}
-
+    method: "POST",
+  });
+};
 
 /**
  * @summary Get current user profile
  */
 export type authControllerMeResponse200 = {
-  data: AuthUserEnvelopeDto
-  status: 200
-}
-    
-export type authControllerMeResponseSuccess = (authControllerMeResponse200) & {
+  data: AuthUserEnvelopeDto;
+  status: 200;
+};
+
+export type authControllerMeResponseSuccess = authControllerMeResponse200 & {
   headers: Headers;
 };
-;
-
-export type authControllerMeResponse = (authControllerMeResponseSuccess)
+export type authControllerMeResponse = authControllerMeResponseSuccess;
 
 export const getAuthControllerMeUrl = () => {
+  return `/api/v1/auth/me`;
+};
 
-
-  
-
-  return `/api/v1/auth/me`
-}
-
-export const authControllerMe = async ( options?: RequestInit): Promise<authControllerMeResponse> => {
-  
-  return apiFetch<authControllerMeResponse>(getAuthControllerMeUrl(),
-  {      
+export const authControllerMe = async (
+  options?: RequestInit,
+): Promise<authControllerMeResponse> => {
+  return apiFetch<authControllerMeResponse>(getAuthControllerMeUrl(), {
     ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+    method: "GET",
+  });
+};
 
 /**
  * @summary Refresh session cookies
  */
 export type authControllerRefreshResponse201 = {
-  data: AuthRefreshEnvelopeDto
-  status: 201
-}
-    
-export type authControllerRefreshResponseSuccess = (authControllerRefreshResponse201) & {
-  headers: Headers;
+  data: AuthRefreshEnvelopeDto;
+  status: 201;
 };
-;
 
-export type authControllerRefreshResponse = (authControllerRefreshResponseSuccess)
+export type authControllerRefreshResponseSuccess =
+  authControllerRefreshResponse201 & {
+    headers: Headers;
+  };
+export type authControllerRefreshResponse =
+  authControllerRefreshResponseSuccess;
 
 export const getAuthControllerRefreshUrl = () => {
+  return `/api/v1/auth/refresh`;
+};
 
-
-  
-
-  return `/api/v1/auth/refresh`
-}
-
-export const authControllerRefresh = async ( options?: RequestInit): Promise<authControllerRefreshResponse> => {
-  
-  return apiFetch<authControllerRefreshResponse>(getAuthControllerRefreshUrl(),
-  {      
-    ...options,
-    method: 'POST'
-    
-    
-  }
-);}
-
-
+export const authControllerRefresh = async (
+  options?: RequestInit,
+): Promise<authControllerRefreshResponse> => {
+  return apiFetch<authControllerRefreshResponse>(
+    getAuthControllerRefreshUrl(),
+    {
+      ...options,
+      method: "POST",
+    },
+  );
+};

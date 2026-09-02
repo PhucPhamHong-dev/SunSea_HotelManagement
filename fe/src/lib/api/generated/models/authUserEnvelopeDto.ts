@@ -4,8 +4,8 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { AuthUserResponseDto } from './authUserResponseDto';
-import type { ApiMetaDto } from './apiMetaDto';
+import type { AuthUserResponseDto } from "./authUserResponseDto";
+import type { ApiMetaDto } from "./apiMetaDto";
 
 export interface AuthUserEnvelopeDto {
   success: boolean;

@@ -23,6 +23,26 @@ export interface CreateStayInput {
   note?: string;
 }
 
+export type GuestDocumentType = 'national_id' | 'passport';
+
+export interface CheckInRoomGuestInput {
+  documentType: GuestDocumentType;
+  fullName: string;
+  documentNumber: string;
+  dateOfBirth: string;
+  address: string;
+  documentIssuedAt?: string;
+  nationality?: string;
+}
+
+export interface CheckInRoomInput {
+  roomId: string;
+  guests: CheckInRoomGuestInput[];
+  roomRatePerNight: number;
+  plannedCheckOutAt?: string | null;
+  note?: string;
+}
+
 export interface ReservationInput {
   roomId: string;
   guestId: string;
@@ -128,12 +148,33 @@ export interface CreatedStay {
   guest: CreatedStayGuest;
 }
 
+export interface CheckedInGuest {
+  id: string;
+  fullName: string;
+  dateOfBirth: string;
+  address: string;
+  role: 'primary' | 'companion';
+  document: {
+    id: string;
+    type: GuestDocumentType;
+    number: string;
+    nationality: string;
+    issuedAt: string | null;
+  };
+}
+
+export interface CheckInRoomResult {
+  reservation: ReservationEntity;
+  guests: CheckedInGuest[];
+}
+
 export interface ReservationRepository {
   list(accessToken: string): Promise<ReservationEntity[]>;
   findById(accessToken: string, reservationId: string): Promise<ReservationEntity | null>;
   listAdvance(accessToken: string, query: AdvanceReservationListQuery): Promise<AdvanceReservationListItem[]>;
   getAdvanceContext(accessToken: string, reservationId: string): Promise<AdvanceReservationContext | null>;
   createStay(accessToken: string, actorId: string, input: CreateStayInput): Promise<CreatedStay>;
+  checkInRoom(accessToken: string, actorId: string, input: CheckInRoomInput): Promise<CheckInRoomResult>;
   getRoomRate(accessToken: string, roomId: string): Promise<number | null>;
   create(accessToken: string, actorId: string, input: ReservationInput, roomRateSnapshot: number | null): Promise<ReservationEntity>;
   updateDetails(accessToken: string, actorId: string, reservationId: string, expectedVersion: number, input: ReservationDetailsUpdate): Promise<ReservationEntity>;

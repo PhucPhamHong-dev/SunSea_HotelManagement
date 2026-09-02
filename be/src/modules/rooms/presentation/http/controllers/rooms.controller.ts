@@ -41,6 +41,7 @@ export class RoomsController {
 
   @Get('availability')
   @ApiOperation({ summary: 'List rooms available for a requested period' })
+  @ApiOkResponse({ type: RoomListResponseDto })
   availability(@CurrentUser() user: AuthenticatedUser, @Query() query: RoomQueryDto) {
     return this.listRooms.execute(user.accessToken, query.floorId, query.checkInAt, query.checkOutAt);
   }

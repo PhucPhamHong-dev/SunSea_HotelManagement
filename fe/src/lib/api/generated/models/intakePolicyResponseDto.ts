@@ -4,7 +4,7 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { IntakePolicyResponseDtoDefaultAction } from './intakePolicyResponseDtoDefaultAction';
+import type { IntakePolicyResponseDtoDefaultAction } from "./intakePolicyResponseDtoDefaultAction";
 
 export interface IntakePolicyResponseDto {
   timezone: string;

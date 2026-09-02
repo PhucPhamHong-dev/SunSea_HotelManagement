@@ -6,5 +6,5 @@
  */
 
 export type AuditControllerListParams = {
-entity: string;
+  entity: string;
 };

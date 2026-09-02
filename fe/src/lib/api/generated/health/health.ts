@@ -4,75 +4,66 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import { apiFetch } from '../../api-fetch';
+import { apiFetch } from "../../api-fetch";
 
 /**
  * @summary Health check
  */
 export type healthControllerGetHealthResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type healthControllerGetHealthResponseSuccess = (healthControllerGetHealthResponse200) & {
-  headers: Headers;
+  data: void;
+  status: 200;
 };
-;
 
-export type healthControllerGetHealthResponse = (healthControllerGetHealthResponseSuccess)
+export type healthControllerGetHealthResponseSuccess =
+  healthControllerGetHealthResponse200 & {
+    headers: Headers;
+  };
+export type healthControllerGetHealthResponse =
+  healthControllerGetHealthResponseSuccess;
 
 export const getHealthControllerGetHealthUrl = () => {
+  return `/api/v1/health`;
+};
 
-
-  
-
-  return `/api/v1/health`
-}
-
-export const healthControllerGetHealth = async ( options?: RequestInit): Promise<healthControllerGetHealthResponse> => {
-  
-  return apiFetch<healthControllerGetHealthResponse>(getHealthControllerGetHealthUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const healthControllerGetHealth = async (
+  options?: RequestInit,
+): Promise<healthControllerGetHealthResponse> => {
+  return apiFetch<healthControllerGetHealthResponse>(
+    getHealthControllerGetHealthUrl(),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Supabase connectivity health check
  */
 export type healthControllerGetSupabaseHealthResponse200 = {
-  data: void
-  status: 200
-}
-    
-export type healthControllerGetSupabaseHealthResponseSuccess = (healthControllerGetSupabaseHealthResponse200) & {
-  headers: Headers;
+  data: void;
+  status: 200;
 };
-;
 
-export type healthControllerGetSupabaseHealthResponse = (healthControllerGetSupabaseHealthResponseSuccess)
+export type healthControllerGetSupabaseHealthResponseSuccess =
+  healthControllerGetSupabaseHealthResponse200 & {
+    headers: Headers;
+  };
+export type healthControllerGetSupabaseHealthResponse =
+  healthControllerGetSupabaseHealthResponseSuccess;
 
 export const getHealthControllerGetSupabaseHealthUrl = () => {
+  return `/api/v1/health/supabase`;
+};
 
-
-  
-
-  return `/api/v1/health/supabase`
-}
-
-export const healthControllerGetSupabaseHealth = async ( options?: RequestInit): Promise<healthControllerGetSupabaseHealthResponse> => {
-  
-  return apiFetch<healthControllerGetSupabaseHealthResponse>(getHealthControllerGetSupabaseHealthUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
-
+export const healthControllerGetSupabaseHealth = async (
+  options?: RequestInit,
+): Promise<healthControllerGetSupabaseHealthResponse> => {
+  return apiFetch<healthControllerGetSupabaseHealthResponse>(
+    getHealthControllerGetSupabaseHealthUrl(),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};

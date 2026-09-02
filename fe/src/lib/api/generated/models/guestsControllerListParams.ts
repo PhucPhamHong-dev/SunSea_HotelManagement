@@ -6,8 +6,8 @@
  */
 
 export type GuestsControllerListParams = {
-/**
- * Search by name, phone or identity number
- */
-search?: string;
+  /**
+   * Search by name, phone or identity number
+   */
+  search?: string;
 };

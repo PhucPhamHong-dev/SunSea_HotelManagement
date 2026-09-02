@@ -5,11 +5,11 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type CreateStayResponseDtoAction = typeof CreateStayResponseDtoAction[keyof typeof CreateStayResponseDtoAction];
-
+export type CreateStayResponseDtoAction =
+  (typeof CreateStayResponseDtoAction)[keyof typeof CreateStayResponseDtoAction];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateStayResponseDtoAction = {
-  check_in: 'check_in',
-  advance: 'advance',
+  check_in: "check_in",
+  advance: "advance",
 } as const;

@@ -4,8 +4,8 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { FloorResponseDto } from './floorResponseDto';
-import type { ApiMetaDto } from './apiMetaDto';
+import type { FloorResponseDto } from "./floorResponseDto";
+import type { ApiMetaDto } from "./apiMetaDto";
 
 export interface FloorListResponseDto {
   success: boolean;

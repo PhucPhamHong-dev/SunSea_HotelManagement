@@ -12,260 +12,245 @@ import type {
   ServiceCatalogEnvelopeDto,
   ServiceCatalogListResponseDto,
   UpdateReservationServiceDto,
-  VoidServiceDto
-} from '.././models';
+  VoidServiceDto,
+} from ".././models";
 
-import { apiFetch } from '../../api-fetch';
+import { apiFetch } from "../../api-fetch";
 
 /**
  * @summary List active services
  */
 export type servicesControllerListCatalogResponse200 = {
-  data: ServiceCatalogListResponseDto
-  status: 200
-}
-    
-export type servicesControllerListCatalogResponseSuccess = (servicesControllerListCatalogResponse200) & {
-  headers: Headers;
+  data: ServiceCatalogListResponseDto;
+  status: 200;
 };
-;
 
-export type servicesControllerListCatalogResponse = (servicesControllerListCatalogResponseSuccess)
+export type servicesControllerListCatalogResponseSuccess =
+  servicesControllerListCatalogResponse200 & {
+    headers: Headers;
+  };
+export type servicesControllerListCatalogResponse =
+  servicesControllerListCatalogResponseSuccess;
 
 export const getServicesControllerListCatalogUrl = () => {
+  return `/api/v1/service-catalog`;
+};
 
-
-  
-
-  return `/api/v1/service-catalog`
-}
-
-export const servicesControllerListCatalog = async ( options?: RequestInit): Promise<servicesControllerListCatalogResponse> => {
-  
-  return apiFetch<servicesControllerListCatalogResponse>(getServicesControllerListCatalogUrl(),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const servicesControllerListCatalog = async (
+  options?: RequestInit,
+): Promise<servicesControllerListCatalogResponse> => {
+  return apiFetch<servicesControllerListCatalogResponse>(
+    getServicesControllerListCatalogUrl(),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Create a service catalog item
  */
 export type servicesControllerCreateCatalogResponse201 = {
-  data: ServiceCatalogEnvelopeDto
-  status: 201
-}
-    
-export type servicesControllerCreateCatalogResponseSuccess = (servicesControllerCreateCatalogResponse201) & {
-  headers: Headers;
+  data: ServiceCatalogEnvelopeDto;
+  status: 201;
 };
-;
 
-export type servicesControllerCreateCatalogResponse = (servicesControllerCreateCatalogResponseSuccess)
+export type servicesControllerCreateCatalogResponseSuccess =
+  servicesControllerCreateCatalogResponse201 & {
+    headers: Headers;
+  };
+export type servicesControllerCreateCatalogResponse =
+  servicesControllerCreateCatalogResponseSuccess;
 
 export const getServicesControllerCreateCatalogUrl = () => {
+  return `/api/v1/service-catalog`;
+};
 
-
-  
-
-  return `/api/v1/service-catalog`
-}
-
-export const servicesControllerCreateCatalog = async (serviceCatalogDto: ServiceCatalogDto, options?: RequestInit): Promise<servicesControllerCreateCatalogResponse> => {
-  
-  return apiFetch<servicesControllerCreateCatalogResponse>(getServicesControllerCreateCatalogUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      serviceCatalogDto,)
-  }
-);}
-
+export const servicesControllerCreateCatalog = async (
+  serviceCatalogDto: ServiceCatalogDto,
+  options?: RequestInit,
+): Promise<servicesControllerCreateCatalogResponse> => {
+  return apiFetch<servicesControllerCreateCatalogResponse>(
+    getServicesControllerCreateCatalogUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(serviceCatalogDto),
+    },
+  );
+};
 
 /**
  * @summary Update a service catalog item
  */
 export type servicesControllerUpdateCatalogResponse200 = {
-  data: ServiceCatalogEnvelopeDto
-  status: 200
-}
-    
-export type servicesControllerUpdateCatalogResponseSuccess = (servicesControllerUpdateCatalogResponse200) & {
-  headers: Headers;
+  data: ServiceCatalogEnvelopeDto;
+  status: 200;
 };
-;
 
-export type servicesControllerUpdateCatalogResponse = (servicesControllerUpdateCatalogResponseSuccess)
+export type servicesControllerUpdateCatalogResponseSuccess =
+  servicesControllerUpdateCatalogResponse200 & {
+    headers: Headers;
+  };
+export type servicesControllerUpdateCatalogResponse =
+  servicesControllerUpdateCatalogResponseSuccess;
 
-export const getServicesControllerUpdateCatalogUrl = (serviceId: string,) => {
+export const getServicesControllerUpdateCatalogUrl = (serviceId: string) => {
+  return `/api/v1/service-catalog/${serviceId}`;
+};
 
-
-  
-
-  return `/api/v1/service-catalog/${serviceId}`
-}
-
-export const servicesControllerUpdateCatalog = async (serviceId: string, options?: RequestInit): Promise<servicesControllerUpdateCatalogResponse> => {
-  
-  return apiFetch<servicesControllerUpdateCatalogResponse>(getServicesControllerUpdateCatalogUrl(serviceId),
-  {      
-    ...options,
-    method: 'PATCH'
-    
-    
-  }
-);}
-
+export const servicesControllerUpdateCatalog = async (
+  serviceId: string,
+  options?: RequestInit,
+): Promise<servicesControllerUpdateCatalogResponse> => {
+  return apiFetch<servicesControllerUpdateCatalogResponse>(
+    getServicesControllerUpdateCatalogUrl(serviceId),
+    {
+      ...options,
+      method: "PATCH",
+    },
+  );
+};
 
 /**
  * @summary List active services for a reservation
  */
 export type servicesControllerListReservationServicesResponse200 = {
-  data: ReservationServiceListResponseDto
-  status: 200
-}
-    
-export type servicesControllerListReservationServicesResponseSuccess = (servicesControllerListReservationServicesResponse200) & {
-  headers: Headers;
+  data: ReservationServiceListResponseDto;
+  status: 200;
 };
-;
 
-export type servicesControllerListReservationServicesResponse = (servicesControllerListReservationServicesResponseSuccess)
+export type servicesControllerListReservationServicesResponseSuccess =
+  servicesControllerListReservationServicesResponse200 & {
+    headers: Headers;
+  };
+export type servicesControllerListReservationServicesResponse =
+  servicesControllerListReservationServicesResponseSuccess;
 
-export const getServicesControllerListReservationServicesUrl = (reservationId: string,) => {
+export const getServicesControllerListReservationServicesUrl = (
+  reservationId: string,
+) => {
+  return `/api/v1/reservations/${reservationId}/services`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}/services`
-}
-
-export const servicesControllerListReservationServices = async (reservationId: string, options?: RequestInit): Promise<servicesControllerListReservationServicesResponse> => {
-  
-  return apiFetch<servicesControllerListReservationServicesResponse>(getServicesControllerListReservationServicesUrl(reservationId),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const servicesControllerListReservationServices = async (
+  reservationId: string,
+  options?: RequestInit,
+): Promise<servicesControllerListReservationServicesResponse> => {
+  return apiFetch<servicesControllerListReservationServicesResponse>(
+    getServicesControllerListReservationServicesUrl(reservationId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Add a service to a checked-in reservation
  */
 export type servicesControllerAddResponse201 = {
-  data: ReservationServiceEnvelopeDto
-  status: 201
-}
-    
-export type servicesControllerAddResponseSuccess = (servicesControllerAddResponse201) & {
-  headers: Headers;
+  data: ReservationServiceEnvelopeDto;
+  status: 201;
 };
-;
 
-export type servicesControllerAddResponse = (servicesControllerAddResponseSuccess)
+export type servicesControllerAddResponseSuccess =
+  servicesControllerAddResponse201 & {
+    headers: Headers;
+  };
+export type servicesControllerAddResponse =
+  servicesControllerAddResponseSuccess;
 
-export const getServicesControllerAddUrl = (reservationId: string,) => {
+export const getServicesControllerAddUrl = (reservationId: string) => {
+  return `/api/v1/reservations/${reservationId}/services`;
+};
 
-
-  
-
-  return `/api/v1/reservations/${reservationId}/services`
-}
-
-export const servicesControllerAdd = async (reservationId: string,
-    addReservationServiceDto: AddReservationServiceDto, options?: RequestInit): Promise<servicesControllerAddResponse> => {
-  
-  return apiFetch<servicesControllerAddResponse>(getServicesControllerAddUrl(reservationId),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      addReservationServiceDto,)
-  }
-);}
-
+export const servicesControllerAdd = async (
+  reservationId: string,
+  addReservationServiceDto: AddReservationServiceDto,
+  options?: RequestInit,
+): Promise<servicesControllerAddResponse> => {
+  return apiFetch<servicesControllerAddResponse>(
+    getServicesControllerAddUrl(reservationId),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(addReservationServiceDto),
+    },
+  );
+};
 
 /**
  * @summary Update a service on a checked-in reservation
  */
 export type servicesControllerUpdateReservationServiceResponse200 = {
-  data: ReservationServiceEnvelopeDto
-  status: 200
-}
-    
-export type servicesControllerUpdateReservationServiceResponseSuccess = (servicesControllerUpdateReservationServiceResponse200) & {
-  headers: Headers;
+  data: ReservationServiceEnvelopeDto;
+  status: 200;
 };
-;
 
-export type servicesControllerUpdateReservationServiceResponse = (servicesControllerUpdateReservationServiceResponseSuccess)
+export type servicesControllerUpdateReservationServiceResponseSuccess =
+  servicesControllerUpdateReservationServiceResponse200 & {
+    headers: Headers;
+  };
+export type servicesControllerUpdateReservationServiceResponse =
+  servicesControllerUpdateReservationServiceResponseSuccess;
 
-export const getServicesControllerUpdateReservationServiceUrl = (serviceId: string,) => {
+export const getServicesControllerUpdateReservationServiceUrl = (
+  serviceId: string,
+) => {
+  return `/api/v1/reservation-services/${serviceId}`;
+};
 
-
-  
-
-  return `/api/v1/reservation-services/${serviceId}`
-}
-
-export const servicesControllerUpdateReservationService = async (serviceId: string,
-    updateReservationServiceDto: UpdateReservationServiceDto, options?: RequestInit): Promise<servicesControllerUpdateReservationServiceResponse> => {
-  
-  return apiFetch<servicesControllerUpdateReservationServiceResponse>(getServicesControllerUpdateReservationServiceUrl(serviceId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      updateReservationServiceDto,)
-  }
-);}
-
+export const servicesControllerUpdateReservationService = async (
+  serviceId: string,
+  updateReservationServiceDto: UpdateReservationServiceDto,
+  options?: RequestInit,
+): Promise<servicesControllerUpdateReservationServiceResponse> => {
+  return apiFetch<servicesControllerUpdateReservationServiceResponse>(
+    getServicesControllerUpdateReservationServiceUrl(serviceId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateReservationServiceDto),
+    },
+  );
+};
 
 /**
  * @summary Void a reservation service
  */
 export type servicesControllerVoidResponse200 = {
-  data: ReservationServiceEnvelopeDto
-  status: 200
-}
-    
-export type servicesControllerVoidResponseSuccess = (servicesControllerVoidResponse200) & {
-  headers: Headers;
+  data: ReservationServiceEnvelopeDto;
+  status: 200;
 };
-;
 
-export type servicesControllerVoidResponse = (servicesControllerVoidResponseSuccess)
+export type servicesControllerVoidResponseSuccess =
+  servicesControllerVoidResponse200 & {
+    headers: Headers;
+  };
+export type servicesControllerVoidResponse =
+  servicesControllerVoidResponseSuccess;
 
-export const getServicesControllerVoidUrl = (serviceId: string,) => {
+export const getServicesControllerVoidUrl = (serviceId: string) => {
+  return `/api/v1/reservation-services/${serviceId}/void`;
+};
 
-
-  
-
-  return `/api/v1/reservation-services/${serviceId}/void`
-}
-
-export const servicesControllerVoid = async (serviceId: string,
-    voidServiceDto: VoidServiceDto, options?: RequestInit): Promise<servicesControllerVoidResponse> => {
-  
-  return apiFetch<servicesControllerVoidResponse>(getServicesControllerVoidUrl(serviceId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      voidServiceDto,)
-  }
-);}
-
-
+export const servicesControllerVoid = async (
+  serviceId: string,
+  voidServiceDto: VoidServiceDto,
+  options?: RequestInit,
+): Promise<servicesControllerVoidResponse> => {
+  return apiFetch<servicesControllerVoidResponse>(
+    getServicesControllerVoidUrl(serviceId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(voidServiceDto),
+    },
+  );
+};

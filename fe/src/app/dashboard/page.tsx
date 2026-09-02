@@ -16,28 +16,30 @@ import { FloorMapPanel } from '../../features/floor-map/floor-map-panel';
 import { RoomTurnoverPanel } from '../../features/rooms/room-turnover-panel';
 import { useCompleteHousekeeping, useRooms } from '../../features/rooms/use-rooms';
 import { StayInfoPanel, type GuestEditableField, type ReservationEditableField } from '../../features/reservations/stay-info-panel';
+import { CheckInRoomModal } from '../../features/reservations/check-in-room-modal';
 import { CreateStayPanel } from '../../features/reservations/create-stay-panel';
 import { useCancelReservation, useCheckInReservation, useCheckoutPreview, useCheckoutReservation, useConfirmReservation } from '../../features/reservations/use-reservation-actions';
-import { useCreateStay, useIntakePolicy } from '../../features/reservations/use-create-stay';
+import { useCheckInRoom, useCreateStay, useIntakePolicy } from '../../features/reservations/use-create-stay';
 import { useAdvanceReservationDetail, useAdvanceReservations, useReservations } from '../../features/reservations/use-reservations';
 import { useStayAutosave } from '../../features/reservations/use-stay-autosave';
 import { useAddReservationService, useReservationServices, useUpdateReservationService } from '../../features/services/use-services';
 import { usePayments } from '../../features/payments/use-payments';
 import { useDashboardRealtime } from '../../features/realtime/use-dashboard-realtime';
-import { apiClient, type AddReservationServiceDto, type AdvanceReservationListItem, type CreateStayDto, type EquivalentRoomSearch, type UpdateReservationServiceDto } from '../../lib/api/api-client';
+import { apiClient, type AddReservationServiceDto, type AdvanceReservationListItem, type CheckInRoomDto, type CreateStayDto, type EquivalentRoomSearch, type Room, type UpdateReservationServiceDto } from '../../lib/api/api-client';
 import { useDashboardUiStore } from '../../stores/dashboard-ui.store';
 
 export default function DashboardPage() {
   const router = useRouter();
   const authSession = useCurrentUser();
   const authenticated = Boolean(authSession.data);
-  const { selectedDate, selectedFloorId, selectedRoomId, selectedReservationId, selectionKind, setSelectedDate, setSelectedFloorId, select, clearSelection, clearReservation } = useDashboardUiStore();
+  const { selectedDate, selectedRangeStart, selectedRangeEnd, selectedFloorId, selectedRoomId, selectedReservationId, selectionKind, setSelectedDateRange, setSelectedFloorId, select, clearSelection } = useDashboardUiStore();
   const [calendarMonth, setCalendarMonth] = useState(() => {
     const today = parseDateKey(dateKey(new Date()));
     return new Date(today.getFullYear(), today.getMonth(), 1);
   });
   const [actionMessage, setActionMessage] = useState('');
   const [bookingMode, setBookingMode] = useState(false);
+  const [walkInRoom, setWalkInRoom] = useState<Room | null>(null);
   const [checkingAlternatives, setCheckingAlternatives] = useState(false);
   const [pendingAlternative, setPendingAlternative] = useState<{ body: CreateStayDto; search: EquivalentRoomSearch } | null>(null);
 
@@ -53,7 +55,7 @@ export default function DashboardPage() {
   const selectedFloor = floorsQuery.data?.find((floor) => floor.id === activeFloorId);
   const floorNumber = selectedFloor?.floorNumber;
 
-  const selectedFloorRoomsQuery = useRooms(activeFloorId, selectedDate, authenticated && Boolean(activeFloorId));
+  const selectedFloorRoomsQuery = useRooms(activeFloorId, selectedDate, selectedRangeEnd, authenticated && Boolean(activeFloorId));
 
   const selectedReservation = useMemo(() => {
     const reservations = reservationsQuery.data ?? [];
@@ -88,6 +90,7 @@ export default function DashboardPage() {
   const checkoutReservation = useCheckoutReservation();
   const completeHousekeeping = useCompleteHousekeeping();
   const createStay = useCreateStay();
+  const checkInRoom = useCheckInRoom();
   const autosave = useStayAutosave({
     onError: (error) => setActionMessage(error instanceof ApiError ? error.message : 'Không thể tự động lưu thay đổi.'),
   });
@@ -109,27 +112,37 @@ export default function DashboardPage() {
       return;
     }
     setActionMessage('');
+    setWalkInRoom(null);
     if (reservation.floorId) setSelectedFloorId(reservation.floorId);
     setBookingMode(false);
-    setSelectedDate(dateKey(new Date(reservation.checkInAt)));
-    const checkIn = parseDateKey(dateKey(new Date(reservation.checkInAt)));
+    const checkInDate = dateKey(new Date(reservation.checkInAt));
+    const checkOutDate = reservation.checkOutAt ? dateKey(new Date(reservation.checkOutAt)) : null;
+    setSelectedDateRange(checkInDate, checkOutDate);
+    const checkIn = parseDateKey(checkInDate);
     setCalendarMonth(new Date(checkIn.getFullYear(), checkIn.getMonth(), 1));
-    // setSelectedDate intentionally clears the previous reservation. Select
-    // afterwards so a click always opens the advance-reservation panel.
+    // Range selection clears the previous reservation. Select afterwards so a
+    // click always opens the advance-reservation panel for this booking.
     select({ kind: 'advanceReservation', roomId: selectionRoomId, reservationId: reservation.reservationId });
   };
 
   const handleSelectDate = (date: string) => {
     setActionMessage('');
-    setSelectedDate(date);
+    if (!selectedRangeStart || selectedRangeEnd || date <= selectedRangeStart) {
+      setSelectedDateRange(date, null);
+    } else {
+      setSelectedDateRange(selectedRangeStart, date);
+    }
     setBookingMode(false);
-    clearReservation();
+    setWalkInRoom(null);
   };
 
-  const handleSelectRoom = (roomId: string) => {
+  const handleSelectRoom = (roomId: string, roomReservationId: string | null) => {
     setActionMessage('');
     setBookingMode(false);
-    const reservation = (reservationsQuery.data ?? []).find((item) => (item.roomId === roomId || item.preferredRoomId === roomId) && reservationCoversDate(item, selectedDate));
+    setWalkInRoom(null);
+    const reservation = roomReservationId
+      ? (reservationsQuery.data ?? []).find((item) => item.id === roomReservationId)
+      : (reservationsQuery.data ?? []).find((item) => (item.roomId === roomId || item.preferredRoomId === roomId) && reservationCoversDate(item, selectedDate));
     if (reservation?.status === 'checked_in') {
       select({ kind: 'activeStay', roomId, reservationId: reservation.id });
       return;
@@ -139,11 +152,14 @@ export default function DashboardPage() {
       return;
     }
     select({ kind: 'room', roomId });
+    const room = (selectedFloorRoomsQuery.data ?? []).find((item) => item.id === roomId);
+    if (room?.status === 'available' && room.canCreateStay) setWalkInRoom(room);
   };
 
   const handleBookNew = () => {
     if (!selectedRoomId) return;
     setActionMessage('');
+    setWalkInRoom(null);
     setBookingMode(true);
   };
 
@@ -230,10 +246,22 @@ export default function DashboardPage() {
     });
   };
 
-  const reservations = reservationsQuery.data ?? [];
-  const rooms = selectedFloorRoomsQuery.data ?? [];
+  const reservations = useMemo(() => reservationsQuery.data ?? [], [reservationsQuery.data]);
+  const rooms = useMemo(() => selectedFloorRoomsQuery.data ?? [], [selectedFloorRoomsQuery.data]);
+  const roomNotes = useMemo(() => {
+    const notes = new Map<string, string>();
+    for (const room of rooms) {
+      const note = room.reservationId
+        ? reservations.find((reservation) => reservation.id === room.reservationId)?.note?.trim()
+        : null;
+      if (note) notes.set(room.id, note);
+    }
+    return notes;
+  }, [reservations, rooms]);
   const selectedRoom = rooms.find((room) => room.id === selectedRoomId);
-  const showCreateStay = Boolean(selectedRoom && (bookingMode || (!selectedReservation && selectedRoom.status === 'available')));
+  // A click on a room ready for an immediate stay opens the dedicated guest
+  // modal. The existing intake panel remains the advance-booking flow.
+  const showCreateStay = Boolean(selectedRoom && (bookingMode || (!selectedReservation && selectedRoom.status === 'available' && !selectedRoom.canCreateStay && selectedRoom.canCreateAdvance)));
   const intakePolicyQuery = useIntakePolicy(selectedDate, authenticated && showCreateStay);
   const apiUnavailable = floorsQuery.isError || selectedFloorRoomsQuery.isError || reservationsQuery.isError || guestsQuery.isError || advanceReservationsQuery.isError;
 
@@ -243,7 +271,9 @@ export default function DashboardPage() {
       onSuccess: (response) => {
         const created = response.data.data;
         const checkIn = parseDateKey(dateKey(new Date(created.reservation.plannedCheckInAt)));
-        setSelectedDate(dateKey(checkIn));
+        const checkInDate = dateKey(checkIn);
+        const checkOutDate = created.reservation.plannedCheckOutAt ? dateKey(new Date(created.reservation.plannedCheckOutAt)) : null;
+        setSelectedDateRange(checkInDate, checkOutDate);
         setCalendarMonth(new Date(checkIn.getFullYear(), checkIn.getMonth(), 1));
         select({
           kind: created.action === 'check_in' ? 'activeStay' : 'advanceReservation',
@@ -255,6 +285,23 @@ export default function DashboardPage() {
         setActionMessage(created.action === 'check_in' ? 'Đã nhận phòng thành công.' : 'Đã tạo đặt phòng trước.');
       },
       onError: (error) => setActionMessage(error instanceof ApiError ? error.message : 'Không thể tạo lưu trú.'),
+    });
+  };
+
+  const handleWalkInCheckIn = (body: CheckInRoomDto) => {
+    if (checkInRoom.isPending) return;
+    setActionMessage('');
+    checkInRoom.mutate(body, {
+      onSuccess: (response) => {
+        const created = response.data.data;
+        const checkIn = parseDateKey(dateKey(new Date(created.reservation.plannedCheckInAt)));
+        setSelectedDateRange(dateKey(checkIn), created.reservation.plannedCheckOutAt ? dateKey(new Date(created.reservation.plannedCheckOutAt)) : null);
+        setCalendarMonth(new Date(checkIn.getFullYear(), checkIn.getMonth(), 1));
+        select({ kind: 'activeStay', roomId: created.reservation.roomId ?? body.roomId, reservationId: created.reservation.id });
+        setWalkInRoom(null);
+        setActionMessage('Đã nhận phòng thành công.');
+      },
+      onError: (error) => setActionMessage(error instanceof ApiError ? error.message : 'Không thể nhận phòng.'),
     });
   };
 
@@ -322,19 +369,20 @@ export default function DashboardPage() {
       <div className="dashboard-workspace">
         <div className="dashboard-top">
           <div className="dashboard-left-column">
-            <CalendarPanel month={calendarMonth} selectedDate={selectedDate} reservations={reservations} onSelectDate={handleSelectDate} onChangeMonth={setCalendarMonth} />
+            <CalendarPanel month={calendarMonth} selectedDate={selectedDate} selectedRangeStart={selectedRangeStart} selectedRangeEnd={selectedRangeEnd} reservations={reservations} onSelectDate={handleSelectDate} onChangeMonth={setCalendarMonth} />
             <AdvanceReservations reservations={advanceReservationsQuery.data ?? []} selectedReservationId={selectedReservationId} onSelect={selectReservation} isLoading={advanceReservationsQuery.isLoading} isError={advanceReservationsQuery.isError} />
           </div>
           {showCreateStay && selectedRoom ? <CreateStayPanel
             room={selectedRoom}
             selectedDate={selectedDate}
+            selectedEndDate={selectedRangeEnd}
             policy={intakePolicyQuery.data}
             policyLoading={intakePolicyQuery.isLoading}
             isPending={createStay.isPending || checkingAlternatives}
             allowUnavailableRoom={bookingMode}
             actionMessage={actionMessage}
             onCreate={handleCreateStay}
-          /> : resolvedSelectionKind === 'advanceReservation' ? <AdvanceReservationPanel detail={advanceDetailQuery.data} payments={paymentsQuery.data ?? []} paymentsLoading={paymentsQuery.isLoading} isLoading={advanceDetailQuery.isLoading} isError={advanceDetailQuery.isError} onCancel={handleCancel} onCheckIn={handleCheckIn} cancelPending={cancelReservation.isPending} checkInPending={checkInReservation.isPending} actionMessage={actionMessage} onBookNew={handleBookNew} /> : selectedRoom && !selectedReservation ? <RoomTurnoverPanel
+          /> : resolvedSelectionKind === 'advanceReservation' ? <AdvanceReservationPanel detail={advanceDetailQuery.data} payments={paymentsQuery.data ?? []} paymentsLoading={paymentsQuery.isLoading} isLoading={advanceDetailQuery.isLoading} isError={advanceDetailQuery.isError} onCancel={handleCancel} onCheckIn={handleCheckIn} cancelPending={cancelReservation.isPending} checkInPending={checkInReservation.isPending} actionMessage={actionMessage} onBookNew={handleBookNew} /> : selectedRoom && !selectedReservation && selectedRoom.status === 'available' && selectedRoom.canCreateStay ? <ReadyRoomPanel room={selectedRoom} /> : selectedRoom && !selectedReservation ? <RoomTurnoverPanel
             room={selectedRoom}
             isPending={completeHousekeeping.isPending}
             actionMessage={actionMessage}
@@ -368,7 +416,7 @@ export default function DashboardPage() {
           />}
         </div>
 
-        {selectedFloor && floorNumber !== undefined ? <FloorMapPanel floorId={activeFloorId} floorNumber={floorNumber} rooms={rooms} isLoading={selectedFloorRoomsQuery.isLoading} isError={selectedFloorRoomsQuery.isError} selectedRoomId={selectedRoomId} selectionKind={resolvedSelectionKind} onSelectRoom={handleSelectRoom} canGoPrevious={floorIndex > 0} canGoNext={floorIndex >= 0 && floorIndex < (floorsQuery.data?.length ?? 1) - 1} onPreviousFloor={() => goToFloor(floorIndex - 1)} onNextFloor={() => goToFloor(floorIndex + 1)} /> : (
+        {selectedFloor && floorNumber !== undefined ? <FloorMapPanel floorId={activeFloorId} floorNumber={floorNumber} rooms={rooms} roomNotes={roomNotes} isLoading={selectedFloorRoomsQuery.isLoading} isError={selectedFloorRoomsQuery.isError} selectedRoomId={selectedRoomId} selectionKind={resolvedSelectionKind} onSelectRoom={handleSelectRoom} canGoPrevious={floorIndex > 0} canGoNext={floorIndex >= 0 && floorIndex < (floorsQuery.data?.length ?? 1) - 1} onPreviousFloor={() => goToFloor(floorIndex - 1)} onNextFloor={() => goToFloor(floorIndex + 1)} /> : (
           <section className="floor-panel" aria-label="Sơ đồ phòng chưa có dữ liệu">
             <p className="empty-copy">Tạo tầng và phòng qua API Backend để bắt đầu vận hành.</p>
           </section>
@@ -382,6 +430,13 @@ export default function DashboardPage() {
         onReserveRoomType={pendingAlternative.body.action === 'advance' && pendingAlternative.search.canReserveRoomType
           ? () => createStayAfterRoomConfirmed({ ...pendingAlternative.body, assignmentMode: 'room_type' })
           : undefined}
+      />}
+      {walkInRoom && <CheckInRoomModal
+        room={walkInRoom}
+        isPending={checkInRoom.isPending}
+        errorMessage={actionMessage}
+        onClose={() => { if (!checkInRoom.isPending) setWalkInRoom(null); }}
+        onCheckIn={handleWalkInCheckIn}
       />}
     </main>
   );
@@ -402,5 +457,17 @@ function EquivalentRoomModal({ search, onClose, onConfirm, onReserveRoomType }: 
         <div className="modal-actions"><button type="button" className="outline-button" onClick={onClose}>Quay lại</button></div>
       </section>
     </div>
+  );
+}
+
+function ReadyRoomPanel({ room }: { room: Room }) {
+  return (
+    <section className="stay-panel turnover-panel" aria-labelledby="ready-room-title">
+      <h2 id="ready-room-title">Phòng {room.roomNumber} trống</h2>
+      <div className="turnover-panel__content">
+        <span className="turnover-panel__status">SẴN SÀNG</span>
+        <p>Phòng đã sẵn sàng nhận khách. Chọn lại phòng trên sơ đồ để mở form nhận khách.</p>
+      </div>
+    </section>
   );
 }

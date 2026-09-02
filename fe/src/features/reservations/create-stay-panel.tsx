@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@heroui/react';
 import { HotelField } from '../../components/ui/hotel-field';
 import type { CreateStayDto, Room } from '../../lib/api/api-client';
-import { formatVndAmountInput, parseVndAmountInput, systemDateTimeLocalToIso } from '../calendar/calendar-utils';
+import { dateKey, formatVndAmountInput, parseVndAmountInput, systemDateTimeLocalToIso } from '../calendar/calendar-utils';
 
 type IntakeAction = CreateStayDto['action'];
 
@@ -20,6 +20,7 @@ interface IntakePolicy {
 interface CreateStayPanelProps {
   room: Room;
   selectedDate: string;
+  selectedEndDate: string | null;
   policy?: IntakePolicy;
   policyLoading?: boolean;
   isPending?: boolean;
@@ -42,10 +43,10 @@ interface FormState {
   note: string;
 }
 
-export function CreateStayPanel({ room, selectedDate, policy, policyLoading = false, isPending = false, allowUnavailableRoom = false, actionMessage, onCreate }: CreateStayPanelProps) {
+export function CreateStayPanel({ room, selectedDate, selectedEndDate, policy, policyLoading = false, isPending = false, allowUnavailableRoom = false, actionMessage, onCreate }: CreateStayPanelProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const policyDefaultAction = defaultAction(policy, room, allowUnavailableRoom);
-  const defaults = useMemo(() => defaultForm(selectedDate, policyDefaultAction, room.defaultNightlyRate), [policyDefaultAction, room.defaultNightlyRate, selectedDate]);
+  const defaults = useMemo(() => defaultForm(selectedDate, selectedEndDate, policyDefaultAction, room.defaultNightlyRate), [policyDefaultAction, room.defaultNightlyRate, selectedDate, selectedEndDate]);
   const [form, setForm] = useState<FormState>(defaults);
   const [action, setAction] = useState<IntakeAction>(policyDefaultAction);
 
@@ -66,7 +67,7 @@ export function CreateStayPanel({ room, selectedDate, policy, policyLoading = fa
     setAction(nextAction);
     setForm((current) => ({
       ...current,
-      ...stayDates(selectedDate, nextAction),
+      ...stayDates(selectedDate, selectedEndDate, nextAction),
     }));
   };
 
@@ -144,12 +145,11 @@ export function CreateStayPanel({ room, selectedDate, policy, policyLoading = fa
   );
 }
 
-function defaultForm(selectedDate: string, action: IntakeAction, defaultNightlyRate: number | null): FormState {
-  const dates = stayDates(selectedDate, action);
+function defaultForm(selectedDate: string, selectedEndDate: string | null, action: IntakeAction, defaultNightlyRate: number | null): FormState {
+  const dates = stayDates(selectedDate, selectedEndDate, action);
   return {
     fullName: '', phone: '', idNumber: '', dateOfBirth: '', idIssuedDate: '', address: '',
     ...dates,
-    plannedCheckOutAt: '',
     roomRatePerNight: formatVndAmountInput(defaultNightlyRate), depositAmount: '', note: '',
   };
 }
@@ -159,10 +159,11 @@ function defaultAction(policy: IntakePolicy | undefined, room: Room, allowUnavai
   return 'advance';
 }
 
-function stayDates(selectedDate: string, action: IntakeAction): Pick<FormState, 'plannedCheckInAt'> {
-  const checkInAt = action === 'check_in' ? localNowInput() : `${selectedDate}T14:00`;
+function stayDates(selectedDate: string, selectedEndDate: string | null, action: IntakeAction): Pick<FormState, 'plannedCheckInAt' | 'plannedCheckOutAt'> {
+  const checkInAt = action === 'check_in' && selectedDate === dateKey(new Date()) ? localNowInput() : `${selectedDate}T14:00`;
   return {
     plannedCheckInAt: checkInAt,
+    plannedCheckOutAt: selectedEndDate ? `${selectedEndDate}T12:00` : '',
   };
 }
 

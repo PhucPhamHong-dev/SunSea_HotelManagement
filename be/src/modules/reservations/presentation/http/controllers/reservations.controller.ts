@@ -5,8 +5,8 @@ import { SupabaseAuthGuard } from '../../../../../common/guards/supabase-auth.gu
 import type { AuthenticatedUser } from '../../../../../common/types/api-response';
 import { ReservationService } from '../../../application/services/reservation.service';
 import type { ReservationRepository } from '../../../application/ports/reservation.repository';
-import { AdvanceReservationListQueryDto, CancelReservationDto, CreateReservationDto, CreateStayDto, IntakePolicyQueryDto, PricingPreviewDto, ReservationActionDto, UpdateReservationDto } from '../dto/reservation.dto';
-import { AdvanceReservationDetailEnvelopeDto, AdvanceReservationListResponseDto, CheckoutPreviewEnvelopeDto, CreateStayEnvelopeDto, IntakePolicyEnvelopeDto, PricingPreviewEnvelopeDto, ReservationEnvelopeDto, ReservationListResponseDto } from '../dto/reservation-response.dto';
+import { AdvanceReservationListQueryDto, CancelReservationDto, CheckInRoomDto, CreateReservationDto, CreateStayDto, IntakePolicyQueryDto, PricingPreviewDto, ReservationActionDto, UpdateReservationDto } from '../dto/reservation.dto';
+import { AdvanceReservationDetailEnvelopeDto, AdvanceReservationListResponseDto, CheckInRoomEnvelopeDto, CheckoutPreviewEnvelopeDto, CreateStayEnvelopeDto, IntakePolicyEnvelopeDto, PricingPreviewEnvelopeDto, ReservationEnvelopeDto, ReservationListResponseDto } from '../dto/reservation-response.dto';
 
 @ApiTags('reservations')
 @ApiCookieAuth('hotel_session')
@@ -51,6 +51,13 @@ export class ReservationsController {
   @ApiCreatedResponse({ type: CreateStayEnvelopeDto })
   createStay(@CurrentUser() user: AuthenticatedUser, @Body() dto: CreateStayDto) {
     return this.service.createStay(user.accessToken, user.id, dto);
+  }
+
+  @Post('check-in')
+  @ApiOperation({ summary: 'Check in a ready room with one or more manually entered guests atomically' })
+  @ApiCreatedResponse({ type: CheckInRoomEnvelopeDto })
+  checkInRoom(@CurrentUser() user: AuthenticatedUser, @Body() dto: CheckInRoomDto) {
+    return this.service.checkInRoom(user.accessToken, user.id, dto);
   }
 
   @Post('pricing-preview')

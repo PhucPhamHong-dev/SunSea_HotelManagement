@@ -4,7 +4,7 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { HousekeepingDtoStatus } from './housekeepingDtoStatus';
+import type { HousekeepingDtoStatus } from "./housekeepingDtoStatus";
 
 export interface HousekeepingDto {
   status: HousekeepingDtoStatus;

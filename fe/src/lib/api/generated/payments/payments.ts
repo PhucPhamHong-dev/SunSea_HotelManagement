@@ -9,123 +9,122 @@ import type {
   PaymentEnvelopeDto,
   PaymentListResponseDto,
   PaymentsControllerListParams,
-  VoidPaymentDto
-} from '.././models';
+  VoidPaymentDto,
+} from ".././models";
 
-import { apiFetch } from '../../api-fetch';
+import { apiFetch } from "../../api-fetch";
 
 /**
  * @summary List payments
  */
 export type paymentsControllerListResponse200 = {
-  data: PaymentListResponseDto
-  status: 200
-}
-    
-export type paymentsControllerListResponseSuccess = (paymentsControllerListResponse200) & {
-  headers: Headers;
+  data: PaymentListResponseDto;
+  status: 200;
 };
-;
 
-export type paymentsControllerListResponse = (paymentsControllerListResponseSuccess)
+export type paymentsControllerListResponseSuccess =
+  paymentsControllerListResponse200 & {
+    headers: Headers;
+  };
+export type paymentsControllerListResponse =
+  paymentsControllerListResponseSuccess;
 
-export const getPaymentsControllerListUrl = (params?: PaymentsControllerListParams,) => {
+export const getPaymentsControllerListUrl = (
+  params?: PaymentsControllerListParams,
+) => {
   const normalizedParams = new URLSearchParams();
 
   Object.entries(params || {}).forEach(([key, value]) => {
-    
     if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
+      normalizedParams.append(key, value === null ? "null" : value.toString());
     }
   });
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `/api/v1/payments?${stringifiedParams}` : `/api/v1/payments`
-}
+  return stringifiedParams.length > 0
+    ? `/api/v1/payments?${stringifiedParams}`
+    : `/api/v1/payments`;
+};
 
-export const paymentsControllerList = async (params?: PaymentsControllerListParams, options?: RequestInit): Promise<paymentsControllerListResponse> => {
-  
-  return apiFetch<paymentsControllerListResponse>(getPaymentsControllerListUrl(params),
-  {      
-    ...options,
-    method: 'GET'
-    
-    
-  }
-);}
-
+export const paymentsControllerList = async (
+  params?: PaymentsControllerListParams,
+  options?: RequestInit,
+): Promise<paymentsControllerListResponse> => {
+  return apiFetch<paymentsControllerListResponse>(
+    getPaymentsControllerListUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
 
 /**
  * @summary Record a manual payment
  */
 export type paymentsControllerCreateResponse201 = {
-  data: PaymentEnvelopeDto
-  status: 201
-}
-    
-export type paymentsControllerCreateResponseSuccess = (paymentsControllerCreateResponse201) & {
-  headers: Headers;
+  data: PaymentEnvelopeDto;
+  status: 201;
 };
-;
 
-export type paymentsControllerCreateResponse = (paymentsControllerCreateResponseSuccess)
+export type paymentsControllerCreateResponseSuccess =
+  paymentsControllerCreateResponse201 & {
+    headers: Headers;
+  };
+export type paymentsControllerCreateResponse =
+  paymentsControllerCreateResponseSuccess;
 
 export const getPaymentsControllerCreateUrl = () => {
+  return `/api/v1/payments`;
+};
 
-
-  
-
-  return `/api/v1/payments`
-}
-
-export const paymentsControllerCreate = async (createPaymentDto: CreatePaymentDto, options?: RequestInit): Promise<paymentsControllerCreateResponse> => {
-  
-  return apiFetch<paymentsControllerCreateResponse>(getPaymentsControllerCreateUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      createPaymentDto,)
-  }
-);}
-
+export const paymentsControllerCreate = async (
+  createPaymentDto: CreatePaymentDto,
+  options?: RequestInit,
+): Promise<paymentsControllerCreateResponse> => {
+  return apiFetch<paymentsControllerCreateResponse>(
+    getPaymentsControllerCreateUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(createPaymentDto),
+    },
+  );
+};
 
 /**
  * @summary Void a manual payment
  */
 export type paymentsControllerVoidResponse200 = {
-  data: PaymentEnvelopeDto
-  status: 200
-}
-    
-export type paymentsControllerVoidResponseSuccess = (paymentsControllerVoidResponse200) & {
-  headers: Headers;
+  data: PaymentEnvelopeDto;
+  status: 200;
 };
-;
 
-export type paymentsControllerVoidResponse = (paymentsControllerVoidResponseSuccess)
+export type paymentsControllerVoidResponseSuccess =
+  paymentsControllerVoidResponse200 & {
+    headers: Headers;
+  };
+export type paymentsControllerVoidResponse =
+  paymentsControllerVoidResponseSuccess;
 
-export const getPaymentsControllerVoidUrl = (paymentId: string,) => {
+export const getPaymentsControllerVoidUrl = (paymentId: string) => {
+  return `/api/v1/payments/${paymentId}/void`;
+};
 
-
-  
-
-  return `/api/v1/payments/${paymentId}/void`
-}
-
-export const paymentsControllerVoid = async (paymentId: string,
-    voidPaymentDto: VoidPaymentDto, options?: RequestInit): Promise<paymentsControllerVoidResponse> => {
-  
-  return apiFetch<paymentsControllerVoidResponse>(getPaymentsControllerVoidUrl(paymentId),
-  {      
-    ...options,
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      voidPaymentDto,)
-  }
-);}
-
-
+export const paymentsControllerVoid = async (
+  paymentId: string,
+  voidPaymentDto: VoidPaymentDto,
+  options?: RequestInit,
+): Promise<paymentsControllerVoidResponse> => {
+  return apiFetch<paymentsControllerVoidResponse>(
+    getPaymentsControllerVoidUrl(paymentId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(voidPaymentDto),
+    },
+  );
+};

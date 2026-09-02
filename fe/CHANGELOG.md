@@ -6,6 +6,14 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### Added
 
+- **2026-08-31 | FE/UI/API:** Click phòng trống mà Backend cho phép nhận khách mở modal HeroUI `Nhận khách` trực tiếp. Modal nhập `Tiền phòng / đêm` bắt buộc theo integer VND, ngày dự kiến trả tùy chọn, ghi chú và nhiều khách CCCD/hộ chiếu; không có số điện thoại, tìm khách cũ, autofill hay OCR giả. Xác nhận gọi API Backend thật và chuyển selection sang stay đang ở.
+
+- **2026-08-29 | FE/UI/API:** Thêm layout Tầng 4 dùng rooms API thật: 4A/4B là card vận hành, còn `Sân phơi`/`Kho` là khu vực tĩnh không thể click, chọn hoặc tạo booking. Điều hướng overlay tự khóa nút tầng sau ở tầng cuối.
+
+- **2026-08-29 | FE/UI/API:** Lịch phòng Dashboard hỗ trợ chọn ngày nhận–trả dạng dải booking. Khi chọn đủ khoảng, FE query availability thật từ Backend và form nhận phòng/đặt trước tự điền ngày nhận, dự kiến trả; không tự tạo reservation.
+
+- **2026-08-29 | FE/UI/API:** Hiển thị ghi chú reservation từ Backend trực tiếp trên card phòng đúng ngày đang xem. Ghi chú dài giữ layout sơ đồ bằng ellipsis/tooltip, không tạo dữ liệu ghi chú riêng ở FE.
+
 - **2026-08-27 | FE/DevOps/CI:** Thêm root GitHub Actions CI/CD cho quality gate Backend/Frontend và deploy VPS sau push `main`. Frontend production vẫn build với public origin duy nhất, không nhận Supabase/database secret; health check/rollback do script deploy thực hiện trên VPS.
 
 - **2026-08-27 | FE/DevOps:** Bổ sung deployment production một domain qua Nginx VPS. Frontend, REST API và Socket.IO dùng cùng origin `https://sunsea.phucpink.io.vn`; không có Supabase config trong bundle.
@@ -43,6 +51,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 - **2026-08-23 | FE/API:** Dựng dashboard theo mockup với calendar tháng, danh sách đặt trước, stay information, dịch vụ phát sinh, lịch sử thanh toán, thao tác xác nhận/trả phòng và realtime query invalidation.
 
 ### Changed
+
+- **2026-08-31 | FE/Tooling/API:** Bổ sung Prettier vào dev dependency mà Orval đã cấu hình sẵn, để `pnpm api:generate` format toàn bộ client sinh tự động nhất quán và `git diff --check` sạch; không chỉnh thủ công các file generated.
 
 - **2026-08-29 | FE/UI/API:** Danh sách `Phòng đặt trước` gọi Backend từ đầu ngày hiện tại theo `Asia/Ho_Chi_Minh` đến toàn bộ tương lai, không còn giới hạn hôm nay/ngày mai. Dashboard được bố trí trong một viewport: panel thông tin lưu trú và danh sách đặt trước cuộn nội bộ, còn sơ đồ phòng vẫn ở màn hình đầu. Bỏ heading `Sơ đồ phòng · Tầng …`; ô thang máy hiển thị trực tiếp `Tầng …` để tiết kiệm không gian.
 
@@ -127,6 +137,8 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 
 ### API
 
+- **2026-08-31 | FE/API:** Regenerate Orval client từ OpenAPI Backend cho `POST /api/v1/reservations/check-in`, các generated DTO `CheckInRoomDto`/guest/document và response đa khách; không chỉnh file generated thủ công.
+
 - **2026-08-26 | FE/API:** Đã regenerate Orval client từ OpenAPI Backend cho `assignmentMode`, `roomTypeId`/`roomTypeName`, capacity room type và nullable physical room assignment. Không sửa file generated thủ công.
 
 - **2026-08-26 | FE/API:** Đã regenerate Orval client từ Swagger Backend sau khi bỏ operation no-show thủ công; Frontend không gọi endpoint này.
@@ -153,6 +165,14 @@ Mọi thay đổi đáng kể phải được ghi tại mục Unreleased.
 - **2026-08-23 | FE/API:** Regenerate client sau khi backend bổ sung list reservation services và checkout-preview schema riêng.
 
 ### Tests
+
+- **2026-08-31 | Tests/FE/UI/API/Docker:** Đã chạy `pnpm api:generate`, `pnpm lint`, `pnpm typecheck` và `pnpm build` thành công. Docker local rebuild; Backend healthy, `/login` HTTP 200. Kiểm tra browser local với Backend thật: login `admin`, click phòng trống mở modal `Nhận khách` cùng giá/đêm, CCCD/hộ chiếu và đa khách; passport hiển thị `Quốc tịch` thay `Ngày cấp`; không xác nhận nên không tạo dữ liệu vận hành. Không thêm/chạy test suite mới theo phạm vi.
+
+- **2026-08-29 | Tests/FE/UI/Docker:** Đã chạy `pnpm lint`, `pnpm typecheck` và `pnpm build` thành công. Docker Compose local rebuild thành công; `/login` trả HTTP `200`. Không thêm test suite mới.
+
+- **2026-08-29 | Tests/FE/UI/API/Docker:** Đã chạy `OPENAPI_URL=../be/openapi.json pnpm api:generate`, `pnpm lint`, `pnpm typecheck` và `pnpm build` thành công cho chọn dải ngày Dashboard; Docker Compose local rebuild thành công, `/login` phản hồi HTTP `200`. Không thêm hoặc thay đổi test suite; không push, CI/CD hoặc deploy VPS.
+
+- **2026-08-29 | Tests/FE/UI/Docker:** Đã chạy `pnpm lint`, `pnpm typecheck`, `pnpm build` thành công và rebuild local Docker Compose. Không push hoặc deploy VPS theo yêu cầu; không thêm hoặc thay đổi test suite.
 
 - **2026-08-29 | Tests/FE/UI/API:** Đã chạy `pnpm lint`, `pnpm typecheck` và `pnpm build` thành công. Không thêm hoặc thay đổi test suite theo phạm vi.
 

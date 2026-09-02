@@ -4,12 +4,12 @@
  * SUNSEA Hotel Management API
  * OpenAPI spec version: 0.1.0
  */
-import type { ReservationResponseDtoActualCheckInAt } from './reservationResponseDtoActualCheckInAt';
-import type { ReservationResponseDtoActualCheckOutAt } from './reservationResponseDtoActualCheckOutAt';
-import type { ReservationResponseDtoStatus } from './reservationResponseDtoStatus';
-import type { ReservationResponseDtoCancellationReason } from './reservationResponseDtoCancellationReason';
-import type { ReservationResponseDtoCancelledAt } from './reservationResponseDtoCancelledAt';
-import type { ReservationResponseDtoNoShowAt } from './reservationResponseDtoNoShowAt';
+import type { ReservationResponseDtoActualCheckInAt } from "./reservationResponseDtoActualCheckInAt";
+import type { ReservationResponseDtoActualCheckOutAt } from "./reservationResponseDtoActualCheckOutAt";
+import type { ReservationResponseDtoStatus } from "./reservationResponseDtoStatus";
+import type { ReservationResponseDtoCancellationReason } from "./reservationResponseDtoCancellationReason";
+import type { ReservationResponseDtoCancelledAt } from "./reservationResponseDtoCancelledAt";
+import type { ReservationResponseDtoNoShowAt } from "./reservationResponseDtoNoShowAt";
 
 export interface ReservationResponseDto {
   id: string;

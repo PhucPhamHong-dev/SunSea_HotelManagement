@@ -8,4 +8,6 @@
 /**
  * @nullable
  */
-export type ReservationResponseDtoCancellationReason = { [key: string]: unknown } | null;
+export type ReservationResponseDtoCancellationReason = {
+  [key: string]: unknown;
+} | null;

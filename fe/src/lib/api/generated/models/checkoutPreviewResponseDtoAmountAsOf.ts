@@ -9,4 +9,6 @@
  * Instant used by the Backend to calculate live open-stay pricing.
  * @nullable
  */
-export type CheckoutPreviewResponseDtoAmountAsOf = { [key: string]: unknown } | null;
+export type CheckoutPreviewResponseDtoAmountAsOf = {
+  [key: string]: unknown;
+} | null;

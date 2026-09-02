@@ -5,14 +5,14 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type RoomResponseDtoStatus = typeof RoomResponseDtoStatus[keyof typeof RoomResponseDtoStatus];
-
+export type RoomResponseDtoStatus =
+  (typeof RoomResponseDtoStatus)[keyof typeof RoomResponseDtoStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RoomResponseDtoStatus = {
-  available: 'available',
-  occupied: 'occupied',
-  cleaning: 'cleaning',
-  reserved: 'reserved',
-  out_of_service: 'out_of_service',
+  available: "available",
+  occupied: "occupied",
+  cleaning: "cleaning",
+  reserved: "reserved",
+  out_of_service: "out_of_service",
 } as const;
